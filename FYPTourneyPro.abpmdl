@@ -1,0 +1,26 @@
+{
+  "template": "app-nolayers",
+  "imports": {
+    "Volo.Abp.Account": {
+      "version": "8.2.2",
+      "isInstalled": true
+    },
+    "Volo.Abp.OpenIddict": {
+      "version": "8.2.2",
+      "isInstalled": true
+    },
+    "Volo.Abp.Identity": {
+      "version": "8.2.2",
+      "isInstalled": true
+    },
+    "Volo.Abp.TenantManagement": {
+      "version": "8.2.2",
+      "isInstalled": true
+    }
+  },
+  "packages": {
+    "FYPTourneyPro": {
+      "path": "FYPTourneyPro/FYPTourneyPro.abppkg"
+    }
+  }
+}

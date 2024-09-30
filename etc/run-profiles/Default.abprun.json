@@ -1,0 +1,9 @@
+﻿{
+  "applications": {
+    "FYPTourneyPro": {
+      "type": "dotnet-project",
+      "launchUrl": "https://localhost:44339",
+      "path": "../../FYPTourneyPro/FYPTourneyPro.csproj"
+    }
+  }
+}

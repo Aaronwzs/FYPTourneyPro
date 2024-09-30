@@ -1,0 +1,37 @@
+{
+  "id": "bee719b7-7bc1-40f5-9c5d-553d6abe1524",
+  "template": "app-nolayers",
+  "versions": {
+    "AbpFramework": "8.2.2",
+    "AbpCommercial": "8.2.2",
+    "AbpStudio": "0.7.9"
+  },
+  "modules": {
+    "FYPTourneyPro": {
+      "path": "FYPTourneyPro.abpmdl"
+    }
+  },
+  "runProfiles": {
+    "Default": {
+      "path": "etc/run-profiles/Default.abprun.json"
+    }
+  },
+  "options": {
+    "httpRequests": {
+      "ignoredUrls": [
+        "^/metrics$"
+      ]
+    }
+  },
+  "creatingStudioConfiguration": {
+    "template": "app-nolayers",
+    "createdAbpStudioVersion": "0.7.9",
+    "uiFramework": "mvc",
+    "databaseProvider": "ef",
+    "databaseManagementSystem": "sqlserver",
+    "theme": "leptonx-lite",
+    "themeStyle": "system",
+    "publicWebsite": "",
+    "socialLogin": ""
+  }
+}
