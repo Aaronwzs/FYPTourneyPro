@@ -45,6 +45,11 @@ public class Program
             }
             await builder.AddApplicationAsync<FYPTourneyProModule>();
             var app = builder.Build();
+
+            // https://stackoverflow.com/questions/69961449/net6-and-datetime-problem-cannot-write-datetime-with-kind-utc-to-postgresql-ty
+            // to fix "Cannot write DateTime with Kind=Local to PostgreSQL type 'timestamp with time zone', only UTC is supported." issue
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
             await app.InitializeApplicationAsync();
 
             if (IsMigrateDatabase(args))
