@@ -33,6 +33,20 @@ public class FYPTourneyProMenuContributor : IMenuContributor
             )
         );
 
+        context.Menu.Items.Insert(
+           1,
+           new ApplicationMenuItem(
+               "TodoList",
+               "TodoList",
+               icon: "fas fa-home"
+           ).AddItem(
+                new ApplicationMenuItem(
+                    FYPTourneyProMenus.TodoItems,
+                    "TodoItems",
+                    url: "/TodoItems"
+                )
+            )
+       );
 
         //Administration
         var administration = context.Menu.GetAdministration();
@@ -60,7 +74,7 @@ public class FYPTourneyProMenuContributor : IMenuContributor
                 ).RequirePermissions(FYPTourneyProPermissions.Books.Default) 
             )
         );
-        
+
         return Task.CompletedTask;
     }
 }

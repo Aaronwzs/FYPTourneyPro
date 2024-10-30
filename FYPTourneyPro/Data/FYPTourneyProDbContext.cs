@@ -11,13 +11,16 @@ using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using FYPTourneyPro.Entities.Books;
+using FYPTourneyPro.Entities.TodoList;
 
 namespace FYPTourneyPro.Data;
 
 public class FYPTourneyProDbContext : AbpDbContext<FYPTourneyProDbContext>
 {
     public DbSet<Book> Books { get; set; }
-    
+
+    public DbSet<TodoItem> TodoItems { get; set; }
+
     public const string DbTablePrefix = "App";
     public const string DbSchema = null;
 
@@ -49,8 +52,13 @@ public class FYPTourneyProDbContext : AbpDbContext<FYPTourneyProDbContext>
             b.ConfigureByConvention(); //auto configure for the base class props
             b.Property(x => x.Name).IsRequired().HasMaxLength(128);
         });
-        
+
         /* Configure your own entities here */
+
+        builder.Entity<TodoItem>(b =>
+        {
+            b.ToTable("TodoItems");
+        });
     }
 }
 
