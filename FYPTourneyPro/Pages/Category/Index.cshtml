@@ -1,0 +1,51 @@
+﻿@page
+@model FYPTourneyPro.Pages.Category.IndexModel
+@section styles {
+    <abp-style src="/Pages/Category/index.css" />
+}
+@section scripts {
+    <abp-script src="/Pages/Category/index.js" />
+}
+
+<div class="container">
+    <abp-card>
+        <abp-card-header>
+            <abp-card-title>
+                 CATEGORY
+            </abp-card-title>
+        </abp-card-header>
+        <abp-card-body>
+
+            <!-- FORM FOR ADD NEW CATEGORY -->
+            <form id="NewCategoryForm" class="row row-cols-lg-auto g-3 align-items-center">
+                <input type="hidden" id="TournamentId" value="@Model.TournamentId" />
+
+                <div class="col-12">
+                    <input id="CategoryName" type="text" class="form-control" placeholder="Category Name" required>
+                </div>
+                <div class="col-12">
+                    <textarea id="CategoryDescription" class="form-control" placeholder="Description" required></textarea>
+                </div>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">Add Category</button>
+                </div>
+            </form>
+            <!-- CATEGORY LIST -->
+            <div class="mb-4">
+                <h4>Category List</h4>
+                <ul id="CategoryList">
+                    @foreach (var category in Model.Categories)
+                    {
+                        <li data-id="@category.Id">
+                            <i class="fa fa-trash-o"></i> @category.Name
+                        </li>
+                    }
+                </ul>
+            </div>
+
+            <!-- FORM FOR ADD NEW CATEGORY ENDS-->
+
+                
+        </abp-card-body>
+    </abp-card>
+</div>

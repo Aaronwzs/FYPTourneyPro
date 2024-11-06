@@ -1,0 +1,55 @@
+﻿@page
+@model FYPTourneyPro.Pages.Tournament.IndexModel
+
+@section styles {
+    <abp-style src="/Pages/Tournament/index.css" />
+}
+@section scripts {
+    <abp-script src="/Pages/Tournament/index.js" />
+}
+
+<div class="container">
+    <abp-card>
+        <abp-card-header>
+            <abp-card-title>
+                TOURNAMENT LIST
+            </abp-card-title>
+        </abp-card-header>
+        <abp-card-body>
+            <!-- FORM FOR NEW TOURNAMENT -->
+            <form id="NewTournamentForm" class="row row-cols-lg-auto g-3 align-items-center">
+                <div class="col-12">
+                    <input id="TournamentName" type="text" class="form-control" placeholder="Tournament Name" required>
+                </div>
+                <div class="col-12">
+                    <textarea id="TournamentDescription" class="form-control" placeholder="Description" required></textarea>
+                </div>
+                <div class="col-md-6">
+                    <input id="RegistrationStartDate" type="date" class="form-control" placeholder="RegStartDate" required>
+                </div>
+                <div class="col-md-6">
+                    <input id="RegistrationEndDate" type="date" class="form-control" placeholder="RegEndDate"  required>
+                </div>
+                <div class="col-md-6">
+                    <input id="StartDate" type="date" class="form-control" placeholder="StartDate" required>
+                </div>
+                <div class="col-md-6">
+                    <input id="EndDate" type="date" class="form-control" placeholder="EndDate" required>
+                </div>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">Add Tournament</button>
+                </div>
+            </form>
+            <!-- TOURNAMENT LIST -->
+            <ul id="TournamentList">
+                @foreach (var tournament in Model.Tournaments)
+                {
+                    <li data-id="@tournament.Id">
+                        <i class="fa fa-trash-o"></i>
+                        <a href="javascript:void(0)" class="tournament-link">@tournament.Name</a>
+                    </li>
+                }
+            </ul>
+        </abp-card-body>
+    </abp-card>
+</div>

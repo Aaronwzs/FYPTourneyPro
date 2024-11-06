@@ -1,0 +1,20 @@
+﻿#CategoryList {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+    #CategoryList li {
+        padding: 5px;
+        margin: 5px 0px;
+    }
+
+        #CategoryList li i {
+            opacity: 0.5;
+        }
+
+            #CategoryList li i:hover {
+                opacity: 1;
+                color: #ff0000;
+                cursor: pointer;
+            }

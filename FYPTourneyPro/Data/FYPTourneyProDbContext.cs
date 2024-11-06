@@ -12,6 +12,7 @@ using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using FYPTourneyPro.Entities.Books;
 using FYPTourneyPro.Entities.TodoList;
+using FYPTourneyPro.Entities.Organizer;
 
 namespace FYPTourneyPro.Data;
 
@@ -20,6 +21,13 @@ public class FYPTourneyProDbContext : AbpDbContext<FYPTourneyProDbContext>
     public DbSet<Book> Books { get; set; }
 
     public DbSet<TodoItem> TodoItems { get; set; }
+
+
+    //organizer
+    public DbSet<Category> Category { get; set; }
+    public DbSet<Tournament> Tournament { get; set; }
+    public DbSet<PlayerRegistration> PlayerRegistration { get; set; }
+    public DbSet<CategoryParticipant> CategoryParticipant { get; set; }
 
     public const string DbTablePrefix = "App";
     public const string DbSchema = null;
@@ -58,6 +66,23 @@ public class FYPTourneyProDbContext : AbpDbContext<FYPTourneyProDbContext>
         builder.Entity<TodoItem>(b =>
         {
             b.ToTable("TodoItems");
+        });
+
+        builder.Entity<Category>(b =>
+        {
+            b.ToTable("Category");
+        });
+        builder.Entity<Tournament>(b =>
+        {
+            b.ToTable("Tournament");
+        });
+        builder.Entity<PlayerRegistration>(b =>
+        {
+            b.ToTable("PlayerRegistration");
+        });
+        builder.Entity<CategoryParticipant>(b =>
+        {
+            b.ToTable("CategoryParticipant");
         });
     }
 }

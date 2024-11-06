@@ -7,4 +7,6 @@ public class FYPTourneyProMenus
     public const string Home = Prefix + ".Home";
 
     public const string TodoItems = Prefix + ".TodoItems";
+
+    public const string Tournament = Prefix + ".Tournament";
 }

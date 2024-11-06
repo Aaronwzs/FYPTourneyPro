@@ -22,6 +22,7 @@ public class FYPTourneyProMenuContributor : IMenuContributor
     private static Task ConfigureMainMenuAsync(MenuConfigurationContext context)
     {
         var l = context.GetLocalizer<FYPTourneyProResource>();
+
         context.Menu.Items.Insert(
             0,
             new ApplicationMenuItem(
@@ -60,7 +61,7 @@ public class FYPTourneyProMenuContributor : IMenuContributor
 
         //Administration->Settings
         administration.SetSubItemOrder(SettingManagementMenuNames.GroupName, 6);
-    
+
         context.Menu.AddItem(
             new ApplicationMenuItem(
                 "BooksStore",
@@ -71,10 +72,82 @@ public class FYPTourneyProMenuContributor : IMenuContributor
                     "BooksStore.Books",
                     l["Menu:Books"],
                     url: "/Books"
-                ).RequirePermissions(FYPTourneyProPermissions.Books.Default) 
+                ).RequirePermissions(FYPTourneyProPermissions.Books.Default)
             )
         );
 
+        if (context.Menu.Name == StandardMenus.Main)
+        {
+            // Add Tournament Management section
+            var tournamentMenu = context.Menu.AddItem(
+                new ApplicationMenuItem(
+                    "TournamentManagement",
+                    "Tournament Management",
+                    icon: "fa fa-trophy"
+                )
+            );
+            // Add sub-items under Tournament Management
+            tournamentMenu.AddItem(
+                    new ApplicationMenuItem(
+                        "TournamentManagement.ListTournaments",
+                        "Tournament",
+                        url: "/Tournament/Index"
+                    )
+                );
+
+            // Add Category Management section
+            var categoryMenu = context.Menu.AddItem(
+                new ApplicationMenuItem(
+                    "CategoryManagement",
+                    "Category Management",
+                    icon: "fa fa-list"
+                )
+            );
+
+            categoryMenu.AddItem(
+                new ApplicationMenuItem(
+                    "CategoryManagement.AddCategory",
+                    "Add Category",
+                    url: "/Category/Index"
+                )
+            );
+
+            // Add Player Registration section
+            var playerRegistrationMenu = context.Menu.AddItem(
+                new ApplicationMenuItem(
+                    "PlayerRegistration",
+                    "Player Registration",
+                    icon: "fa fa-user-plus"
+                )
+            );
+
+            playerRegistrationMenu.AddItem(
+                new ApplicationMenuItem(
+                    "PlayerRegistration.Register",
+                    "Register Player",
+                    url: "/PlayerRegistration/Register"
+                )
+            );
+
+            // Add CategoryParticipant Management section
+            var categoryParticipantMenu = context.Menu.AddItem(
+                new ApplicationMenuItem(
+                    "CategoryParticipantManagement",
+                    "Participant Management",
+                    icon: "fa fa-users"
+                )
+            );
+
+            categoryParticipantMenu.AddItem(
+                new ApplicationMenuItem(
+                    "CategoryParticipantManagement.ListParticipants",
+                    "Participant List",
+                    url: "/CategoryParticipant/List"
+                )
+            );
+        }
+
         return Task.CompletedTask;
+        }
     }
-}
+
