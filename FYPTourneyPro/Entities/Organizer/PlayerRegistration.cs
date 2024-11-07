@@ -10,7 +10,7 @@ namespace FYPTourneyPro.Entities.Organizer
         public Guid UserId { get; set; }
         public Guid TournamentId { get; set; }
 
+        public string UserName { get; set; } = string.Empty; //Added userName
 
-        
     }
 }

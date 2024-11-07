@@ -71,7 +71,16 @@ namespace FYPTourneyPro.Services.Organizer
             tournament.EndDate = input.EndDate;
 
             await _tournamentRepository.UpdateAsync(tournament);
-            return ObjectMapper.Map<Tournament, TournamentDto>(tournament);
+            return new TournamentDto
+            {
+                Id = tournament.Id,
+                Name = tournament.Name,
+                Description = tournament.Description,
+                RegistrationStartDate = tournament.RegStartDate,
+                RegistrationEndDate = tournament.RegEndDate,
+                StartDate = tournament.StartDate,
+                EndDate = tournament.EndDate
+            };
         }
         public async Task DeleteAsync(Guid id)
         {

@@ -40,7 +40,13 @@ namespace FYPTourneyPro.Services.Organizer
                 PlayerRegistrationId = input.PlayerRegistrationId
             });
 
-            return ObjectMapper.Map<CategoryParticipant, CategoryParticipantDto>(participant);
+            return new CategoryParticipantDto
+            {
+                Id = participant.Id,
+                Seed = participant.Seed,
+                CategoryId = participant.CategoryId,
+                PlayerRegistrationId = participant.PlayerRegistrationId
+            };
         }
 
 
