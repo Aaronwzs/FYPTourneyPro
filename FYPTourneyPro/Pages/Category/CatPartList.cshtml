@@ -1,0 +1,35 @@
+﻿@page
+@model FYPTourneyPro.Pages.Category.CatPartList
+@{
+    ViewData["Title"] = "Category Participants List";
+}
+<div class="container">
+    <abp-card>
+        <abp-card-header>
+            <abp-card-title>
+                Participants in @Model.Category.Name
+            </abp-card-title>
+        </abp-card-header>
+        <abp-card-body>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Seeding</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var participant in Model.Participants)
+                        {
+                            <tr>
+                                <td>@participant.PlayerName</td>
+                                <td>@(participant.Seed == 0 ? "NA" : participant.Seed.ToString())</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </abp-card-body>
+    </abp-card>
+</div>

@@ -4,6 +4,7 @@ using FYPTourneyPro.Services.Dtos.Organizer.Category;
 using FYPTourneyPro.Services.Dtos.TodoItems;
 using OpenQA.Selenium;
 using SendGrid.Helpers.Errors.Model;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 
 namespace FYPTourneyPro.Services.Organizer
@@ -91,6 +92,23 @@ namespace FYPTourneyPro.Services.Organizer
             TournamentId = category.TournamentId
         }).ToList();
 }
+
+        public async Task<CategoryDto> GetAsync(Guid id)
+        {
+            var category = await _categoryRepository.FindAsync(id);
+            if (category == null)
+            {
+                throw new EntityNotFoundException(typeof(Category), id);
+            }
+
+            return new CategoryDto
+            {
+                Id = category.Id,
+                Name = category.Name,
+                Description = category.Description,
+                TournamentId = category.TournamentId
+            };
+        }
 
     }
 }

@@ -8,5 +8,7 @@ namespace FYPTourneyPro.Services.Dtos.Organizer.CategoryParticipant
         public int Seed { get; set; }
         public Guid CategoryId { get; set; }
         public Guid PlayerRegistrationId { get; set; }
+        public string CategoryName { get; set; } // Category Name for display
+        public string PlayerName { get; set; }  // Player Name for display
     }
 }

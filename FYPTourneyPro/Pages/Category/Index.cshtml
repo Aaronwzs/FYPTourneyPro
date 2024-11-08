@@ -40,7 +40,10 @@
                             @foreach (var category in Model.Categories)
                             {
                                 <li data-id="@category.Id">
-                                    <i class="fa fa-trash-o"></i> @category.Name
+                                    <i class="fa fa-trash-o"></i> 
+                                    <a  href="@Url.Page("/Category/CatPartList", new { categoryId = category.Id })">
+                                        @category.Name
+                                    </a>
                                 </li>
                             }
                         </ul>

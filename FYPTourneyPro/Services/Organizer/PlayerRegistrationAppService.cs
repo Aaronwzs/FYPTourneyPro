@@ -84,7 +84,24 @@ namespace FYPTourneyPro.Services.Organizer
             await _playerRegistrationRepository.DeleteAsync(id);
         }
 
-        public async Task<List<PlayerRegDto>> GetListByTournamentAsync(Guid tournamentId)
+
+        public async Task<List<PlayerRegDto>> GetListByCategoryAsync(Guid categoryId)
+        {
+            var registrations = await _playerRegistrationRepository.GetListAsync(r => r.CategoryId == categoryId);
+            return registrations.Select(r => new PlayerRegDto
+            {
+                Id = r.Id,
+                Date = r.Date,
+                Amount = r.Amount,
+                CategoryId = r.CategoryId,
+                UserId = r.UserId,
+                TournamentId = r.TournamentId,
+
+                UserName = r.UserName
+            }).ToList();
+        }
+
+            public async Task<List<PlayerRegDto>> GetListByTournamentAsync(Guid tournamentId)
         {
             var registrations = await _playerRegistrationRepository.GetListAsync(r => r.TournamentId == tournamentId);
             return registrations

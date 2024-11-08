@@ -8,11 +8,17 @@ namespace FYPTourneyPro.Services.Organizer
     public class CategoryParticipantAppService : FYPTourneyProAppService
     {
         private readonly IRepository<CategoryParticipant, Guid> _categoryParticipantRepository;
+        private readonly IRepository<Category, Guid> _categoryRepository;
+        private readonly IRepository<PlayerRegistration, Guid> _playerRegistrationRepository;
 
 
-        public CategoryParticipantAppService(IRepository<CategoryParticipant, Guid> categoryPaticipantRepository)
+        public CategoryParticipantAppService(IRepository<CategoryParticipant, Guid> categoryPaticipantRepository,
+            IRepository<Category, Guid> categoryRepository,
+            IRepository<PlayerRegistration, Guid> playerRegistrationRepository)
         {
             _categoryParticipantRepository = categoryPaticipantRepository;
+            _categoryRepository = categoryRepository;
+            _playerRegistrationRepository = playerRegistrationRepository;
         }
 
         public async Task<List<CategoryParticipantDto>> GetListAsync()
@@ -31,22 +37,49 @@ namespace FYPTourneyPro.Services.Organizer
         }
 
 
-        public async Task<CategoryParticipantDto> CreateAsync(CategoryParticipantDto input)
+        public async Task CreatefromPlyerRegAsync(Guid categoryId) 
+            // fetches the PlayerRegistration records based on CategoryId, creates CategoryParticipant records with Seed set to 0, and saves them into the CategoryParticipant table
         {
-            var participant = await _categoryParticipantRepository.InsertAsync(new CategoryParticipant
-            {
-                Seed = input.Seed,
-                CategoryId = input.CategoryId,
-                PlayerRegistrationId = input.PlayerRegistrationId
-            });
+            // Fetch all player registrations for the given category
+            var registrations = await _playerRegistrationRepository.GetListAsync(r => r.CategoryId == categoryId);
 
-            return new CategoryParticipantDto
+            // Create new CategoryParticipants for each player registration
+            foreach (var registration in registrations)
             {
-                Id = participant.Id,
-                Seed = participant.Seed,
-                CategoryId = participant.CategoryId,
-                PlayerRegistrationId = participant.PlayerRegistrationId
-            };
+                var categoryParticipant = new CategoryParticipant
+                {
+                    Seed = 0, // Set Seed as 0
+                    CategoryId = categoryId,
+                    PlayerRegistrationId = registration.Id
+                };
+
+                // Insert the new CategoryParticipant into the database
+                await _categoryParticipantRepository.InsertAsync(categoryParticipant);
+            }
+        }
+
+        public async Task<List<CategoryParticipantDto>> GetParticipantsWithDetailsAsync(Guid categoryId)
+        //fetches the CategoryParticipant records for the specified CategoryId, retrieves the corresponding PlayerName from PlayerRegistration, and returns a list of CategoryParticipantDto objects
+        {
+            var participants = await _categoryParticipantRepository.GetListAsync(p => p.CategoryId == categoryId);
+
+            var result = new List<CategoryParticipantDto>();
+
+            foreach (var participant in participants)
+            {
+                var playerRegistration = await _playerRegistrationRepository.GetAsync(participant.PlayerRegistrationId);
+
+                result.Add(new CategoryParticipantDto
+                {
+                    Id = participant.Id,
+                    Seed = participant.Seed, // Seed value (which is 0)
+                    CategoryId = participant.CategoryId,
+                    PlayerRegistrationId = participant.PlayerRegistrationId,
+                    PlayerName = playerRegistration.UserName // Fetch PlayerName from PlayerRegistration
+                });
+            }
+
+            return result;
         }
 
 
@@ -55,6 +88,11 @@ namespace FYPTourneyPro.Services.Organizer
         {
             await _categoryParticipantRepository.DeleteAsync(id);
         }
+
+
+
+       
+
     }
 }
 

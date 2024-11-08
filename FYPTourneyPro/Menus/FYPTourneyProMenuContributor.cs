@@ -107,44 +107,12 @@ public class FYPTourneyProMenuContributor : IMenuContributor
             categoryMenu.AddItem(
                 new ApplicationMenuItem(
                     "CategoryManagement.AddCategory",
-                    "Add Category",
+                    "Category/Registration",
                     url: "/Category/Index"
                 )
             );
 
-            // Add Player Registration section
-            var playerRegistrationMenu = context.Menu.AddItem(
-                new ApplicationMenuItem(
-                    "PlayerRegistration",
-                    "Player Registration",
-                    icon: "fa fa-user-plus"
-                )
-            );
-
-            playerRegistrationMenu.AddItem(
-                new ApplicationMenuItem(
-                    "PlayerRegistration.Register",
-                    "Register Player",
-                    url: "/PlayerRegistration/Register"
-                )
-            );
-
-            // Add CategoryParticipant Management section
-            var categoryParticipantMenu = context.Menu.AddItem(
-                new ApplicationMenuItem(
-                    "CategoryParticipantManagement",
-                    "Participant Management",
-                    icon: "fa fa-users"
-                )
-            );
-
-            categoryParticipantMenu.AddItem(
-                new ApplicationMenuItem(
-                    "CategoryParticipantManagement.ListParticipants",
-                    "Participant List",
-                    url: "/CategoryParticipant/List"
-                )
-            );
+            
         }
 
         return Task.CompletedTask;

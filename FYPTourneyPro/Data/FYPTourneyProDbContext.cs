@@ -13,6 +13,7 @@ using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using FYPTourneyPro.Entities.Books;
 using FYPTourneyPro.Entities.TodoList;
 using FYPTourneyPro.Entities.Organizer;
+using System.Reflection.Emit;
 
 namespace FYPTourneyPro.Data;
 
@@ -27,7 +28,10 @@ public class FYPTourneyProDbContext : AbpDbContext<FYPTourneyProDbContext>
     public DbSet<Category> Category { get; set; }
     public DbSet<Tournament> Tournament { get; set; }
     public DbSet<PlayerRegistration> PlayerRegistration { get; set; }
+    
     public DbSet<CategoryParticipant> CategoryParticipant { get; set; }
+    public DbSet<Compete> Competes { get; set; }
+    public DbSet<Match> Matches { get; set; }
 
     public const string DbTablePrefix = "App";
     public const string DbSchema = null;
@@ -84,6 +88,32 @@ public class FYPTourneyProDbContext : AbpDbContext<FYPTourneyProDbContext>
         {
             b.ToTable("CategoryParticipant");
         });
+
+        // Explicitly define the relationship between CategoryParticipant and Category
+        builder.Entity<CategoryParticipant>()
+            .HasOne(cp => cp.Category)
+            .WithMany() // Or .WithOne() depending on your relationship
+            .HasForeignKey(cp => cp.CategoryId)
+            .OnDelete(DeleteBehavior.Cascade);  // Use appropriate delete behavior
+
+        // Explicitly define the relationship between CategoryParticipant and PlayerRegistration
+        builder.Entity<CategoryParticipant>()
+            .HasOne(cp => cp.PlayerRegistration)
+            .WithMany() // Or .WithOne() depending on your relationship
+            .HasForeignKey(cp => cp.PlayerRegistrationId)
+            .OnDelete(DeleteBehavior.Cascade);  // Use appropriate delete behavior
+
+        builder.Entity<Compete>(b =>
+        {
+            b.ToTable("Compete");
+        });
+
+
+        builder.Entity<Match>(b =>
+        {
+            b.ToTable("Match");
+        });
+
     }
 }
 
