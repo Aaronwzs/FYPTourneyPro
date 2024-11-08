@@ -43,18 +43,25 @@ namespace FYPTourneyPro.Services.Organizer
             // Fetch all player registrations for the given category
             var registrations = await _playerRegistrationRepository.GetListAsync(r => r.CategoryId == categoryId);
 
-            // Create new CategoryParticipants for each player registration
             foreach (var registration in registrations)
             {
-                var categoryParticipant = new CategoryParticipant
-                {
-                    Seed = 0, // Set Seed as 0
-                    CategoryId = categoryId,
-                    PlayerRegistrationId = registration.Id
-                };
+                // Check if a CategoryParticipant already exists for this PlayerRegistrationId and CategoryId
+                var existingParticipant = await _categoryParticipantRepository
+                    .FirstOrDefaultAsync(p => p.PlayerRegistrationId == registration.Id && p.CategoryId == categoryId);
 
-                // Insert the new CategoryParticipant into the database
-                await _categoryParticipantRepository.InsertAsync(categoryParticipant);
+                // If no existing participant, create a new one with Seed 0
+                if (existingParticipant == null)
+                {
+                    var categoryParticipant = new CategoryParticipant
+                    {
+                        Seed = 0, // Set Seed to 0
+                        CategoryId = categoryId,
+                        PlayerRegistrationId = registration.Id
+                    };
+
+                    // Insert the new CategoryParticipant
+                    await _categoryParticipantRepository.InsertAsync(categoryParticipant);
+                }
             }
         }
 
