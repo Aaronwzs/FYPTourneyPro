@@ -12,6 +12,8 @@ namespace FYPTourneyPro.Entities.Organizer
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
 
+        // New UserId property to track which user created the tournament
+        public Guid UserId { get; set; }
 
 
     }

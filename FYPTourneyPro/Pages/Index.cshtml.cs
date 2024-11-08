@@ -17,6 +17,7 @@ public class IndexModel : AbpPageModel
     public async Task OnGetAsync()
     {
         Tournaments = await _tournamentAppService.GetListAsync();
+        Tournaments = await _tournamentAppService.GetListAsyncUid();
     }
 
     public async Task<IActionResult> OnPostDeleteAsync(Guid id)

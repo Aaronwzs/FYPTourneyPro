@@ -16,7 +16,9 @@
             </abp-card-title>
         </abp-card-header>
         <abp-card-body>
+            @if (User.Identity.IsAuthenticated) {
             <!-- FORM FOR NEW TOURNAMENT -->
+           
             <form id="NewTournamentForm" class="row row-cols-lg-auto g-3 align-items-center">
                 <div class="col-12">
                     <input id="TournamentName" type="text" class="form-control" placeholder="Tournament Name" required>
@@ -40,9 +42,27 @@
                     <button type="submit" class="btn btn-primary">Add Tournament</button>
                 </div>
             </form>
+            }
+            else
+            {
+                <div class="alert alert-danger">
+                    You must be logged in to create a tournament.
+                </div>
+            }
             <!-- TOURNAMENT LIST -->
             <ul id="TournamentList">
                 @foreach (var tournament in Model.Tournaments)
+                {
+                    <li data-id="@tournament.Id">
+                        <i class="fa fa-trash-o"></i>
+                        <a href="javascript:void(0)" class="tournament-link">@tournament.Name</a>
+                    </li>
+                }
+            </ul>
+            <!-- USER'S TOURNAMENT LIST -->
+            <h3>Your Tournaments</h3>
+            <ul id="UserTournamentList">
+                @foreach (var tournament in Model.UserTournaments)
                 {
                     <li data-id="@tournament.Id">
                         <i class="fa fa-trash-o"></i>

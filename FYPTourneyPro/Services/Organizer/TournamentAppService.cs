@@ -2,17 +2,22 @@
 
 using FYPTourneyPro.Entities.Organizer;
 using FYPTourneyPro.Services.Dtos.Organizer.Tournament;
+using System.Linq;
+using Volo.Abp.Authorization;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.Users;
 
 namespace FYPTourneyPro.Services.Organizer
 {
     public class TournamentAppService : FYPTourneyProAppService
     {
         private readonly IRepository<Tournament, Guid> _tournamentRepository;
+        private readonly ICurrentUser _currentUser;
 
-        public TournamentAppService(IRepository<Tournament, Guid> tournamentRepository)
+        public TournamentAppService(IRepository<Tournament, Guid> tournamentRepository, ICurrentUser currentUser)
         {
             _tournamentRepository = tournamentRepository;
+            _currentUser = currentUser;
         }
 
         public async Task<List<TournamentDto>> GetListAsync()
@@ -31,36 +36,69 @@ namespace FYPTourneyPro.Services.Organizer
                 }).ToList();
         }
 
+        public async Task<List<TournamentDto>> GetListAsyncUid()
+        {
+            // Fetch tournaments created by the current logged-in user
+            var tournaments = await _tournamentRepository.GetListAsync(t => t.UserId == _currentUser.Id); //filter by userid
+
+
+            return tournaments
+                .Select(t => new TournamentDto
+                {
+                    Id = t.Id,
+                    Name = t.Name,
+                    Description = t.Description,
+                    RegistrationStartDate = t.RegStartDate,
+                    RegistrationEndDate = t.RegEndDate,
+                    StartDate = t.StartDate,
+                    EndDate = t.EndDate
+                }).ToList();
+        }
+
         public async Task<TournamentDto> GetAsync(Guid id)
         {
             var tournament = await _tournamentRepository.GetAsync(id);
+            if (tournament.UserId != _currentUser.Id)
+            {
+                throw new Exception("You are not authorized to view this tournament.");
+            }
             return ObjectMapper.Map<Tournament, TournamentDto>(tournament);
         }
 
         public async Task<TournamentDto> CreateAsync(TournamentDto input)
         {
-            var tournament = await _tournamentRepository.InsertAsync(new Tournament
+            if (_currentUser.IsAuthenticated)
             {
-                Name = input.Name,
-                Description = input.Description,
-                RegStartDate = input.RegistrationStartDate,
-                RegEndDate = input.RegistrationEndDate,
-                StartDate = input.StartDate,
-                EndDate = input.EndDate
-            });
 
-            return new TournamentDto
+                var tournament = await _tournamentRepository.InsertAsync(new Tournament
+                {
+                    Name = input.Name,
+                    Description = input.Description,
+                    RegStartDate = input.RegistrationStartDate,
+                    RegEndDate = input.RegistrationEndDate,
+                    StartDate = input.StartDate,
+                    EndDate = input.EndDate,
+                    UserId = _currentUser.Id.Value
+                });
+
+                return new TournamentDto
+                {
+                    Id = tournament.Id,
+                    Name = tournament.Name,
+                    Description = tournament.Description,
+                    RegistrationStartDate = tournament.RegStartDate,
+                    RegistrationEndDate = tournament.RegEndDate,
+                    StartDate = tournament.StartDate,
+                    EndDate = tournament.EndDate
+                };
+
+            }
+            else
             {
-                Id = tournament.Id,
-                Name = tournament.Name,
-                Description = tournament.Description,
-                RegistrationStartDate = tournament.RegStartDate,
-                RegistrationEndDate = tournament.RegEndDate,
-                StartDate = tournament.StartDate,
-                EndDate = tournament.EndDate
-            };
+                throw new Exception("User must be logged in to create a tournament.");
+            }
         }
-        public async Task<TournamentDto> UpdateAsync(Guid id, TournamentDto input)
+            public async Task<TournamentDto> UpdateAsync(Guid id, TournamentDto input)
         {
             var tournament = await _tournamentRepository.GetAsync(id);
             tournament.Name = input.Name;
