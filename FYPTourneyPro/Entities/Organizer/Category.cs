@@ -11,6 +11,7 @@ namespace FYPTourneyPro.Entities.Organizer
         public string Name { get; set; }
         public string Description { get; set; }
         public Guid TournamentId { get; set; }
+        public Boolean isPair { get; set; } // added ispair
     }
 
 }

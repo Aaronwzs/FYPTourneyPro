@@ -27,14 +27,15 @@ public class FYPTourneyProDbContext : AbpDbContext<FYPTourneyProDbContext>
     //organizer
     public DbSet<Category> Category { get; set; }
     public DbSet<Tournament> Tournament { get; set; }
-    public DbSet<PlayerRegistration> PlayerRegistration { get; set; }
-    
+  
     public DbSet<CategoryParticipant> CategoryParticipant { get; set; }
 
     //Match
     public DbSet<MatchParticipant> MatchParticipant { get; set; }
     public DbSet<Match> Match { get; set; }
 
+    public DbSet<Registration> Registration { get; set; }
+    public DbSet<Participant> Participant { get; set; }
 
     public const string DbTablePrefix = "App";
     public const string DbSchema = null;
@@ -83,29 +84,11 @@ public class FYPTourneyProDbContext : AbpDbContext<FYPTourneyProDbContext>
         {
             b.ToTable("Tournament");
         });
-        builder.Entity<PlayerRegistration>(b =>
-        {
-            b.ToTable("PlayerRegistration");
-        });
+       
         builder.Entity<CategoryParticipant>(b =>
         {
             b.ToTable("CategoryParticipant");
         });
-
-        // Explicitly define the relationship between CategoryParticipant and Category
-        builder.Entity<CategoryParticipant>()
-            .HasOne(cp => cp.Category)
-            .WithMany() // Or .WithOne() depending on your relationship
-            .HasForeignKey(cp => cp.CategoryId)
-            .OnDelete(DeleteBehavior.Cascade);  // Use appropriate delete behavior
-
-        // Explicitly define the relationship between CategoryParticipant and PlayerRegistration
-        builder.Entity<CategoryParticipant>()
-            .HasOne(cp => cp.PlayerRegistration)
-            .WithMany() // Or .WithOne() depending on your relationship
-            .HasForeignKey(cp => cp.PlayerRegistrationId)
-            .OnDelete(DeleteBehavior.Cascade);  // Use appropriate delete behavior
-
 
         builder.Entity<MatchParticipant>(b =>
         {
@@ -115,6 +98,16 @@ public class FYPTourneyProDbContext : AbpDbContext<FYPTourneyProDbContext>
         builder.Entity<Match>(b =>
         {
             b.ToTable("Match");
+        });
+
+        builder.Entity<Registration>(b =>
+        {
+            b.ToTable("Registration");
+        });
+
+        builder.Entity<Participant>(b =>
+        {
+            b.ToTable("Participant");
         });
 
 

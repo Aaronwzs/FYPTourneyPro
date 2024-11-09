@@ -3,6 +3,7 @@ using System;
 using FYPTourneyPro.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Volo.Abp.EntityFrameworkCore;
@@ -12,9 +13,11 @@ using Volo.Abp.EntityFrameworkCore;
 namespace FYPTourneyPro.Migrations
 {
     [DbContext(typeof(FYPTourneyProDbContext))]
-    partial class FYPTourneyProDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241109153536_remove_MatchPartId_MatchTable")]
+    partial class remove_MatchPartId_MatchTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -108,13 +111,17 @@ namespace FYPTourneyPro.Migrations
                     b.Property<Guid>("CategoryId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("ParticipantId")
+                    b.Property<Guid>("PlayerRegistrationId")
                         .HasColumnType("uuid");
 
                     b.Property<int>("Seed")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("PlayerRegistrationId");
 
                     b.ToTable("CategoryParticipant", (string)null);
                 });
@@ -193,6 +200,35 @@ namespace FYPTourneyPro.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Participant", (string)null);
+                });
+
+            modelBuilder.Entity("FYPTourneyPro.Entities.Organizer.PlayerRegistration", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("numeric");
+
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("TournamentId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PlayerRegistration");
                 });
 
             modelBuilder.Entity("FYPTourneyPro.Entities.Organizer.Registration", b =>
@@ -2137,6 +2173,25 @@ namespace FYPTourneyPro.Migrations
                     b.HasKey("TenantId", "Name");
 
                     b.ToTable("AbpTenantConnectionStrings", (string)null);
+                });
+
+            modelBuilder.Entity("FYPTourneyPro.Entities.Organizer.CategoryParticipant", b =>
+                {
+                    b.HasOne("FYPTourneyPro.Entities.Organizer.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FYPTourneyPro.Entities.Organizer.PlayerRegistration", "PlayerRegistration")
+                        .WithMany()
+                        .HasForeignKey("PlayerRegistrationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("PlayerRegistration");
                 });
 
             modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLogAction", b =>

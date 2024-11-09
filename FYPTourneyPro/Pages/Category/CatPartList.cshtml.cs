@@ -28,11 +28,7 @@ namespace FYPTourneyPro.Pages.Category
             // Fetch the category details by ID
             Category = await _categoryAppService.GetAsync(categoryId);
 
-            // Create CategoryParticipants from PlayerRegistrations 
-            await _categoryParticipantAppService.CreatefromPlyerRegAsync(categoryId);
-
-            // Fetch participants with PlayerName and Seed (Seed will be 0)
-            Participants = await _categoryParticipantAppService.GetParticipantsWithDetailsAsync(categoryId);
+           
         }
 
     }

@@ -14,13 +14,13 @@ namespace FYPTourneyPro.Pages.Category
         public Guid TournamentId { get; set; }
 
         private readonly CategoryAppService _categoryAppService;
-        private readonly PlayerRegistrationAppService _playerRegistrationAppService;
+        
 
 
-        public IndexModel(CategoryAppService categoryAppService, PlayerRegistrationAppService playerRegistrationAppService)
+        public IndexModel(CategoryAppService categoryAppService )
         {
             _categoryAppService = categoryAppService;
-            _playerRegistrationAppService = playerRegistrationAppService;
+           
 
         }
 
@@ -28,7 +28,7 @@ namespace FYPTourneyPro.Pages.Category
         {
             TournamentId = tournamentId;
             Categories = await _categoryAppService.GetListByTournamentAsync(tournamentId);
-            Registrations = await _playerRegistrationAppService.GetListByTournamentAsync(tournamentId);
+           
 
         }
     }

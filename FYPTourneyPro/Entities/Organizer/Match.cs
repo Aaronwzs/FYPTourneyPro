@@ -8,7 +8,7 @@ namespace FYPTourneyPro.Entities.Organizer
         public DateTime startTime { get; set; }
         public DateTime endTime { get; set; }
         public int courtNum { get; set; }
-        public Guid MatchParticipants {  get; set; }
+        
         public Guid CategoryId { get; set; }
 
     }
