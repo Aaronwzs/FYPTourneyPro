@@ -263,3 +263,6 @@ FYPTourneyPro/Logs/*
 
 # Use abp install-libs to restore.
 **/wwwroot/libs/*
+
+# Ignore appsettings
+FYPTourneyPro/appsettings.json
