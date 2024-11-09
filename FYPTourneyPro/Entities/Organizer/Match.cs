@@ -4,11 +4,12 @@ namespace FYPTourneyPro.Entities.Organizer
 {
     public class Match : Entity<Guid>
     {
-        public Guid CompeteId { get; set; } // Link to the compete match-up
-        public DateTime MatchTime { get; set; }
-        public string Court { get; set; } // Court name or number
+        public string round { get; set; }
+        public DateTime startTime { get; set; }
+        public DateTime endTime { get; set; }
+        public int courtNum { get; set; }
+        public Guid MatchParticipants {  get; set; }
+        public Guid CategoryId { get; set; }
 
-        // Navigation properties
-        public virtual Compete Compete { get; set; }
     }
 }

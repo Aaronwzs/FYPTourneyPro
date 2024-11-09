@@ -3,6 +3,7 @@ using System;
 using FYPTourneyPro.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Volo.Abp.EntityFrameworkCore;
@@ -12,9 +13,11 @@ using Volo.Abp.EntityFrameworkCore;
 namespace FYPTourneyPro.Migrations
 {
     [DbContext(typeof(FYPTourneyProDbContext))]
-    partial class FYPTourneyProDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241108160253_RemoveCompeteMatchTable")]
+    partial class RemoveCompeteMatchTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -118,57 +121,6 @@ namespace FYPTourneyPro.Migrations
                     b.HasIndex("PlayerRegistrationId");
 
                     b.ToTable("CategoryParticipant", (string)null);
-                });
-
-            modelBuilder.Entity("FYPTourneyPro.Entities.Organizer.Match", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("CategoryId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("MatchParticipants")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("courtNum")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("endTime")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("round")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("startTime")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Match", (string)null);
-                });
-
-            modelBuilder.Entity("FYPTourneyPro.Entities.Organizer.MatchParticipant", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
-
-                    b.Property<bool>("IsWinner")
-                        .HasColumnType("boolean");
-
-                    b.Property<Guid>("MatchId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("PairId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("MatchParticipant", (string)null);
                 });
 
             modelBuilder.Entity("FYPTourneyPro.Entities.Organizer.PlayerRegistration", b =>
