@@ -1,6 +1,6 @@
 ﻿
 using FYPTourneyPro.Entities.Organizer;
-using FYPTourneyPro.Services.Dtos.Organizer.CategoryParticipant;
+using FYPTourneyPro.Services.Dtos.Organizer;
 using Volo.Abp.Domain.Repositories;
 
 namespace FYPTourneyPro.Services.Organizer

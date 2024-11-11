@@ -1,7 +1,7 @@
 ﻿
 
 using FYPTourneyPro.Entities.Organizer;
-using FYPTourneyPro.Services.Dtos.Organizer.Tournament;
+using FYPTourneyPro.Services.Dtos.Organizer;
 using System.Linq;
 using Volo.Abp.Authorization;
 using Volo.Abp.Domain.Repositories;

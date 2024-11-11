@@ -1,7 +1,7 @@
 ﻿using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Entities;
 
-namespace FYPTourneyPro.Services.Dtos.Organizer.CategoryParticipant
+namespace FYPTourneyPro.Services.Dtos.Organizer
 {
     public class CategoryParticipantDto : EntityDto<Guid>
     {

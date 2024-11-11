@@ -1,11 +1,10 @@
-using FYPTourneyPro.Services.Dtos.Organizer.Category;
-using FYPTourneyPro.Services.Dtos.Organizer.CategoryParticipant;
-using FYPTourneyPro.Services.Dtos.Organizer.PlayerRegistration;
+using FYPTourneyPro.Services.Dtos.Organizer;
+
 using FYPTourneyPro.Services.Organizer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace FYPTourneyPro.Pages.Category
+namespace FYPTourneyPro.Pages.TourCategory
 {
     public class CatPartList : PageModel
     {

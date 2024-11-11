@@ -1,7 +1,7 @@
 ﻿using FYPTourneyPro.Entities.Organizer;
 using FYPTourneyPro.Entities.TodoList;
-using FYPTourneyPro.Services.Dtos.Organizer.Category;
-using FYPTourneyPro.Services.Dtos.TodoItems;
+using FYPTourneyPro.Services.Dtos.Organizer;
+
 using OpenQA.Selenium;
 using SendGrid.Helpers.Errors.Model;
 using Volo.Abp.Domain.Entities;
@@ -39,7 +39,8 @@ namespace FYPTourneyPro.Services.Organizer
             {
                 Name = input.Name,
                 Description = input.Description,
-                TournamentId = input.TournamentId
+                TournamentId = input.TournamentId,
+                isPair = input.IsPair
             };
 
             var createdCategory = await _categoryRepository.InsertAsync(category);
@@ -49,30 +50,12 @@ namespace FYPTourneyPro.Services.Organizer
                 Id = createdCategory.Id,
                 Name = createdCategory.Name,
                 Description = createdCategory.Description,
-                TournamentId = createdCategory.TournamentId
+                TournamentId = createdCategory.TournamentId,
+                 IsPair = createdCategory.isPair
             };
         }
 
-        public async Task<CategoryDto> EditAsync(Guid id, string name, string description)
-        {
-            var existingCategory = await _categoryRepository.FindAsync(id);
-            if (existingCategory == null)
-            {
-                throw new OpenQA.Selenium.NotFoundException($"Category with ID {id} not found.");
-            }
-
-            existingCategory.Name = name;
-            existingCategory.Description = description;
-
-            var updatedCategory = await _categoryRepository.UpdateAsync(existingCategory);
-            return new CategoryDto
-            {
-                Id = updatedCategory.Id,
-                Name = updatedCategory.Name,
-                Description = updatedCategory.Description,
-                TournamentId = updatedCategory.TournamentId
-            };
-        }
+       
 
         public async Task DeleteAsync(Guid id)
         {
@@ -108,6 +91,11 @@ namespace FYPTourneyPro.Services.Organizer
                 Description = category.Description,
                 TournamentId = category.TournamentId
             };
+        }
+        public async Task<bool> GetIsPairAsync(Guid categoryId)
+        {
+            var category = await _categoryRepository.GetAsync(categoryId);
+            return category.isPair;
         }
 
     }

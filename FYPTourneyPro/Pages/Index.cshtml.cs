@@ -1,4 +1,4 @@
-﻿using FYPTourneyPro.Services.Dtos.Organizer.Tournament;
+﻿using FYPTourneyPro.Services.Dtos.Organizer;
 using FYPTourneyPro.Services.Organizer;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;

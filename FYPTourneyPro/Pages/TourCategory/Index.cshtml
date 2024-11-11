@@ -1,0 +1,75 @@
+﻿@page
+@model FYPTourneyPro.Pages.TourCategory.IndexModel
+@section styles {
+    <abp-style src="/Pages/TourCategory/index.css" />
+}
+@section scripts {
+    <abp-script src="/Pages/TourCategory/index.js" />
+}
+
+<div class="container">
+    <abp-card>
+        <abp-card-header>
+            <div class="d-flex justify-content-between align-items-center">
+            <abp-card-title>
+                CATEGORY
+            </abp-card-title>
+                <a href="@Url.Page("/TourRegistration/index", new { tournamentId = Model.TournamentId })"
+                   class="btn btn-success">
+                    <i class="fa fa-user-plus"></i> Register Players
+                </a>
+            </div>
+        </abp-card-header>
+        <abp-card-body>
+            <div class="row">
+                
+                <div class="col-md-6">
+
+                    <!-- FORM FOR NEW CATEGORY STARTS-->
+                    <form id="NewCategoryForm" class="row row-cols-lg-auto g-3 align-items-center mb-4">
+                        <div class="col-12">
+                            <input type="hidden" id="TournamentId" value="@Model.TournamentId" />
+                            <input id="CategoryName" type="text" class="form-control" placeholder="Category Name" required>
+                        </div>
+                        <div class="col-12">
+                            <textarea id="CategoryDescription" class="form-control" placeholder="Description" required></textarea>
+                        </div>
+                        <div class="col-12">
+                            <!-- Toggle for "Is Pair" (for doubles) -->
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="IsPair" />
+                                <label class="form-check-label" for="IsPair">
+                                    Is Doubles (Pair)
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary">Add Category</button>
+                        </div>
+                    </form>
+
+                    <!-- CATEGORY LIST -->
+                    <div class="mb-4">
+                        <h4>Categories</h4>
+                        <ul id="CategoryList">
+                            @foreach (var category in Model.Categories)
+                            {
+                                <li data-id="@category.Id">
+                                    <i class="fa fa-trash-o"></i>
+                                    <a href="@Url.Page("/TourCategory/CatPartList", new { categoryId = category.Id })">
+                                        @category.Name
+                                    </a>
+                                    @if (category.IsPair)
+                                    {
+                                        <span class="badge bg-info">Doubles</span>
+                                    }
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                   
+            </div>
+           
+        </abp-card-body>
+    </abp-card>
+</div>

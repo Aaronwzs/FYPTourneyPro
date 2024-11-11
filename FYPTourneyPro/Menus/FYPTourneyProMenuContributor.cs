@@ -91,7 +91,7 @@ public class FYPTourneyProMenuContributor : IMenuContributor
                     new ApplicationMenuItem(
                         "TournamentManagement.ListTournaments",
                         "Tournament",
-                        url: "/Tournament/Index"
+                        url: "/Tour/Index"
                     )
                 );
 
@@ -108,7 +108,7 @@ public class FYPTourneyProMenuContributor : IMenuContributor
                 new ApplicationMenuItem(
                     "CategoryManagement.AddCategory",
                     "Category/Registration",
-                    url: "/Category/Index"
+                    url: "/TourCategory/Index"
                 )
             );
 

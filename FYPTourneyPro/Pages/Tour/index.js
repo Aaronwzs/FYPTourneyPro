@@ -26,12 +26,12 @@
     // Handle tournament name click ( edit )
     $('#TournamentList').on('click', '.tournament-link', function () {
         var tournamentId = $(this).parent().attr('data-id');
-        window.location.href = '/Category/Index?tournamentId=' + tournamentId;
+        window.location.href = '/TourCategory/Index?tournamentId=' + tournamentId;
     });
 
     $('#UserTournamentList').on('click', '.tournament-link', function () {
         var tournamentId = $(this).parent().attr('data-id');
-        window.location.href = '/Category/Index?tournamentId=' + tournamentId;
+        window.location.href = '/TourCategory/Index?tournamentId=' + tournamentId;
     });
 
     // Adding a New Tournament
@@ -50,7 +50,7 @@
        
         fYPTourneyPro.services.organizer.tournament.create(tournamentData).then(function (result) {
             // Redirect to the Category page with the tournamentId as a URL parameter
-            window.location.href = '/Category/Index?tournamentId=' + result.id;
+            window.location.href = '/TourCategory/Index?tournamentId=' + result.id;
         });
     });
 });

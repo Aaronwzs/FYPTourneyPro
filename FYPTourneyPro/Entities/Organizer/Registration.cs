@@ -8,5 +8,6 @@ namespace FYPTourneyPro.Entities.Organizer
         public double totalAmount { get; set; }
         public Guid CategoryId { get; set; }
         
+       
     }
 }

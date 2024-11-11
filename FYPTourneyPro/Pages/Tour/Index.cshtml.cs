@@ -1,9 +1,9 @@
-using FYPTourneyPro.Services.Dtos.Organizer.Tournament;
+using FYPTourneyPro.Services.Dtos.Organizer;
 using FYPTourneyPro.Services.Organizer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace FYPTourneyPro.Pages.Tournament
+namespace FYPTourneyPro.Pages.Tour
 {
     public class IndexModel : PageModel
     {

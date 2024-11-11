@@ -1,7 +1,7 @@
 ﻿using System;
 using Volo.Abp.Application.Dtos;
 
-namespace FYPTourneyPro.Services.Dtos.Organizer.Tournament
+namespace FYPTourneyPro.Services.Dtos.Organizer
 {
     public class TournamentDto : EntityDto<Guid>
     {

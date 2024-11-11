@@ -3,6 +3,7 @@ using System;
 using FYPTourneyPro.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Volo.Abp.EntityFrameworkCore;
@@ -12,9 +13,11 @@ using Volo.Abp.EntityFrameworkCore;
 namespace FYPTourneyPro.Migrations
 {
     [DbContext(typeof(FYPTourneyProDbContext))]
-    partial class FYPTourneyProDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241110150724_remove_PartId_RegTable")]
+    partial class remove_PartId_RegTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -172,7 +175,7 @@ namespace FYPTourneyPro.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("PairId")
+                    b.Property<Guid>("PairId")
                         .HasColumnType("uuid");
 
                     b.Property<int>("Points")
