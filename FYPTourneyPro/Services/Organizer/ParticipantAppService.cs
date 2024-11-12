@@ -4,6 +4,7 @@ using Volo.Abp.Domain.Repositories;
 using FYPTourneyPro.Services.Dtos.Organizer;
 using Volo.Abp.Identity;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace FYPTourneyPro.Services.Organizer
 {
@@ -26,27 +27,7 @@ namespace FYPTourneyPro.Services.Organizer
             _userRepository = userRepository;
         }
 
-        // Create participant
-        //public async Task<ParticipantDto> CreateAsync(Guid registrationId, Guid userId, Guid tournamentId)
-        //{
-
-
-        //    var participant = await _participantRepository.InsertAsync(new Participant
-        //    {
-        //        UserId = userId,
-        //        RegistrationId = registrationId,
-        //        TournamentId = tournamentId,
-                
-        //    });
-
-        //    return new RegistrationDto
-        //    {
-        //        User = userId,
-        //        RegistrationId = registrationId,
-        //        TournamentId = tournamentId,
-        //    };
-        //}
-
+      
 
 
         // Get participants by registrationId
@@ -54,25 +35,31 @@ namespace FYPTourneyPro.Services.Organizer
         {
             var participants = await _participantRepository.GetListAsync(p => p.RegistrationId == registrationId);
 
+
             //loop participants, each part get registrationid, use regId to get registrationData, then get categoryId from registration data, when get catId, get the cat data, catId.catName
 
-            List<ParticipantDto> participantListDto = new List <ParticipantDto>();
+            List<ParticipantDto> participantListDto = new List<ParticipantDto>();
 
             foreach (var participant in participants)
             {
                 var regId = participant.RegistrationId;
 
                 // get registration 
-                var registration =  await _registrationRepository.GetAsync(regId);
+                var registration = await _registrationRepository.GetAsync(regId);
                 var catId = registration.CategoryId;
 
                 // get category
                 var category = await _categoryRepository.GetAsync(catId);
-                
+
+                //get userId
+                var userId = participant.UserId;
+                var user = await _userRepository.GetAsync(userId);
+
                 participantListDto.Add(new ParticipantDto
                 {
                     Id = participant.Id,
                     UserId = participant.UserId,
+                    userName = user.UserName,
                     RegistrationId = registrationId,
                     TournamentId = participant.TournamentId,
                     CategoryId = catId,
@@ -84,5 +71,9 @@ namespace FYPTourneyPro.Services.Organizer
             }
             return participantListDto;
         }
+
+
+
     }
+    
 }

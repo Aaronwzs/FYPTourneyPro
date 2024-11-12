@@ -11,5 +11,6 @@
         public Guid? PairId { get; set; }
         public int Seed { get; set; }
         public int Points { get; set; }
+        public string userName { get; set; }
     }
 }

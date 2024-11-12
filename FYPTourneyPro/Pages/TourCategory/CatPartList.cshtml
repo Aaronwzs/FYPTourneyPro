@@ -1,7 +1,10 @@
-﻿@page
+﻿@page "{categoryId:guid}"
 @model FYPTourneyPro.Pages.TourCategory.CatPartList
 @{
     ViewData["Title"] = "Category Participants List";
+}
+@section scripts {
+    <abp-script src="/Pages/TourCategory/CatPartList.js" />
 }
 <div class="container">
     <abp-card>
@@ -11,20 +14,29 @@
             </abp-card-title>
         </abp-card-header>
         <abp-card-body>
+
+
+            <h3>Registered Users</h3>
             <div class="table-responsive">
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th>Name</th>
-                            <th>Seeding</th>
+                            <th>Category</th>
+                            <th>Player 1</th>
+                            <th>Player 2</th>
+                            <th>Registration Date</th>
+                            <th>Total Amount</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var participant in Model.Participants)
+                        @foreach (var registration in Model.Registrations)
                         {
                             <tr>
-                                <td>@participant.PlayerName</td>
-                                <td>@(participant.Seed == 0 ? "NA" : participant.Seed.ToString())</td>
+                                <td>@registration.CategoryName</td>
+                                <td>@registration.userName1</td>
+                                <td>@registration.userName2 ?? "N/A"</td>
+                                <td>@registration.RegDate.ToString("yyyy-MM-dd")</td>
+                                <td>@registration.TotalAmount</td>
                             </tr>
                         }
                     </tbody>

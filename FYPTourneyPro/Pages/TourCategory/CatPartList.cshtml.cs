@@ -1,3 +1,4 @@
+using FYPTourneyPro.Entities.Organizer;
 using FYPTourneyPro.Services.Dtos.Organizer;
 
 using FYPTourneyPro.Services.Organizer;
@@ -8,27 +9,34 @@ namespace FYPTourneyPro.Pages.TourCategory
 {
     public class CatPartList : PageModel
     {
-        public List<CategoryParticipantDto> Participants { get; set; } = new();
-        public CategoryDto Category { get; set; } = new();
 
-        private readonly CategoryParticipantAppService _categoryParticipantAppService;
+        private readonly ParticipantAppService _participantAppService;
         private readonly CategoryAppService _categoryAppService;
+        private readonly RegistrationAppService _registrationAppService;
 
-        public CatPartList(
-       CategoryParticipantAppService categoryParticipantAppService,
-       CategoryAppService categoryAppService)
+        [BindProperty(SupportsGet = true)]
+        public Guid categoryId { get; set; }
+
+        public List<RegistrationDto> Registrations { get; set; } = new();
+        public CategoryDto Category { get; set; }
+        public List<ParticipantDto> Participants { get; set; } = new();
+
+        public CatPartList(ParticipantAppService participantAppService, CategoryAppService categoryAppService, RegistrationAppService registrationAppService)
         {
-            _categoryParticipantAppService = categoryParticipantAppService;
+            _participantAppService = participantAppService;
             _categoryAppService = categoryAppService;
+            _registrationAppService = registrationAppService;
         }
 
-        public async Task OnGetAsync(Guid categoryId)
+        public async Task OnGetAsync(Guid CategoryId)
         {
-            // Fetch the category details by ID
-            Category = await _categoryAppService.GetAsync(categoryId);
+            categoryId = CategoryId;
 
-           
+            Category = await _categoryAppService.GetAsync(CategoryId);
+
+            Registrations = await _registrationAppService.GetRegistrationListByCategoryAsync(CategoryId);
         }
 
     }
+
 }

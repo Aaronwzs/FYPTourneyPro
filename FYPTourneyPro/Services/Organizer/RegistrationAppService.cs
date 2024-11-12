@@ -168,6 +168,8 @@ namespace FYPTourneyPro.Services.Organizer
             {
                 // get participant
                 var participants = await _participantRepository.GetListAsync(p => p.RegistrationId == registrationId);
+
+                
                 IdentityUser? user1 = null;
                 IdentityUser? user2 = null;
 
@@ -193,6 +195,74 @@ namespace FYPTourneyPro.Services.Organizer
                     userName2 = user2 != null ? user2.UserName : null,
                     CategoryId = reg.CategoryId,
                     CategoryName = category.Name
+                });
+            }
+            return RegistrationListDto;
+        }
+
+        public async Task<List<RegistrationDto>> GetRegistrationListByCategoryAsync(Guid CategoryId)
+        {
+            var registrations = await _registrationRepository.GetListAsync(p => p.CategoryId == CategoryId);
+
+
+            //loop participants, each part get registrationid, use regId to get registrationData, then get categoryId from registration data, when get catId, get the cat data, catId.catName
+
+            List<RegistrationDto> RegistrationListDto = new List<RegistrationDto>();
+
+            
+
+            //check if response is empty then return the empty list
+            if (registrations.Count == 0)
+            {
+                return RegistrationListDto;
+            }
+
+            foreach (var reg in registrations)
+            {
+                var regId = reg.Id;
+                // get participant
+                var participants = await _participantRepository.GetListAsync(p => p.RegistrationId == regId);
+                IdentityUser? user1 = null;
+                IdentityUser? user2 = null;
+
+                //if (participants[0].PairId != null)
+                //{
+                //    user1 = await _userRepository.GetAsync(participants[0].UserId);
+                //    user1 = await _userRepository.GetAsync(participants[1].UserId);
+                //}
+                //else
+                //{
+                //    user1 = await _userRepository.GetAsync(participants[0].UserId);
+                //}
+
+
+                // Get the first participant
+                if (participants.Count > 0)
+                {
+                    user1 = await _userRepository.GetAsync(participants[0].UserId);
+                }
+
+                // Get the second participant if it exists
+                if (participants.Count > 1)
+                {
+                    user2 = await _userRepository.GetAsync(participants[1].UserId);
+                }
+
+
+                var category = await _categoryRepository.GetAsync(reg.CategoryId);
+
+                RegistrationListDto.Add(new RegistrationDto
+                {
+                    Id = reg.Id,
+                    RegDate = reg.RegDate,
+                    TotalAmount = reg.totalAmount,
+                    userId1 = user1.Id,
+                    userId2 = user2 != null ? user2.Id : null,
+                    userName1 = user1.UserName,
+                    userName2 = user2 != null ? user2.UserName : null,
+                    CategoryId = reg.CategoryId,
+                    CategoryName = category.Name
+                    
                 });
             }
             return RegistrationListDto;
