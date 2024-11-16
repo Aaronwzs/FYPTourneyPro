@@ -1,5 +1,5 @@
 ﻿@page "{categoryId:guid}"
-@model FYPTourneyPro.Pages.TourCategory.CatPartList
+@model FYPTourneyPro.Pages.TourCategory.CatPartListModel
 @{
     ViewData["Title"] = "Category Participants List";
 }
@@ -14,9 +14,12 @@
             </abp-card-title>
         </abp-card-header>
         <abp-card-body>
-
+            <input id="categoryId" value="@Model.Category.Id" hidden />
 
             <h3>Registered Users</h3>
+
+           
+
             <div class="table-responsive">
                 <table class="table table-striped">
                     <thead>
@@ -42,6 +45,14 @@
                     </tbody>
                 </table>
             </div>
+            <!-- Button to trigger the generation of draw -->
+            <button class="btn btn-primary" id="generateDrawBtn">Generate Draw</button>
+
+            <!-- Add a placeholder to show the match list -->
+            <div id="matchListContainer" class="mt-4">
+                <!-- Matches will be dynamically injected here -->
+            </div>
+
         </abp-card-body>
     </abp-card>
 </div>
