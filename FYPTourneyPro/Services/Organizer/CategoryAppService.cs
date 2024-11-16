@@ -33,6 +33,19 @@ namespace FYPTourneyPro.Services.Organizer
 
                 }).ToList();
         }
+
+        public async Task<List<CategoryDto>> GetListByTournamentIdAsync(Guid tournamentId)
+        {
+            var categories = await _categoryRepository.GetListAsync(category => category.TournamentId == tournamentId);
+            return categories
+                .Select(category => new CategoryDto
+                {
+                    Id = category.Id,
+                    Name = category.Name,
+                    Description = category.Description,
+                }).ToList();
+        }
+
         public async Task<CategoryDto> CreateAsync(CategoryDto input)
         {
             var category = new Category

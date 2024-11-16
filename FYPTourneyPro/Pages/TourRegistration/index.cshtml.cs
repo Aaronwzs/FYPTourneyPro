@@ -36,9 +36,9 @@ namespace FYPTourneyPro.Pages.TourRegistration
         }
 
 
-        public async Task OnGetAsync(Guid CategoryId)
+        public async Task OnGetAsync(Guid tournamentId)
         {
-            categoryId = CategoryId;
+            TournamentId = tournamentId;
            
 
             // Get current user
@@ -48,8 +48,10 @@ namespace FYPTourneyPro.Pages.TourRegistration
                 var currentUser = await _userRepository.GetAsync(UserId);
                 UserName = currentUser.UserName;
             }
+
+            Categories = await _categoryAppService.GetListByTournamentIdAsync(tournamentId);
             
-            Registrations = await _registrationAppService.GetRegistrationListByCategoryAsync(CategoryId);
+            //Registrations = await _registrationAppService.GetRegistrationListByCategoryAsync(CategoryId);
         }
     }
        
