@@ -266,3 +266,7 @@ FYPTourneyPro/Logs/*
 
 # Ignore appsettings
 FYPTourneyPro/appsettings.json
+
+rasa_env/
+FYPTourneyPro/AIChatbot/chatbot-env
+FYPTourneyPro/Chatbot/.rasa
