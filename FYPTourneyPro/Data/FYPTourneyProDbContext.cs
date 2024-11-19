@@ -36,6 +36,7 @@ public class FYPTourneyProDbContext : AbpDbContext<FYPTourneyProDbContext>
 
     public DbSet<Registration> Registration { get; set; }
     public DbSet<Participant> Participant { get; set; }
+    public DbSet<MatchScore> MatchScore { get; set; }
 
     public const string DbTablePrefix = "App";
     public const string DbSchema = null;
@@ -110,6 +111,10 @@ public class FYPTourneyProDbContext : AbpDbContext<FYPTourneyProDbContext>
             b.ToTable("Participant");
         });
 
+        builder.Entity<MatchScore>(b =>
+        {
+            b.ToTable("MatchScore");
+        });
 
     }
 }
