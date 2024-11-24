@@ -12,8 +12,8 @@ using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using FYPTourneyPro.Entities.Books;
 using FYPTourneyPro.Entities.TodoList;
+using FYPTourneyPro.Entities.DiscussionBoard;
 using FYPTourneyPro.Entities.Organizer;
-using System.Reflection.Emit;
 
 namespace FYPTourneyPro.Data;
 
@@ -22,12 +22,11 @@ public class FYPTourneyProDbContext : AbpDbContext<FYPTourneyProDbContext>
     public DbSet<Book> Books { get; set; }
 
     public DbSet<TodoItem> TodoItems { get; set; }
-
-
-    //organizer
+    public DbSet<Post> Post { get; set; }
+    public DbSet<Comment> Comment { get; set; }
     public DbSet<Category> Category { get; set; }
     public DbSet<Tournament> Tournament { get; set; }
-  
+
     public DbSet<CategoryParticipant> CategoryParticipant { get; set; }
 
     //Match
@@ -77,6 +76,29 @@ public class FYPTourneyProDbContext : AbpDbContext<FYPTourneyProDbContext>
             b.ToTable("TodoItems");
         });
 
+        builder.Entity<Post>(b =>
+        {
+            b.ToTable("Posts");
+            b.ConfigureByConvention();
+            b.HasMany(p => p.Comments)
+             .WithOne(c => c.Post)
+             .HasForeignKey(c => c.PostId);
+        });
+
+        builder.Entity<Comment>(b =>
+        {
+            b.ToTable("Comments");
+            b.ConfigureByConvention();
+            b.HasOne(c => c.Post)
+             .WithMany(p => p.Comments)
+             .HasForeignKey(c => c.PostId);
+        });
+
+        builder.Entity<TodoItem>(b =>
+        {
+            b.ToTable("TodoItems");
+        });
+
         builder.Entity<Category>(b =>
         {
             b.ToTable("Category");
@@ -85,7 +107,7 @@ public class FYPTourneyProDbContext : AbpDbContext<FYPTourneyProDbContext>
         {
             b.ToTable("Tournament");
         });
-       
+
         builder.Entity<CategoryParticipant>(b =>
         {
             b.ToTable("CategoryParticipant");
@@ -115,7 +137,6 @@ public class FYPTourneyProDbContext : AbpDbContext<FYPTourneyProDbContext>
         {
             b.ToTable("MatchScore");
         });
-
     }
 }
 

@@ -1,0 +1,53 @@
+﻿@page
+@model FYPTourneyPro.Pages.DiscussionBoard.indexModel
+@{
+    ViewData["Title"] = "Discussion Board";
+}
+
+@section scripts {
+    <abp-script src="/Pages/DiscussionBoard/index.js" />
+}
+
+<h2>Discussion Board</h2>
+
+<!-- Button to Add a New Post -->
+<a class="btn btn-primary" asp-page="Create">Create New Post</a>
+
+<form id="discussionForm">
+    <div class="form-group">
+        <label for="CreatedByUserId">Username</label>
+        <input type="text" id="CreatedByUserId" class="form-control" value="@Model.UserName" readonly />
+    </div>
+    <div class="form-group">
+        <label for="Title">Title</label>
+        <input type="text" id="Title" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for="Content">Content</label>
+        <input type="text" id="Content" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+<table class="table table-bordered mt-3">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Content</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+@*         @foreach (var post in Model.Posts)
+        {
+            <tr>
+                <td>@post.Title</td>
+                <td>@post.Content</td>
+                <td>
+                    <a asp-page="Edit" asp-route-id="@post.Id" class="btn btn-warning">Edit</a>
+                    <a asp-page="Delete" asp-route-id="@post.Id" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        } *@
+    </tbody>
+}

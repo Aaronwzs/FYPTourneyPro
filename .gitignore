@@ -266,7 +266,13 @@ FYPTourneyPro/Logs/*
 
 # Ignore appsettings
 FYPTourneyPro/appsettings.json
+<<<<<<< Updated upstream
 
 rasa_env/
 FYPTourneyPro/AIChatbot/chatbot-env
 FYPTourneyPro/Chatbot/.rasa
+=======
+rasa_env/
+/FYPTourneyPro/Chatbot
+/FYPTourneyPro/AIChatbot/chatbot-env
+>>>>>>> Stashed changes
