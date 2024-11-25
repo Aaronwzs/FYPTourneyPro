@@ -6,5 +6,7 @@
         public Guid PostId { get; set; }
         public string Content { get; set; }
         public Guid CreatedByUserId { get; set; }
+        public int? Upvotes { get; set; }
+        public int? Downvotes { get; set; }
     }
 }

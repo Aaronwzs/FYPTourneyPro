@@ -9,6 +9,6 @@ namespace FYPTourneyPro.Services.Dtos.Posts
         public string Content { get; set; }
         public int? Upvotes { get; set; }
         public int? Downvotes { get; set; }
-        public List<CommentDto> Comments { get; set; }
+        public List<CommentDto>? Comments { get; set; } = new List<CommentDto>();
     }
 }

@@ -7,6 +7,7 @@ using Volo.Abp.Domain.Entities;
 using OpenQA.Selenium.DevTools.V128.Input;
 using Volo.Abp.Identity;
 using Volo.Abp.Users;
+using FYPTourneyPro.Services.Dtos.Organizer;
 
 
 namespace FYPTourneyPro.Services.Posts
@@ -42,7 +43,6 @@ namespace FYPTourneyPro.Services.Posts
             {
                 Title = post.Title,
                 Content = post.Content,             
-
             };
         }
 
@@ -52,7 +52,6 @@ namespace FYPTourneyPro.Services.Posts
             return posts
                 .Select(post => new PostDto
                 {
-                    Id = post.Id,
                     Title = post.Title,
                     Content = post.Content,
                     Upvotes = post.Upvotes,
@@ -95,8 +94,27 @@ namespace FYPTourneyPro.Services.Posts
 
             post.Title = input.Title;
             post.Content = input.Content;
+            post.Comments = input.Comments.Select(c => new Comment
+            {
+                PostId = c.PostId,
+                Content = c.Content,
+                CreatedByUserId = c.CreatedByUserId
+            }).ToList();
 
             await _postRepository.UpdateAsync(post);
+        }
+        public async Task<List<PostDto>> GetListAsyncUid()
+        {
+            // Fetch tournaments created by the current logged-in user
+            var posts = await _postRepository.GetListAsync(p => p.CreatedByUserId == _currentUser.Id); //filter by userid
+
+            return posts
+                .Select(p => new PostDto
+                {
+                    Id = p.Id,
+                    Title = p.Title,
+                    Content = p.Content
+                }).ToList();
         }
 
         public async Task DeleteAsync(Guid id)

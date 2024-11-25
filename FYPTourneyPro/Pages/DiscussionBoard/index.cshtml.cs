@@ -23,6 +23,7 @@ namespace FYPTourneyPro.Pages.DiscussionBoard
             _currentUser = currentUser;
         }
         public List<PostDto> Posts { get; set; }
+        public List<PostDto> YourPosts { get; set; }
         public List<IdentityUser> Users { get; set; }
         public string UserName { get; set; }
         public Guid UserId { get; set; }
@@ -36,6 +37,10 @@ namespace FYPTourneyPro.Pages.DiscussionBoard
                 var currentUser = await _userRepository.GetAsync(UserId);
                 UserName = currentUser.UserName;
             }
+
+            Posts = await _postAppService.GetAllAsync();
+
+            YourPosts = await _postAppService.GetListAsyncUid();
         }
     }
 }
