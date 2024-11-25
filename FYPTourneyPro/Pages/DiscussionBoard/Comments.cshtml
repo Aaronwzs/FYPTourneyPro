@@ -1,4 +1,31 @@
 ﻿@page
 @model FYPTourneyPro.Pages.DiscussionBoard.CommentsModel
 @{
+    ViewData["Title"] = "Post Comments";
 }
+
+@section scripts {
+    <abp-script src="/Pages/DiscussionBoard/Comments.js" />
+}
+
+<h2>@Model.Post.Title</h2>
+<p>@Model.Post.Content</p>
+
+<h3>Comments</h3>
+<ul>
+    @foreach (var comment in Model.Comments)
+    {
+        <li>
+            <p>@comment.Content</p>
+            <p><small>By: @comment.CreatedByUserId</small></p>
+        </li>
+    }
+</ul>
+
+<!-- Form to Add a New Comment -->
+<h3>Add a Comment</h3>
+<form id="addCommentForm">
+    <textarea id="newCommentContent" placeholder="Write your comment..." rows="4" class="form-control"></textarea>
+    <button type="submit" class="btn btn-primary mt-2">Add Comment</button>
+</form>
+

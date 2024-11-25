@@ -52,6 +52,7 @@ namespace FYPTourneyPro.Services.Posts
             return posts
                 .Select(post => new PostDto
                 {
+                    Id = post.Id,
                     Title = post.Title,
                     Content = post.Content,
                     Upvotes = post.Upvotes,
@@ -76,7 +77,6 @@ namespace FYPTourneyPro.Services.Posts
 
             return new PostDto
             {
-                Id = post.Id,
                 Title = post.Title,
                 Content = post.Content,
                 Upvotes = post.Upvotes,
