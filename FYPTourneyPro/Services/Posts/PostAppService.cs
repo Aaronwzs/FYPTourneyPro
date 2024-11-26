@@ -77,6 +77,7 @@ namespace FYPTourneyPro.Services.Posts
 
             return new PostDto
             {
+                Id = post.Id,
                 Title = post.Title,
                 Content = post.Content,
                 Upvotes = post.Upvotes,

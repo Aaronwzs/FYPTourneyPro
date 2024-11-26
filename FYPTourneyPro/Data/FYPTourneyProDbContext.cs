@@ -14,6 +14,7 @@ using FYPTourneyPro.Entities.Books;
 using FYPTourneyPro.Entities.TodoList;
 using FYPTourneyPro.Entities.DiscussionBoard;
 using FYPTourneyPro.Entities.Organizer;
+using System.Reflection.Emit;
 
 namespace FYPTourneyPro.Data;
 
@@ -23,6 +24,7 @@ public class FYPTourneyProDbContext : AbpDbContext<FYPTourneyProDbContext>
 
     public DbSet<TodoItem> TodoItems { get; set; }
     public DbSet<Post> Post { get; set; }
+    public DbSet<PostVotes> postVotes { get; set; }
     public DbSet<Comment> Comment { get; set; }
     public DbSet<Category> Category { get; set; }
     public DbSet<Tournament> Tournament { get; set; }
@@ -92,6 +94,25 @@ public class FYPTourneyProDbContext : AbpDbContext<FYPTourneyProDbContext>
             b.HasOne(c => c.Post)
              .WithMany(p => p.Comments)
              .HasForeignKey(c => c.PostId);
+        });
+
+        builder.Entity<PostVotes>(b =>
+        {
+            b.ToTable("PostVotes"); // Table name in the database
+
+            b.HasKey(pv => pv.Id); // Primary key
+
+            // Foreign key to Posts
+            b.HasOne<Post>() // Relationship with Post entity
+             .WithMany() // A Post can have many votes
+             .HasForeignKey(pv => pv.PostId) // Foreign key property
+             .IsRequired(); // PostId must not be null
+
+            // Configure VoteType property
+            b.Property(pv => pv.VoteType)
+             .IsRequired() // Required field
+             .HasMaxLength(10) // Max length of 10 characters
+             .HasComment("Allowed values: 'Upvote' or 'Downvote'");
         });
 
         builder.Entity<TodoItem>(b =>

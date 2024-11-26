@@ -8,8 +8,26 @@
     <abp-script src="/Pages/DiscussionBoard/Comments.js" />
 }
 
+<style>
+.active {
+    background-color: greenyellow; /* Highlight the active button */
+    color: black;
+    border: 2px solid black;
+}
+</style>
 <h2>@Model.Post.Title</h2>
 <p>@Model.Post.Content</p>
+<div>
+    <!-- Display the upvote count and button -->
+    <button id="upvoteButton" class="btn btn-success" onclick="vote('Upvote', '@Model.Post.Id')">
+        👍 Upvote (@Model.Upvotes)
+    </button>
+
+    <!-- Display the downvote count and button -->
+    <button id="downvoteButton" class="btn btn-danger" onclick="vote('Downvote', '@Model.Post.Id')">
+        👎 Downvote (@Model.Downvotes)
+    </button>
+</div>
 
 <h3>Comments</h3>
 <ul>

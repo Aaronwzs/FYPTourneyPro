@@ -40,17 +40,30 @@
             <th>Actions</th>
         </tr>
     </thead>
-    <tbody>
+    
+
+
         @if (Model.Posts != null && Model.Posts.Any())
         {
-                @foreach (var post in Model.Posts)
+            <div>
+                <!-- Filter Dropdown -->
+                <label for="filterSelect">Filter by:</label>
+                <select id="filterSelect" class="form-control" onchange="applyFilter()">
+                    <option value="hot">Hot</option>
+                    <option value="best">Best</option>
+                    <option value="latest">Latest</option>
+                </select>
+            </div>
+            <tbody id="postContainer" class="mt-4">
+            @*     @foreach (var post in Model.Posts)
                 {
                 <tr onclick="window.location.href='/DiscussionBoard/Comments?postId=@post.Id'" style="cursor: pointer;">
                     <td>@post.Title</td>
                     <td>@post.Content</td>
-
+                    <td>@post.CreationTime</td>
                 </tr>
-                }
+                } *@
+            </tbody>
         }
         else
         {
@@ -103,7 +116,6 @@
         {
             <p>No posts available.</p>
         }
-
-    </tbody>
-
+       
+</table>
 }

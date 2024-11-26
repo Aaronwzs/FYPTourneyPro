@@ -67,7 +67,7 @@ $('#editDiscussionForm').submit(function (e) {
 
         // On success, show an alert and reset the form
         alert('Registration Successful!');
-        $('#discussionForm')[0].reset();
+        $('#editDiscussionForm')[0].reset();
     }).fail(function (error) {
         // On failure, show an error alert
         alert('Registration Failed! ' + error.message);
@@ -83,3 +83,41 @@ $('#postDelete').on('click', function () {
         abp.notify.info('Deleted the post.');
     });
 });
+
+
+//Change filtering
+function applyFilter() {
+    // Get the selected filter type
+    const filterType = document.getElementById('filterSelect').value;
+
+    console.log(fYPTourneyPro.services.posts.postVote);
+    fYPTourneyPro.services.posts.postVote.getFilteredPosts(filterType).then((result) => {
+        console.log(result);
+        updatePosts(result);
+    });
+}
+
+//Update posts dynamically according to the filters
+function updatePosts(result) {
+    // Get the tbody element
+    const postContainer = document.getElementById('postContainer');
+
+    // Clear the existing rows
+    postContainer.innerHTML = '';
+
+    // Add rows for the new posts
+    result.forEach(post => {
+        console.log(post.postId);
+        const row = `
+            <tr onclick="window.location.href='/DiscussionBoard/Comments?postId=${post.postId}'" style="cursor: pointer;">
+                <td>${post.title}</td>
+                <td>${post.content}</td>
+                <td>${new Date(post.creationTime).toLocaleString()}</td>
+            </tr>
+        `;
+        postContainer.innerHTML += row; // Append the new row
+    });
+}
+
+// Load posts with the default filter when the page loads
+document.addEventListener('DOMContentLoaded', applyFilter);
