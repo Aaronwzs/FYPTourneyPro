@@ -14,10 +14,19 @@
             <abp-card-title>
                 CATEGORY
             </abp-card-title>
+             @if (Model.Tournament.RegistrationStartDate <= DateTime.Now && Model.Tournament.RegistrationEndDate >= DateTime.Now)
+            {
                 <a href="@Url.Page("/TourRegistration/index", new { tournamentId = Model.TournamentId })"
                    class="btn btn-success">
                     <i class="fa fa-user-plus"></i> Register Players
                 </a>
+                }
+                else
+                {
+                    <div class="alert alert-info">
+                        Registration is not available yet or has ended.
+                    </div>
+                }
             </div>
         </abp-card-header>
         <abp-card-body>

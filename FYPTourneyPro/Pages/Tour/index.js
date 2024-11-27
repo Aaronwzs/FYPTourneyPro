@@ -38,6 +38,27 @@
     $('#NewTournamentForm').submit(function (e) {
         e.preventDefault();
 
+        var regStartDate = new Date($('#RegistrationStartDate').val());
+        var regEndDate = new Date($('#RegistrationEndDate').val());
+
+        var startDate = new Date($('#StartDate').val());
+        var endDate = new Date($('#EndDate').val());
+
+        if (regStartDate > regEndDate) {
+            alert('Registration start date cannot be later than registration end date.');
+            return; // Prevent form submission
+        }
+
+        if (startDate <= regEndDate) {
+            alert('Start date must be later than the registration end date.');
+            return; // Prevent form submission
+        }
+
+        if (endDate <= startDate) {
+            alert('End date must be later than the start date.');
+            return; // Prevent form submission
+        }
+
         var tournamentData = {
             name: $('#TournamentName').val(),
             description: $('#TournamentDescription').val(),

@@ -2,9 +2,15 @@
 @model FYPTourneyPro.Pages.TourCategory.DrawListModel
 @{
     ViewData["Title"] = "Draw List for Category: " + Model.Category.Name;
+    // var urlPage = Url.Page();
+    var baseUrl = Url.Content("~");
+}
+@section scripts {
+    <abp-script src="/Pages/TourCategory/DrawList.js" />
 }
 
 <div class="container">
+    <input hidden value="@baseUrl" />
     <abp-card>
         <abp-card-header>
             <abp-card-title>
@@ -12,36 +18,9 @@
             </abp-card-title>
         </abp-card-header>
         <abp-card-body>
-            <h3>Generated Matches</h3>
+            
 
-            <div class="table-responsive">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Match ID</th>
-                            <th>Round</th>
-                            <th>Participants</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var match in Model.Matches)
-                        {
-                            <tr>
-                                <td>@match.Id</td>
-                                <td>@match.round</td>
-                                <td>
-                                    @foreach (var participant in Model.MatchParticipants.Where(mp => mp.matchId == match.Id))
-                                    {
-                                        <span>@participant.userId</span>
-
-                                        <br />
-                                    }
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
+            
         </abp-card-body>
     </abp-card>
 </div>
