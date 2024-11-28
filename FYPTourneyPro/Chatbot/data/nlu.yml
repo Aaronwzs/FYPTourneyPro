@@ -99,7 +99,8 @@ nlu:
 
 - intent: ask_schedule
   examples: |
-    - Can you tell me the next [soccer](sport) competition?
-    - When is the next [basketball](sport) game?
-    - What is the date of the next [tennis](sport) match?
-    - Tell me about the next [soccer](sport) tournament.
+    - Tell me matches played by [ABC1234](player)
+    - What matches are in the tournament [de wsa](tournament_name)?
+    - Show me matches for the player [ADMIN](player)
+    - List matches in the tournament [de wsa](tournament_name)
+    - When is the next match for [ABC1234](player)?

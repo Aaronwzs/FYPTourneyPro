@@ -2,21 +2,23 @@ import psycopg2
 from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
 from typing import Any, Text, Dict, List
+import logging
 
+logging.basicConfig(level=logging.DEBUG)
 class ActionFetchSchedule(Action):
-
     def name(self) -> Text:
         return "action_fetch_schedule"
 
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        
-        # Extract the sport from the user's message
-        sport = next(tracker.get_latest_entity_values("sport"), None)
-        
-        if not sport:
-            dispatcher.utter_message(text="Please specify the sport you are interested in.")
+    def run(self, dispatcher, tracker, domain):
+        # Get dynamic inputs from slots
+        player_name = tracker.get_slot("player")
+        tournament_name = tracker.get_slot("tournament_name")
+
+        logging.debug(f"Player Name from slot: {player_name}")
+        logging.debug(f"Tournament Name from slot: {tournament_name}")
+
+        if not (player_name or tournament_name):
+            dispatcher.utter_message("Please provide a player name or tournament name.")
             return []
 
         # Connect to PostgreSQL database
@@ -29,21 +31,49 @@ class ActionFetchSchedule(Action):
         )
         cursor = connection.cursor()
 
-        # Query the tournament schedule for the specified sport
-        query = "SELECT sport, date, location FROM tournament_schedule WHERE sport = %s ORDER BY date LIMIT 1"
-        cursor.execute(query, (sport,))
-        record = cursor.fetchone()
+        # Build query dynamically based on inputs
+        if player_name:
+            query = """
+            SELECT m."startTime", m."endTime", t."Name", u."NormalizedUserName"
+            FROM "Match" m
+            JOIN "MatchParticipant" mp ON m."Id" = mp."MatchId"
+            JOIN "AbpUsers" u ON mp."UserId" = u."Id"
+            JOIN "Category" c ON m."CategoryId" = c."Id"
+            JOIN "Tournament" t ON c."TournamentId" = t."Id"
+            WHERE u."NormalizedUserName" = %s
+            """
+            cursor.execute(query, (player_name,))
+        elif tournament_name:
+            query = """
+            SELECT m."startTime", m."endTime", t."Name", u."NormalizedUserName"
+            FROM "Match" m
+            JOIN "MatchParticipant" mp ON m."Id" = mp."MatchId"
+            JOIN "AbpUsers" u ON mp."UserId" = u."Id"
+            JOIN "Category" c ON m."CategoryId" = c."Id"
+            JOIN "Tournament" t ON c."TournamentId" = t."Id"
+            WHERE t."Name" = %s
+            """
+            cursor.execute(query, (tournament_name,))
 
-        # Format the response
-        if record:
-            response = f"The next {record[0]} competition is on {record[1]} at {record[2]}."
-        else:
-            response = f"Sorry, I couldn't find any upcoming {sport} competitions."
-
-        # Close the database connection
-        cursor.close()
+        results = cursor.fetchall()
         connection.close()
 
-        # Send the response back to the user
-        dispatcher.utter_message(text=response)
+        logging.debug(f"Query: {query}")
+        logging.debug(f"Parameters: {player_name}")
+        logging.debug(f"Query Results: {results}")
+        # Format and return results
+        if results:
+            players = set()
+            response = []
+            for row in results:
+                start_time, end_time, tournament_name, player_name = row
+                players.add(player_name)
+                match_info = f"- Tournament: {tournament_name}\n  Start Time: {start_time}\n  End Time: {end_time}"
+                response.append(match_info)
+
+            response.append("\nPlayers: " + ", ".join(players))
+            dispatcher.utter_message("\n".join(response))
+        else:
+            dispatcher.utter_message("No matches found for the provided details.")
+
         return []

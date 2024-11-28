@@ -12,12 +12,24 @@ intents:
   - ask_schedule
 
 entities:
-- sport
-- date
-- location
+  - player
+  - tournament_name
+
+slots:
+  player:
+    type: text
+    mappings:
+      - type: from_entity
+        entity: player
+
+  tournament_name:
+    type: text
+    mappings:
+      - type: from_entity
+        entity: tournament_name
 
 actions:
-  - action_fetch_schedul
+  - action_fetch_schedule
 
 responses:
   utter_greet:
