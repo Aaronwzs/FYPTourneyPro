@@ -266,3 +266,5 @@ FYPTourneyPro/Logs/*
 
 # Ignore appsettings
 FYPTourneyPro/appsettings.json
+
+/rasa_env/

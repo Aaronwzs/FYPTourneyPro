@@ -1,0 +1,20 @@
+[
+  {
+    "tag_name": "entity",
+    "ids_to_tags": {
+      "1": "B-sport",
+      "2": "I-sport",
+      "3": "L-sport",
+      "4": "U-sport",
+      "0": "O"
+    },
+    "tags_to_ids": {
+      "B-sport": 1,
+      "I-sport": 2,
+      "L-sport": 3,
+      "U-sport": 4,
+      "O": 0
+    },
+    "num_tags": 5
+  }
+]
