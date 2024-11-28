@@ -2,11 +2,13 @@
 @model FYPTourneyPro.Pages.TourCategory.CatPartListModel
 @{
     ViewData["Title"] = "Category Participants List";
+    var baseUrl = Url.Content("~");
 }
 @section scripts {
     <abp-script src="/Pages/TourCategory/CatPartList.js" />
 }
 <div class="container">
+    <input hidden value="@baseUrl" />
     <abp-card>
         <abp-card-header>
             <abp-card-title>
@@ -50,7 +52,119 @@
 
             <!-- Add a placeholder to show the match list -->
             <div id="matchListContainer" class="mt-4">
+
+                <h3>Generated Matches</h3>
+
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Match ID</th>
+                                <th>Round</th>
+                                <th>Participants</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var match in Model.Matches)
+                            {
+                                <tr>
+                                    <td>@match.Id</td>
+                                    <td>@match.round</td>
+                                    <td>
+                                        @foreach (var participant in Model.MatchParticipants.Where(mp => mp.matchId == match.Id))
+                                        {
+                                            <div>@participant.userId</div>
+                                            <br />
+                                        }
+                                        <button class="btn btn-sm btn-primary mt-2" onclick="openScoreModal('@match.Id')">Enter Score</button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+
                 <!-- Matches will be dynamically injected here -->
+            </div>
+
+
+            @* Modal to update score *@
+            <div class="modal fade" id="scoreModal" tabindex="-1" role="dialog" aria-labelledby="scoreModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="scoreModalLabel">Update Match Score</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="scoreForm">
+                                <input type="hidden" id="matchId" />
+                                <input type="hidden" id="categoryId" />
+                                <div class="form-group">
+                                    <label>Set Scores</label>
+                                    @* <input type="text" class="form-control" id="set1" placeholder="Score for Set 1" required />
+                                    <input type="text" class="form-control mt-2" id="set2" placeholder="Score for Set 2" required />
+                                    <input type="text" class="form-control mt-2" id="set3" placeholder="Score for Set 3 (if played)" /> *@
+                                    <div class="row py-1">
+                                        <div class="col-6 col-sm-3">
+                                            <label>Players</label>
+                                        </div>
+                                        <div class="col-6 col-sm-3">
+                                            <label>Set 1</label>
+                                        </div>
+                                        <div class="col-6 col-sm-3">
+                                            <label>Set 2</label>
+                                        </div>
+                                        <div class="col-6 col-sm-3">
+                                            <label>Set 3</label>
+                                        </div>
+                                    </div>
+                                    <div class="row py-1">
+                                        <div class="col-6 col-sm-3">
+                                            <label id="player1">Player 1</label>
+                                        </div>
+                                        <div class="col-6 col-sm-3">
+                                            <input type="number" class="form-control" name="player1_set1_score" id="player1_set1" placeholder="" max="21" required />
+                                        </div>
+                                        <div class="col-6 col-sm-3">
+                                            <input type="number" class="form-control" name="player1_set2_score" id="player1_set2" placeholder="" max="21" required />
+                                        </div>
+                                        <div class="col-6 col-sm-3">
+                                            <input type="number" class="form-control" name="player1_set3_score" id="player1_set3" placeholder="" max="21" />
+                                        </div>
+                                    </div>
+                                    <div class="row py-1">
+                                        <div class="col-6 col-sm-3">
+                                            <label id="player2">Player 2</label>
+                                        </div>
+                                        <div class="col-6 col-sm-3">
+                                            <input type="number" class="form-control" name="player2_set1_score" id="player2_set1" placeholder="" max="21" required />
+                                        </div>
+                                        <div class="col-6 col-sm-3">
+                                            <input type="number" class="form-control" name="player2_set2_score" id="player2_set2" placeholder="" max="21" required />
+                                        </div>
+                                        <div class="col-6 col-sm-3">
+                                            <input type="number" class="form-control" name="player2_set3_score" id="player2_set3" placeholder="" max="21" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Select Winner</label>
+                                    <select class="form-control" name="winnerId" id="winnerId" required>
+                                        <option value="">Select Winner</option>
+                                    </select>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary" onclick="submitScore()">Save Score</button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
         </abp-card-body>

@@ -182,14 +182,23 @@ namespace FYPTourneyPro.Services.Organizer
             // Retrieve all participants for the specified matchId
             var matchParticipants = await _matchParticipantRepository.GetListAsync(mp => mp.MatchId == matchId);
 
+            var userIds = matchParticipants.Select(mp => mp.UserId).Distinct().ToList();
+
+            var users = await _userRepository.GetListByIdsAsync(userIds);
+
             // Convert the entities into MatchParticipantDto
-            var matchParticipantDtos = matchParticipants.Select(mp => new MatchParticipantDto
+            var matchParticipantDtos = matchParticipants.Select(mp =>
             {
-                Id = mp.Id,
-                userId = mp.UserId,
-                pairId = mp.PairId,
-                matchId = mp.MatchId,
-                isWinner = mp.IsWinner
+                var user = users.FirstOrDefault(u => u.Id == mp.UserId);
+                return new MatchParticipantDto
+                {
+                    Id = mp.Id,
+                    userId = mp.UserId,
+                    pairId = mp.PairId,
+                    matchId = mp.MatchId,
+                    isWinner = mp.IsWinner,
+                    userName = user != null ? user.UserName : "",
+                };
             }).ToList();
 
             return matchParticipantDtos;

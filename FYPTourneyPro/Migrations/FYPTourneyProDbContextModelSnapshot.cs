@@ -261,10 +261,13 @@ namespace FYPTourneyPro.Migrations
                     b.Property<Guid>("MatchParticipantId")
                         .HasColumnType("uuid");
 
-                    b.Property<int>("NumOfSets")
+                    b.Property<int>("Set1Score")
                         .HasColumnType("integer");
 
-                    b.Property<int>("Score")
+                    b.Property<int>("Set2Score")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Set3Score")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
