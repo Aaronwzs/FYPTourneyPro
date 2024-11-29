@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Category Participants List";
     var baseUrl = Url.Content("~");
+    var matchScore = Model.MatchScores;
 }
 @section scripts {
     <abp-script src="/Pages/TourCategory/CatPartList.js" />
@@ -62,12 +63,16 @@
                                 <th>Match ID</th>
                                 <th>Round</th>
                                 <th>Participants</th>
+                                <th>Set 1 Score</th>
+                                <th>Set 2 Score</th>
+                                <th>Set 3 Score</th>
+                                <th>Winner</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach (var match in Model.Matches)
                             {
-                                <tr>
+                               @*  <tr>
                                     <td>@match.Id</td>
                                     <td>@match.round</td>
                                     <td>
@@ -78,7 +83,45 @@
                                         }
                                         <button class="btn btn-sm btn-primary mt-2" onclick="openScoreModal('@match.Id')">Enter Score</button>
                                     </td>
+                                </tr> *@
+                                <tr>
+                                    <td>@match.Id</td>
+                                    <td>@match.round</td>
+                                    <td>
+                                        @foreach (var participant in Model.MatchParticipants.Where(mp => mp.matchId == match.Id))
+                                        {
+                                            <div>@participant.userId</div>
+                                        }
+                                    </td>
+                                    <td>
+                                        @foreach (var score in Model.MatchScores.Where(ms => ms.MatchId == match.Id))
+                                        {
+                                            <div>@score.Set1Score</div>
+                                        }
+                                    </td>
+                                    <td>
+                                        @foreach (var score in Model.MatchScores.Where(ms => ms.MatchId == match.Id))
+                                        {
+                                            <div>@score.Set2Score</div>
+                                        }
+                                    </td>
+                                    <td>
+                                        @foreach (var score in Model.MatchScores.Where(ms => ms.MatchId == match.Id))
+                                        {
+                                            <div>@score.Set3Score</div>
+                                        }
+                                    </td>
+                                    <td>
+                                        @foreach (var score in Model.MatchScores.Where(ms => ms.MatchId == match.Id))
+                                        {
+                                            <div>@score.WinnerId</div>
+                                        }
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary mt-2" onclick="openScoreModal('@match.Id')">Enter Score</button>
+                                    </td>
                                 </tr>
+
                             }
                         </tbody>
                     </table>
@@ -90,12 +133,12 @@
 
 
             @* Modal to update score *@
-            <div class="modal fade" id="scoreModal" tabindex="-1" role="dialog" aria-labelledby="scoreModalLabel" aria-hidden="true">
+            <div class="modal" id="scoreModal" tabindex="-1" role="dialog" aria-labelledby="scoreModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="scoreModalLabel">Update Match Score</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="closeModal()">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
@@ -160,7 +203,8 @@
                             </form>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-secondary" onclick="closeModal()">Close</button>
+
                             <button type="submit" class="btn btn-primary" onclick="submitScore()">Save Score</button>
                         </div>
                     </div>

@@ -22,11 +22,13 @@ namespace FYPTourneyPro.Pages.TourCategory
         public List<ParticipantDto> Participants { get; set; }
         public List<MatchDto> Matches { get; set; }
         public List<MatchParticipantDto> MatchParticipants { get; set; }
+        public List<MatchScoreDto> MatchScores { get; set; }
         public string Message { get; set; }
 
 
-        public CatPartListModel(CategoryAppService categoryAppService, RegistrationAppService registrationAppService 
-            ,MatchParticipantAppService matchParticipantAppService,
+        public CatPartListModel(CategoryAppService categoryAppService, 
+            RegistrationAppService registrationAppService,
+            MatchParticipantAppService matchParticipantAppService,
             MatchAppService matchAppService,
             MatchScoreAppService matchScoreAppService
             )
@@ -51,6 +53,7 @@ namespace FYPTourneyPro.Pages.TourCategory
             Registrations = await _registrationAppService.GetRegistrationListByCategoryAsync(CategoryId);
 
 
+           
 
             // Get the generated matches for the category
             Matches = await _matchAppService.GetMatchesByCategoryIdAsync(CategoryId);
@@ -61,6 +64,14 @@ namespace FYPTourneyPro.Pages.TourCategory
             {
                 var participants = await _matchParticipantAppService.GetMatchParticipantsByMatchIdAsync(match.Id);
                 MatchParticipants.AddRange(participants);
+            }
+
+            // Get the match scores for the matches
+            MatchScores = new List<MatchScoreDto>();
+            foreach (var match in Matches)
+            {
+                var scores = await _matchScoreAppService.GetMatchScoreAsync(match.Id);
+                MatchScores.AddRange(scores);
             }
 
         }

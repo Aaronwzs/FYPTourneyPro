@@ -1,6 +1,12 @@
 ﻿
 $(function () {
 
+    console.log("Initializing...");
+    const generateDrawBtn = $('#generateDrawBtn');
+    const matchListContainer = $('#matchListContainer');
+    const scoreModal = $('#scoreModal');
+    const modal = new bootstrap.Modal(scoreModal[0]);
+
     console.log(fYPTourneyPro.services.organizer);
 
     // Redirect when clicking a category participant row if needed
@@ -95,9 +101,10 @@ var matchParticipants = [];
 function openScoreModal(matchId) {
     document.getElementById('matchId').value = matchId;
 
-    fYPTourneyPro.services.organizer.matchParticipant.getMatchParticipantsByMatchId(matchId)
+    fYPTourneyPro.services.organizer.matchParticipant.getMatchParticipantsByMatchId(matchId) //  fetch the match participants
         .then(function (participants) {
             console.log('participants: ', participants)
+
             matchParticipants = participants;
             //const participantsList = document.getElementById('participantsList');
             const winnerDropdown = document.getElementById('winnerId');
@@ -113,22 +120,66 @@ function openScoreModal(matchId) {
             });
             //get 2 data in list
             //cater for doubles
-           // option.value = participant.pairId;
-
+            // option.value = participant.pairId;
             $('#player1').text(participants[0].userName);
             $('#player1').data('id', participants[0].id);
             $('#player2').text(participants[1].userName);
             $('#player2').data('id', participants[1].id);
 
 
+
+            //Cater for pairs
+            const participantGroups = {};
+            participants.forEach(function (participant) {
+                if (!participantGroups[participant.pairId]) {
+                    participantGroups[participant.pairId] = [];
+                }
+                participantGroups[participant.pairId].push(participant);
+            });
+
+            // Populate winner dropdown with pair names
+            Object.values(participantGroups).forEach(function (pairParticipants) {
+                const option = document.createElement('option');
+
+                // Create pair name by combining participant names
+                const pairName = pairParticipants.map(p => p.userName).join(' & ');
+
+                // Use first participant's pairId as the value
+                option.value = pairParticipants[0].pairId;
+                option.textContent = pairName;
+                winnerDropdown.appendChild(option);
+            });
+
+            // Set player labels (works for both singles and doubles)
+            if (participants.length >= 2) {
+                const firstPair = participantGroups[participants[0].pairId];
+                const secondPair = participantGroups[participants[1].pairId];
+
+                // Display pair names
+                $('#player1').text(firstPair.map(p => p.userName).join(' & '));
+                $('#player1').data('pairId', participants[0].pairId);
+
+                $('#player2').text(secondPair.map(p => p.userName).join(' & '));
+                $('#player2').data('pairId', participants[1].pairId);
+            }
+
+
+
+
             // Show the modal
-            new bootstrap.Modal(document.getElementById('scoreModal')).show();
+            //new bootstrap.Modal(document.getElementById('scoreModal')).show();
+            $('#scoreModal').show();
         })
         .catch(function (error) {
             console.error('Error fetching match participants:', error);
             alert('Failed to load match participants. Please try again.');
         });
 }
+
+// function closeMo() {
+//    modal.hide();
+//    $('#scoreForm')[0].reset();
+//};
 
 function submitScore() {
     // todo: validation
@@ -206,4 +257,13 @@ function submitScore() {
     })
 
 
+}
+
+
+function closeModal() {
+    //const modalElement = document.getElementById('scoreModal');
+    //const modal = new bootstrap.Modal(modalElement);
+    //modal.hide();  // This will close the modal programmatically
+    $('#scoreModal').hide();
+    $('#scoreForm')[0].reset();
 }
