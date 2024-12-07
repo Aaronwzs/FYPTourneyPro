@@ -35,7 +35,7 @@ $('#addCommentForm').submit(function (e) {
         $('#addCommentForm')[0].reset();
     }).fail(function (error) {
         // On failure, show an error alert
-        alert('Registration Failed! ' + error.message);
+        alert('Comment Failed! ' + error.message);
     });
 });
 

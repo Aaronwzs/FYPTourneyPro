@@ -10,6 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
     <PackageReference Include="Serilog.AspNetCore" Version="8.0.0" />
 	<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.10" />
 	<PackageReference Include="Selenium.WebDriver" Version="4.26.1" />
@@ -100,18 +101,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="Entities\NewFolder\**" />
     <Content Remove="Localization\FYPTourneyPro\*.json" />
     <EmbeddedResource Include="Localization\FYPTourneyPro\*.json" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Entities\NewFolder\**" />
     <Compile Remove="Logs\**" />
     <Content Remove="Logs\**" />
-    <EmbeddedResource Remove="Entities\NewFolder\**" />
     <EmbeddedResource Remove="Logs\**" />
-    <None Remove="Entities\NewFolder\**" />
     <None Remove="Logs\**" />
   </ItemGroup>
 

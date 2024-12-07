@@ -55,6 +55,7 @@ namespace FYPTourneyPro.Services.Posts
                     Id = post.Id,
                     Title = post.Title,
                     Content = post.Content,
+                    CreationTime = post.CreationTime,
                     Upvotes = post.Upvotes,
                     Downvotes = post.Downvotes,
                     Comments = post.Comments.Select(comment => new CommentDto
@@ -80,6 +81,7 @@ namespace FYPTourneyPro.Services.Posts
                 Id = post.Id,
                 Title = post.Title,
                 Content = post.Content,
+                CreationTime = post.CreationTime,
                 Upvotes = post.Upvotes,
                 Downvotes = post.Downvotes
             };

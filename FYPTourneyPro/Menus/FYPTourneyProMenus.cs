@@ -11,4 +11,6 @@ public class FYPTourneyProMenus
     public const string Tournament = Prefix + ".Tournament";
 
     public const string Discussion = Prefix + ".Discussion";
+
+    public const string Chat = Prefix + ".Chat";
 }

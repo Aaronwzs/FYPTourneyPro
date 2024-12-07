@@ -1,0 +1,38 @@
+﻿@page
+@model FYPTourneyPro.Pages.Chat.IndexModel
+
+@section scripts {
+    <abp-script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></abp-script>
+    <abp-script src="/Pages/Chat/index.js" />
+}
+
+@{
+    <div id="createGroupChatContainer">
+        <h2>Create Group Chat</h2>
+        <form id="createGroupForm">
+            <!-- Input for Group Name -->
+            <label for="groupName">Group Name:</label>
+            <input type="text" id="groupName" placeholder="Enter group name" required />
+
+            <!-- Multi-Select Dropdown for Participants -->
+            <div id="participantsContainer">
+                <!-- Checkboxes will be added here by JavaScript -->
+            </div>
+
+            <!-- Button to Create Group -->
+            <button type="submit" id="createGroupButton">Create Group</button>
+        </form>
+    </div>
+
+
+    <div id="chatRoomsList"></div>
+
+    <div id="chatMessagesContainer" style="display: none;">
+        <h2 id="chatRoomTitle"></h2>
+        <div id="messagesList"></div>
+        <div>
+            <input type="text" id="messageInput" placeholder="Type your message here...">
+            <button id="sendMessageButton">Send</button>
+        </div>
+    </div>
+}

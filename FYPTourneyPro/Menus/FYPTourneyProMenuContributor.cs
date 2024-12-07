@@ -123,6 +123,17 @@ public class FYPTourneyProMenuContributor : IMenuContributor
           
          );
 
+            context.Menu.Items.Insert(
+   2,
+   new ApplicationMenuItem(
+       "Chat",
+       "ChatRoom",
+       url: "/Chat/index",
+       icon: "fas fa-home"
+   )
+
+   );
+
 
         }
 

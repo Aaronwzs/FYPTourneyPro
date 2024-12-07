@@ -15,6 +15,8 @@ using FYPTourneyPro.Entities.TodoList;
 using FYPTourneyPro.Entities.DiscussionBoard;
 using FYPTourneyPro.Entities.Organizer;
 using System.Reflection.Emit;
+using FYPTourneyPro.Entities.Chatroom;
+using Volo.Abp.Identity;
 
 namespace FYPTourneyPro.Data;
 
@@ -38,6 +40,10 @@ public class FYPTourneyProDbContext : AbpDbContext<FYPTourneyProDbContext>
     public DbSet<Registration> Registration { get; set; }
     public DbSet<Participant> Participant { get; set; }
     public DbSet<MatchScore> MatchScore { get; set; }
+    public DbSet<ChatRoom> ChatRooms { get; set; }
+    public DbSet<ChatMessage> ChatMessages { get; set; }
+    public DbSet<ChatRoomParticipant> ChatRoomParticipants { get; set; }
+    public DbSet<IdentityUser> Users { get; set; } // DbSet for IdentityUser if required
 
     public const string DbTablePrefix = "App";
     public const string DbSchema = null;
@@ -157,6 +163,34 @@ public class FYPTourneyProDbContext : AbpDbContext<FYPTourneyProDbContext>
         builder.Entity<MatchScore>(b =>
         {
             b.ToTable("MatchScore");
+        });
+
+        builder.Entity<ChatRoom>(b =>
+        {
+            b.ToTable("ChatRooms"); // Set the table name
+            b.HasMany(c => c.Messages)
+             .WithOne(m => m.ChatRoom)
+             .HasForeignKey(m => m.ChatRoomId)
+             .OnDelete(DeleteBehavior.Cascade); // Setting up relationship
+        });
+
+        builder.Entity<ChatMessage>(b =>
+        {
+            b.ToTable("ChatMessages"); // Set the table name
+        });
+
+        builder.Entity<ChatRoomParticipant>(b =>
+        {
+            b.ToTable("ChatRoomParticipants"); // Set the table name
+            b.HasOne(c => c.ChatRoom)
+             .WithMany() // You could add a collection in ChatRoom if needed
+             .HasForeignKey(c => c.ChatRoomId)
+             .OnDelete(DeleteBehavior.Cascade);
+
+            b.HasOne(c => c.User)
+             .WithMany() // If your IdentityUser class has a collection, reference it here
+             .HasForeignKey(c => c.UserId)
+             .OnDelete(DeleteBehavior.Cascade);
         });
     }
 }
