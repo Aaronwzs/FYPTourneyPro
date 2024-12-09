@@ -6,7 +6,7 @@ let currentChatRoomId = null;
 // Receive messages from the server
 connection.on("ReceiveMessage", function (userId, message, creationTime) {
     console.log(`Message received from user ${userId}: ${message} at ${creationTime}`);
-    const msg = `${userId}: ${message}`;
+    const msg = `${userId}: ${message} at ${creationTime}`;
     const li = document.createElement("li");
     li.textContent = msg;
     document.getElementById("messagesList").appendChild(li);
@@ -85,6 +85,7 @@ connection.start().then(function () {
         });
     }
 
+    // LOAD ALL PARTCIPANTS TO BE INCLUDED INTO GROUP CHAT
     async function loadParticipants() {
         try {
             const participantsContainer = document.getElementById("participantsContainer");
@@ -100,7 +101,6 @@ connection.start().then(function () {
                     checkbox.type = "checkbox";
                     checkbox.value = user.id;
                     checkbox.id = `participant_${user.id}`;  // Assign unique ID for each checkbox
-                    console.log(checkbox);
                     // Create the label for the checkbox
                     const label = document.createElement("label");
                     label.htmlFor = `participant_${user.id}`;
@@ -124,6 +124,7 @@ connection.start().then(function () {
     document.addEventListener("DOMContentLoaded", loadParticipants);
 
 
+    // LOAD ALL THE CHAT ROOMS INVOLVED BY THE CURRENT USER
     async function loadChatRooms() {
         try {
             const chatRoomsContainer = document.getElementById("chatRoomsList");
@@ -145,6 +146,8 @@ connection.start().then(function () {
         }
     }
 
+
+    // OPEN THE CHATROOM SELECTED
 async function openChatRoom(chatRoomId, chatRoomName) {
 
     // Update the UI to show the chat room name and make the messages section visible
@@ -169,7 +172,7 @@ async function loadChatMessages(chatRoomId) {
             messages.forEach(message => {
                 const messageDiv = document.createElement("div");
                 messageDiv.classList.add("message");
-                messageDiv.textContent = `${message.creatorId}: ${message.content}`;
+                messageDiv.textContent = `${message.creatorId}: ${message.content} at ${message.creationTime}`;
                 messagesContainer.appendChild(messageDiv);
             });
         });
@@ -205,7 +208,7 @@ document.getElementById("sendMessageButton").addEventListener("click", async fun
         var chatMessage = await fYPTourneyPro.services.chat.chat.createChatMessages(messageData);
         console.log(`Attempting to send message: content = ${content}, currentChatRoomId = ${currentChatRoomId}, creatorId = ${chatMessage.creatorId}`);
         // Optionally, invoke SignalR to broadcast the message to other users
-        connection.invoke("SendMessage", currentChatRoomId, chatMessage.creatorId, content)
+        connection.invoke("SendMessage", currentChatRoomId, chatMessage.creatorId, content, chatMessage.creationTime)
             .then(() => {
                 console.log("Message broadcasted successfully.");
             })
