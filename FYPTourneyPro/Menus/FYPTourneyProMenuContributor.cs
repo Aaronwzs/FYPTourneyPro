@@ -112,7 +112,29 @@ public class FYPTourneyProMenuContributor : IMenuContributor
                 )
             );
 
-            
+            context.Menu.Items.Insert(
+         2,
+         new ApplicationMenuItem(
+             "DiscussionBoard",
+             "Discussion",
+             url: "/DiscussionBoard/index",
+             icon: "fas fa-home"
+         )
+          
+         );
+
+            context.Menu.Items.Insert(
+   2,
+   new ApplicationMenuItem(
+       "Chat",
+       "ChatRoom",
+       url: "/Chat/index",
+       icon: "fas fa-home"
+   )
+
+   );
+
+
         }
 
         return Task.CompletedTask;

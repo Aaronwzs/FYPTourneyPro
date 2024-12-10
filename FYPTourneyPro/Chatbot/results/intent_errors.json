@@ -1,0 +1,58 @@
+[
+  {
+    "text": "Can you tell me about the tournament?",
+    "intent": "ask_tournament",
+    "intent_prediction": {
+      "name": "bot_challenge",
+      "confidence": 0.8509005904197693
+    }
+  },
+  {
+    "text": "What is the tournament about?",
+    "intent": "ask_tournament",
+    "intent_prediction": {
+      "name": "deny",
+      "confidence": 0.33017390966415405
+    }
+  },
+  {
+    "text": "What is the tournament",
+    "intent": "ask_tournament",
+    "intent_prediction": {
+      "name": "deny",
+      "confidence": 0.5392993092536926
+    }
+  },
+  {
+    "text": "Can you tell me the next soccer competition?",
+    "intent": "ask_schedule",
+    "intent_prediction": {
+      "name": "bot_challenge",
+      "confidence": 0.43036210536956787
+    }
+  },
+  {
+    "text": "When is the next basketball game?",
+    "intent": "ask_schedule",
+    "intent_prediction": {
+      "name": "deny",
+      "confidence": 0.37622514367103577
+    }
+  },
+  {
+    "text": "What is the date of the next tennis match?",
+    "intent": "ask_schedule",
+    "intent_prediction": {
+      "name": "deny",
+      "confidence": 0.5435178875923157
+    }
+  },
+  {
+    "text": "Tell me about the next soccer tournament.",
+    "intent": "ask_schedule",
+    "intent_prediction": {
+      "name": "bot_challenge",
+      "confidence": 0.34031936526298523
+    }
+  }
+]

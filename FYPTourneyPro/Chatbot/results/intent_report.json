@@ -1,0 +1,90 @@
+{
+  "greet": {
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1-score": 1.0,
+    "support": 13,
+    "confused_with": {}
+  },
+  "bot_challenge": {
+    "precision": 0.5714285714285714,
+    "recall": 1.0,
+    "f1-score": 0.7272727272727273,
+    "support": 4,
+    "confused_with": {}
+  },
+  "mood_great": {
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1-score": 1.0,
+    "support": 14,
+    "confused_with": {}
+  },
+  "affirm": {
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1-score": 1.0,
+    "support": 6,
+    "confused_with": {}
+  },
+  "ask_tournament": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 3,
+    "confused_with": {
+      "deny": 2,
+      "bot_challenge": 1
+    }
+  },
+  "deny": {
+    "precision": 0.6363636363636364,
+    "recall": 1.0,
+    "f1-score": 0.7777777777777778,
+    "support": 7,
+    "confused_with": {}
+  },
+  "ask_schedule": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 4,
+    "confused_with": {
+      "deny": 2,
+      "bot_challenge": 2
+    }
+  },
+  "goodbye": {
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1-score": 1.0,
+    "support": 10,
+    "confused_with": {}
+  },
+  "mood_unhappy": {
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1-score": 1.0,
+    "support": 14,
+    "confused_with": {}
+  },
+  "accuracy": 0.9066666666666666,
+  "macro avg": {
+    "precision": 0.6897546897546898,
+    "recall": 0.7777777777777778,
+    "f1-score": 0.7227833894500562,
+    "support": 75
+  },
+  "weighted avg": {
+    "precision": 0.8498701298701299,
+    "recall": 0.9066666666666666,
+    "f1-score": 0.8713804713804714,
+    "support": 75
+  },
+  "micro avg": {
+    "precision": 0.9066666666666666,
+    "recall": 0.9066666666666666,
+    "f1-score": 0.9066666666666666,
+    "support": 75
+  }
+}

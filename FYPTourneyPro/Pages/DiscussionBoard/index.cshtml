@@ -1,0 +1,121 @@
+﻿@page
+@model FYPTourneyPro.Pages.DiscussionBoard.indexModel
+@{
+    ViewData["Title"] = "Discussion Board";
+}
+
+@section scripts {
+    <abp-script src="/Pages/DiscussionBoard/index.js" />
+}
+
+
+
+<h2>Discussion Board</h2>
+
+<!-- Button to Add a New Post -->
+<a class="btn btn-primary" asp-page="Create">Create New Post</a>
+
+<form id="discussionForm">
+    <div class="form-group">
+        <label for="CreatedByUserId">Username</label>
+        <input type="text" id="CreatedByUserId" class="form-control" value="@Model.UserName" readonly />
+    </div>
+    <div class="form-group">
+        <label for="Title">Title</label>
+        <input type="text" id="Title" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for="Content">Content</label>
+        <input type="text" id="Content" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+<table class="table table-bordered mt-3">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Content</th>
+            <th>CreatedBy</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    
+
+
+        @if (Model.Posts != null && Model.Posts.Any())
+        {
+            <div>
+                <!-- Filter Dropdown -->
+                <label for="filterSelect">Filter by:</label>
+                <select id="filterSelect" class="form-control" onchange="applyFilter()">
+                    <option value="hot">Hot</option>
+                    <option value="best">Best</option>
+                    <option value="latest">Latest</option>
+                </select>
+            </div>
+            <tbody id="postContainer" class="mt-4">
+            @*     @foreach (var post in Model.Posts)
+                {
+                <tr onclick="window.location.href='/DiscussionBoard/Comments?postId=@post.Id'" style="cursor: pointer;">
+                    <td>@post.Title</td>
+                    <td>@post.Content</td>
+                    <td>@post.CreationTime</td>
+                </tr>
+                } *@
+            </tbody>
+        }
+        else
+        {
+        <p>No posts available.</p>
+        }
+
+        @if (Model.YourPosts != null && Model.YourPosts.Any())
+        {
+            @foreach (var post in Model.YourPosts)
+            {
+                <tr>
+                    <td>@post.Title</td>
+                    <td>@post.Content</td>
+                    <td>
+                        <!-- Modal -->
+                        <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="editModalLabel">Edit Post</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form id="editDiscussionForm">
+                                            <div class="mb-3">
+                                                <label for="editTitle" class="form-label">Title</label>
+                                                <input type="text" class="form-control" id="editTitle" name="title" />
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="editContent" class="form-label">Content</label>
+                                                <textarea class="form-control" id="editContent" name="content"></textarea>
+                                            </div>
+                                            <input type="hidden" id="editPostId" name="id" />
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Submit</button>
+     
+                                        </form>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        <button class="btn btn-warning" onclick="openEditModal('@post.Id', '@post.Title', '@post.Content')">Edit</button>
+                        <button id="postDelete" class="btn btn-danger delete-btn" data-id="@post.Id">Delete</button>
+                    </td>
+
+                </tr>
+            }
+        }
+        else
+        {
+            <p>No posts available.</p>
+        }
+       
+</table>
+}
