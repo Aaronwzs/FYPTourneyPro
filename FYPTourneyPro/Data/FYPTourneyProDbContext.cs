@@ -15,6 +15,8 @@ using FYPTourneyPro.Entities.TodoList;
 using FYPTourneyPro.Entities.Organizer;
 using System.Reflection.Emit;
 
+using FYPTourneyPro.Entities.User;
+
 namespace FYPTourneyPro.Data;
 
 public class FYPTourneyProDbContext : AbpDbContext<FYPTourneyProDbContext>
@@ -37,6 +39,9 @@ public class FYPTourneyProDbContext : AbpDbContext<FYPTourneyProDbContext>
     public DbSet<Registration> Registration { get; set; }
     public DbSet<Participant> Participant { get; set; }
     public DbSet<MatchScore> MatchScore { get; set; }
+
+    //Custom Register
+    public DbSet<User> User { get; set; }
 
     public const string DbTablePrefix = "App";
     public const string DbSchema = null;
@@ -114,6 +119,13 @@ public class FYPTourneyProDbContext : AbpDbContext<FYPTourneyProDbContext>
         builder.Entity<MatchScore>(b =>
         {
             b.ToTable("MatchScore");
+        });
+
+        //Custom Register
+        builder.Entity<User>(b =>
+        {
+            b.ToTable("Users");
+
         });
 
     }

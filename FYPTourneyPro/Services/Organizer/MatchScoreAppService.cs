@@ -3,6 +3,8 @@ using Volo.Abp;
 using FYPTourneyPro.Entities.Organizer;
 using Volo.Abp.Domain.Repositories;
 using FYPTourneyPro.Services.Dtos.Organizer;
+using System.Linq;
+using Serilog.Filters;
 
 namespace FYPTourneyPro.Services.Organizer
 {
@@ -43,5 +45,45 @@ namespace FYPTourneyPro.Services.Organizer
            
         }
 
+
+        public async Task<List<MatchScoreDto>> GetMatchScoreAsync( Guid matchId)
+        {
+
+            var scores = new List<MatchScoreDto>();
+
+            // Fetch all participants for the given matchId
+            var matchParticipants = await _matchParticipantRepository.GetListAsync(mp => mp.MatchId == matchId);
+
+            // Check if there are any participants in the match
+            if (matchParticipants.Count > 0)
+            {
+                // Loop through the match participants and fetch the MatchScore for each
+                foreach (var mParticipant in matchParticipants)
+                {
+                    // Fetch the match score for the current match participant
+                    var matchScore = await _matchScoreRepository
+                        .FirstOrDefaultAsync(ms => ms.MatchParticipantId == mParticipant.Id);
+
+                    // If a match score exists for this participant, map it to the DTO
+                    if (matchScore != null)
+                    {
+                        var matchScoreDto = new MatchScoreDto
+                        {
+                            MatchParticipantId = matchScore.MatchParticipantId,
+                            MatchId = mParticipant.MatchId,
+                            Set1Score = matchScore.Set1Score.ToString(),
+                            Set2Score = matchScore.Set2Score.ToString(),
+                            Set3Score = matchScore.Set3Score.ToString(),
+                            WinnerId = mParticipant.UserId // Assuming WinnerId is the UserId of the MatchParticipant
+                        };
+
+                        // Add the match score to the list
+                        scores.Add(matchScoreDto);
+                    }
+                }
+            }
+
+            return scores;  // Return the list of match scores
+        }
     }
 }
