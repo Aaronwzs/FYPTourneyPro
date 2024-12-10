@@ -48,6 +48,27 @@ namespace FYPTourneyPro.Services.Chat
         }
 
 
+        //public async Task<Guid> CreateDirectChatAsync(Guid userId)
+        //{
+        //    try
+        //    {
+        //        var receiver = await _userRepository.GetAsync(userId);
+        //        var currentUserId = CurrentUser.Id; // Get the ID of the logged-in user
+
+        //        var existingChatRoom = await _chatRoomParticipantRepository.GetListAsync(cp => cp.UserId == currentUserId);
+
+        //        var chatRoom = existingChatRoom.FirstOrDefault(cp => cp.UserId == userId);
+
+        //        if (chatRoom != null && chatRoom.ChatRoom.ChatMessages.ChatType == ChatType.Direct)
+        //        {
+        //            return chatRoom.ChatRoomId;
+        //        }
+
+
+
+        //    }
+        //}
+
         public async Task<Guid> CreateGroupChatAsync(string groupName, List<Guid> participantIds)
         {
 
@@ -58,7 +79,24 @@ namespace FYPTourneyPro.Services.Chat
                 if (currentUserId.HasValue && !participantIds.Contains(currentUserId.Value))
                 {
                     participantIds.Add(currentUserId.Value);
+
                 }
+                var existingChatRooms = await _chatRoomParticipantRepository.GetListAsync(cp => participantIds.Contains(cp.UserId));
+
+                var duplicateChatRoom = existingChatRooms
+                   .GroupBy(cp => cp.ChatRoomId) // Group by chat room ID
+                   .FirstOrDefault(g =>
+                       g.Count() == participantIds.Count && // Match participant count
+                       participantIds.All(pid => g.Any(p => p.UserId == pid)) // Check if all participant IDs match
+                   )?.Key;
+
+
+                if (duplicateChatRoom.HasValue)
+                {
+                    // If a duplicate exists, return its ID
+                    return duplicateChatRoom.Value;
+                }
+
                 // Create the new chat room
                 var newChatRoom = new ChatRoom
                 {

@@ -54,7 +54,6 @@ connection.start().then(function () {
         }
 
         fYPTourneyPro.services.chat.chat.createGroupChat(groupName, participantIds).then((result) => {
-            console.log("Group chat created with ID:", result);
             connection.invoke("JoinRoom", result)
                 .then(() => {
                     console.log(`Joined room ${result}`);
@@ -86,7 +85,7 @@ connection.start().then(function () {
     }
 
     // LOAD ALL PARTCIPANTS TO BE INCLUDED INTO GROUP CHAT
-    async function loadParticipants() {
+    async function loadGroupParticipants() {
         try {
             const participantsContainer = document.getElementById("participantsContainer");
 
@@ -119,9 +118,28 @@ connection.start().then(function () {
         }
     }
 
+//Load all individual participants(chats)
+//async function loadParticipants() {
+//    try {
+//        const participantsContainer = document.getElementById("participantsContainer");
+
+//        fYPTourneyPro.services.chat.chat.getAllUsers().then((users) => {
+//            users.forEach(user => {
+//                const userDiv = document.createElement("div");
+//                userDiv.value = user.id;
+//                userDiv.textContent = user.userName;
+//                userDiv.addEventListener("click", () => {
+//                    openChatRoom();
+//                })
+//            }
+
+//        });
+//    } catch (error) {
+//        console.error("Error loading participants:", error);
+//}
 
     // Call loadParticipants on page load
-    document.addEventListener("DOMContentLoaded", loadParticipants);
+    document.addEventListener("DOMContentLoaded", loadGroupParticipants);
 
 
     // LOAD ALL THE CHAT ROOMS INVOLVED BY THE CURRENT USER
@@ -224,4 +242,3 @@ document.getElementById("sendMessageButton").addEventListener("click", async fun
         console.error("Error saving message to backend:", error);
     }
 });
-
