@@ -3,6 +3,7 @@ using FYPTourneyPro.Services.Dtos.Organizer;
 using FYPTourneyPro.Services.Organizer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Volo.Abp.Auditing;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Identity;
 using Volo.Abp.Users;
@@ -38,8 +39,6 @@ namespace FYPTourneyPro.Pages.TourRegistration
 
         public async Task OnGetAsync(Guid tournamentId)
         {
-            TournamentId = tournamentId;
-           
 
             // Get current user
             if (_currentUser.IsAuthenticated)
