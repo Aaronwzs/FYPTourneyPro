@@ -200,7 +200,7 @@ namespace FYPTourneyPro.Services.Organizer
             return RegistrationListDto;
         }
 
-        public async Task<List<RegistrationDto>> GetRegistrationListByCategoryAsync(Guid CategoryId)
+        public async Task<List<RegistrationDto>> GetRegistrationListByCategoryAsync(Guid CategoryId) //When click on Category populate the registration
         {
             var registrations = await _registrationRepository.GetListAsync(p => p.CategoryId == CategoryId);
 

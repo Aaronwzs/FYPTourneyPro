@@ -89,7 +89,7 @@ namespace FYPTourneyPro.Pages.Account
         {
             await CheckLocalLoginAsync();
 
-            ValidateModel();
+            //ValidateModel();
 
             ExternalProviders = await GetExternalProviders();
 
