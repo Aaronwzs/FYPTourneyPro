@@ -15,6 +15,12 @@ namespace FYPTourneyPro.Entities.Organizer
         // New UserId property to track which user created the tournament
         public Guid UserId { get; set; }
 
+        //Additional Fields
+        
+        public string HotlineNum { get; set; }
+        public string RulesAndRegulations { get; set; }
+        public bool IsMalaysian { get; set; }
+
 
     }
 }

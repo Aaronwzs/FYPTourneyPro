@@ -38,9 +38,23 @@
                 <div class="col-md-6">
                     <input id="EndDate" type="date" class="form-control" placeholder="EndDate" required>
                 </div>
+                    <div class="col-md-6">
+                        <input id="HotlineNum" type="text" class="form-control" placeholder="Hotline Number" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-check-label" for="IsMalaysian">Is Malaysian</label>
+                        <input id="IsMalaysian" type="checkbox" class="form-check-input">
+                    </div>
+                    <div class="col-md-12">
+                        <label class="form-check-label" for="RulesAndRegulations">Rules and Regulations</label>
+                        <textarea id="RulesAndRegulations" class="form-control" placeholder="Enter Rules and Regulations" required></textarea>
+                    </div>
+
                 <div class="col-12">
                     <button type="submit" class="btn btn-primary">Add Tournament</button>
                 </div>
+
+
             </form>
             }
             else
@@ -55,21 +69,83 @@
                 {
                     <li data-id="@tournament.Id">
                         <i class="fa fa-trash-o"></i>
+                        <button class="btn btn-warning btn-sm edit-tournament">
+                            <i class="fa fa-edit"></i> Edit
+                        </button>
                         <a href="javascript:void(0)" class="tournament-link">@tournament.Name</a>
                     </li>
                 }
             </ul>
             <!-- USER'S TOURNAMENT LIST -->
-            <h3>Your Tournaments</h3>
+          @*   <h3>Your Tournaments</h3>
             <ul id="UserTournamentList">
                 @foreach (var tournament in Model.UserTournaments)
                 {
                     <li data-id="@tournament.Id">
                         <i class="fa fa-trash-o"></i>
+                        <button class="btn btn-warning btn-sm edit-tournament">
+                            <i class="fa fa-edit"></i> Edit
+                        </button>
                         <a href="javascript:void(0)" class="tournament-link">@tournament.Name</a>
                     </li>
                 }
-            </ul>
+            </ul> *@
+
+            <!-- Edit Tournament Modal -->
+            <div class="modal fade" id="EditTournamentModal" tabindex="-1" aria-labelledby="EditTournamentModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="EditTournamentModalLabel">Edit Tournament</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="EditTournamentForm">
+                                <input type="hidden" id="EditTournamentId" />
+                                <div class="mb-3">
+                                    <label for="EditTournamentName" class="form-label">Tournament Name</label>
+                                    <input id="EditTournamentName" type="text" class="form-control" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="EditTournamentDescription" class="form-label">Description</label>
+                                    <textarea id="EditTournamentDescription" class="form-control" required></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="EditRegistrationStartDate" class="form-label">Registration Start Date</label>
+                                    <input id="EditRegistrationStartDate" type="date" class="form-control" placeholder="dd/mm/yyyy" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="EditRegistrationEndDate" class="form-label">Registration End Date</label>
+                                    <input id="EditRegistrationEndDate" type="date" class="form-control" placeholder="dd/mm/yyyy"  required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="EditStartDate" class="form-label">Start Date</label>
+                                    <input id="EditStartDate" type="date" class="form-control" placeholder="dd/mm/yyyy" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="EditEndDate" class="form-label">End Date</label>
+                                    <input id="EditEndDate" type="date" class="form-control" placeholder="dd/mm/yyyy" required>
+                                </div>
+                                <!-- New fields for editing -->
+                                <div class="mb-3">
+                                    <label for="EditHotlineNum" class="form-label">Hotline Number</label>
+                                    <input id="EditHotlineNum" type="text" class="form-control" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="EditIsMalaysian" class="form-check-label">Is Malaysian</label>
+                                    <input id="EditIsMalaysian" type="checkbox" class="form-check-input">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="EditRulesAndRegulations" class="form-label">Rules and Regulations</label>
+                                    <textarea id="EditRulesAndRegulations" class="form-control" required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </abp-card-body>
     </abp-card>
 </div>

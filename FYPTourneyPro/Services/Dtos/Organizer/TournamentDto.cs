@@ -11,5 +11,10 @@ namespace FYPTourneyPro.Services.Dtos.Organizer
         public DateTime RegistrationEndDate { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
+
+        public string HotlineNum { get; set; }
+        public Boolean isMalaysian { get; set; }
+        public string RulesAndRegulations { get; set; }
+
     }
 }

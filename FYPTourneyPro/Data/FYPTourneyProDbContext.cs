@@ -43,6 +43,9 @@ public class FYPTourneyProDbContext : AbpDbContext<FYPTourneyProDbContext>
     //Custom Register
     public DbSet<User> User { get; set; }
 
+    //Wallet
+    public DbSet<Wallet> Wallet { get; set; }
+
     public const string DbTablePrefix = "App";
     public const string DbSchema = null;
 
@@ -125,6 +128,12 @@ public class FYPTourneyProDbContext : AbpDbContext<FYPTourneyProDbContext>
         builder.Entity<User>(b =>
         {
             b.ToTable("Users");
+
+        });
+
+        builder.Entity<Wallet>(b =>
+        {
+            b.ToTable("Wallets");
 
         });
 
