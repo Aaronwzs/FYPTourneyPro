@@ -41,49 +41,7 @@ nlu:
     - okay 
     - good
 
-- intent: deny
-  examples: |
-    - no
-    - n
-    - never
-    - I don't think so
-    - don't like that
-    - no way
-    - not really
 
-- intent: mood_great
-  examples: |
-    - perfect
-    - great
-    - amazing
-    - feeling like a king
-    - wonderful
-    - I am feeling very good
-    - I am great
-    - I am amazing
-    - I am going to save the world
-    - super stoked
-    - extremely good
-    - so so perfect
-    - so good
-    - so perfect
-
-- intent: mood_unhappy
-  examples: |
-    - my day was horrible
-    - I am sad
-    - I don't feel very well
-    - I am disappointed
-    - super sad
-    - I'm so sad
-    - sad
-    - very sad
-    - unhappy
-    - not good
-    - not very good
-    - extremly sad
-    - so saad
-    - so sad
 
 - intent: bot_challenge
   examples: |
@@ -92,13 +50,6 @@ nlu:
     - am I talking to a bot?
     - am I talking to a human?
 
-
-- intent: ask_tournament
-  examples: |
-    - Can you tell me about the tournament?
-    - What is the tournament about?
-    - What is the tournament
-
 - intent: ask_schedule
   examples: |
     - Tell me matches played by [ABC1234](player)
@@ -106,16 +57,16 @@ nlu:
     - Show me matches for the player [ADMIN](player)
     - List matches in the tournament [de wsa](tournament_name)
     - When is the next match for [ABC1234](player)?
-    - 
+   
 
-- intent: ask_registration
-  examples: |
-    - How do I register for the competition?
-    - Can I register as a user?
-    - What are the registration requirements?
-    - When is the registration period?
-    - How do I get a spot in the competition?
-    - What are the rules and regulations for registration?
+# - intent: ask_registration
+#   examples: |
+#     - How do I register for the competition?
+#     - Can I register as a user?
+#     - What are the registration requirements?
+#     - When is the registration period?
+#     - How do I get a spot in the competition?
+#     - What are the rules and regulations for registration?
 
 
 - intent: ask_substitutions

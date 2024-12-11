@@ -6,11 +6,14 @@
 
 @section scripts {
     <abp-script src="/Pages/DiscussionBoard/index.js" />
+    <abp-script src="/Pages/chatbot.js"></abp-script>
+    <abp-script src="https://cdn.jsdelivr.net/npm/rasa-webchat/lib/index.js"></abp-script>
 }
 
 
 
 <h2>Discussion Board</h2>
+<div id="webchat"></div>
 
 <!-- Button to Add a New Post -->
 <a class="btn btn-primary" asp-page="Create">Create New Post</a>

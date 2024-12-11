@@ -79,10 +79,41 @@ class ActionFetchNextMatch(Action):
 
     def run(self, dispatcher, tracker, domain):
         
+        user_id = tracker.get_slot("userId")
 
-        # Fetch the user's next match (placeholder logic)
-        dispatcher.utter_message(text=f"Fetching next match for user ID: {user_id}.")
-        return []
+         # Connect to PostgreSQL database
+        connection = psycopg2.connect(
+            user="postgres",
+            password="user123",
+            host="127.0.0.1",
+            port="5432",
+            database="FYPTourneyPro"
+        )
+        cursor = connection.cursor()
+
+        query = """
+            SELECT  u."NormalizedUserName", m."startTime", t."Name"
+            FROM "Match" m
+            JOIN "MatchParticipant" mp ON m."Id" = mp."MatchId"
+            JOIN "AbpUsers" u ON mp."UserId" = u."Id"
+            JOIN "Category" c ON m."CategoryId" = c."Id"
+            JOIN "Tournament" t ON c."TournamentId" = t."Id"
+            WHERE u."Id" = %s
+            ORDER BY m."startTime" ASC
+            """
+        cursor.execute(query,(user_id,))
+
+        results = cursor.fetchone()
+        connection.close()
+
+        if results:
+         # Unpacking the first row in the results
+         normalized_user_name, start_time, tournament_name = results
+         dispatcher.utter_message(
+            text=f"Dear {normalized_user_name}, your next match is on {start_time} in the tournament {tournament_name}."
+          )
+        else:
+            dispatcher.utter_message(text="Sorry, no matches were found.")
 
 
 class ActionExtractCustomData(Action):
@@ -94,11 +125,6 @@ class ActionExtractCustomData(Action):
         metadata = tracker.latest_message.get("metadata", {})
         user_id = metadata.get("userId")
         is_logged_in = metadata.get("isLoggedIn", False)
-
-        # Debug: Log extracted values (optional)
-        dispatcher.utter_message(
-            text=f"Extracted metadata -> UserId: {user_id}, IsLoggedIn: {is_logged_in}"
-        )
 
         # Set slots dynamically
         return [
