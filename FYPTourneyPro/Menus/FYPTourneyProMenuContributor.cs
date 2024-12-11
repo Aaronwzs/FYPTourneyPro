@@ -95,7 +95,7 @@ public class FYPTourneyProMenuContributor : IMenuContributor
                     )
                 );
 
-            // Add Category Management section
+            // Add Application Management section
             var categoryMenu = context.Menu.AddItem(
                 new ApplicationMenuItem(
                     "CategoryManagement",
@@ -107,8 +107,25 @@ public class FYPTourneyProMenuContributor : IMenuContributor
             categoryMenu.AddItem(
                 new ApplicationMenuItem(
                     "CategoryManagement.AddCategory",
-                    "Category/Registration",
-                    url: "/TourCategory/Index"
+                    "Application Form",
+                    url: "/User/AppForm"
+                )
+            );
+
+            // Add Application Management section
+            var UploadExcelMenu = context.Menu.AddItem(
+                new ApplicationMenuItem(
+                    "CategoryManagement",
+                    "Category Management",
+                    icon: "fa fa-list"
+                )
+            );
+
+            categoryMenu.AddItem(
+                new ApplicationMenuItem(
+                    "CategoryManagement.AddCategory",
+                    "Application Form",
+                    url: "/User/AppForm"
                 )
             );
 

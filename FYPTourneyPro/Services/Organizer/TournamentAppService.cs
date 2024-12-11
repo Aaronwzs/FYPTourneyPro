@@ -32,7 +32,10 @@ namespace FYPTourneyPro.Services.Organizer
                     RegistrationStartDate = t.RegStartDate,
                     RegistrationEndDate = t.RegEndDate,
                     StartDate = t.StartDate,
-                    EndDate = t.EndDate
+                    EndDate = t.EndDate,
+                    HotlineNum = t.HotlineNum,
+                    isMalaysian = t.IsMalaysian, 
+                    RulesAndRegulations = t.RulesAndRegulations  
                 }).ToList();
         }
 
@@ -51,17 +54,20 @@ namespace FYPTourneyPro.Services.Organizer
                     RegistrationStartDate = t.RegStartDate,
                     RegistrationEndDate = t.RegEndDate,
                     StartDate = t.StartDate,
-                    EndDate = t.EndDate
+                    EndDate = t.EndDate,
+                    HotlineNum = t.HotlineNum,
+                    isMalaysian = t.IsMalaysian,
+                    RulesAndRegulations = t.RulesAndRegulations
                 }).ToList();
         }
 
         public async Task<TournamentDto> GetAsync(Guid id)
         {
             var tournament = await _tournamentRepository.GetAsync(id);
-            if (tournament.UserId != _currentUser.Id)
-            {
-                throw new Exception("You are not authorized to view this tournament.");
-            }
+            //if (tournament.UserId != _currentUser.Id)
+            //{
+            //    throw new Exception("You are not authorized to view this tournament.");
+            //}
             return new TournamentDto
             {
                 Id = tournament.Id,
@@ -70,7 +76,10 @@ namespace FYPTourneyPro.Services.Organizer
                 RegistrationStartDate = tournament.RegStartDate,
                 RegistrationEndDate = tournament.RegEndDate,
                 StartDate = tournament.StartDate,
-                EndDate = tournament.EndDate
+                EndDate = tournament.EndDate,
+                HotlineNum = tournament.HotlineNum,
+                isMalaysian = tournament.IsMalaysian,
+                RulesAndRegulations = tournament.RulesAndRegulations
             };
         }
 
@@ -103,7 +112,10 @@ namespace FYPTourneyPro.Services.Organizer
                     RegEndDate = input.RegistrationEndDate,
                     StartDate = input.StartDate,
                     EndDate = input.EndDate,
-                    UserId = _currentUser.Id.Value
+                    UserId = _currentUser.Id.Value,
+                    HotlineNum= input.HotlineNum,
+                    RulesAndRegulations= input.RulesAndRegulations,
+                    IsMalaysian = input.isMalaysian
                 });
 
                 return new TournamentDto
@@ -114,7 +126,10 @@ namespace FYPTourneyPro.Services.Organizer
                     RegistrationStartDate = tournament.RegStartDate,
                     RegistrationEndDate = tournament.RegEndDate,
                     StartDate = tournament.StartDate,
-                    EndDate = tournament.EndDate
+                    EndDate = tournament.EndDate,
+                    HotlineNum = tournament.HotlineNum,
+                    isMalaysian = tournament.IsMalaysian,
+                    RulesAndRegulations = tournament.RulesAndRegulations
                 };
 
             }
@@ -150,6 +165,9 @@ namespace FYPTourneyPro.Services.Organizer
             tournament.RegEndDate = input.RegistrationEndDate;
             tournament.StartDate = input.StartDate;
             tournament.EndDate = input.EndDate;
+             tournament.HotlineNum = input.HotlineNum;  
+            tournament.IsMalaysian = input.isMalaysian;  
+            tournament.RulesAndRegulations = input.RulesAndRegulations; 
 
             await _tournamentRepository.UpdateAsync(tournament);
             return new TournamentDto
@@ -160,7 +178,10 @@ namespace FYPTourneyPro.Services.Organizer
                 RegistrationStartDate = tournament.RegStartDate,
                 RegistrationEndDate = tournament.RegEndDate,
                 StartDate = tournament.StartDate,
-                EndDate = tournament.EndDate
+                EndDate = tournament.EndDate,
+                HotlineNum = tournament.HotlineNum,  
+                isMalaysian = tournament.IsMalaysian,  
+                RulesAndRegulations = tournament.RulesAndRegulations
             };
         }
         public async Task DeleteAsync(Guid id)
@@ -168,6 +189,7 @@ namespace FYPTourneyPro.Services.Organizer
             await _tournamentRepository.DeleteAsync(id);
         }
     }
+
   
 
 }

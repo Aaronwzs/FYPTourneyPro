@@ -7,33 +7,77 @@ using Volo.Abp.Application.Services;
 using Volo.Abp.Users;
 using static Volo.Abp.Identity.IdentityPermissions;
 using Volo.Abp.Identity;
+using Volo.Abp;
+using FYPTourneyPro.Entities.User;
 
 namespace FYPTourneyPro.Services.Organizer
 {
     public class RegistrationAppService : ApplicationService
     {
+        private readonly IRepository<Entities.User.User, Guid> _custUserRepository;  // Custom User repository
+        private readonly IRepository<Tournament, Guid> _tournamentRepository;
         private readonly IRepository<Registration, Guid> _registrationRepository;
         private readonly IRepository<Category, Guid> _categoryRepository;
         private readonly IRepository<Participant, Guid> _participantRepository;
         private readonly ICurrentUser _currentUser;
         private readonly IIdentityUserRepository _userRepository;
+       
 
 
         public RegistrationAppService(
+            IRepository<Tournament, Guid> tournamentRepository,
             IRepository<Registration, Guid> registrationRepository,
             IRepository<Category, Guid> categoryRepository,
+            IRepository<Entities.User.User, Guid> custUserRepository,
             IRepository<Participant, Guid> participantRepository, ICurrentUser currentUser, IIdentityUserRepository userRepository)
         {
+            _tournamentRepository = tournamentRepository;
             _registrationRepository = registrationRepository;
             _categoryRepository = categoryRepository;
             _participantRepository = participantRepository;
             _currentUser = currentUser;
             _userRepository = userRepository;
+            _custUserRepository = custUserRepository;
         }
 
         // Create a registration and add participants
         public async Task<RegistrationDto> CreateAsync(RegistrationDto input)
         {
+
+            //Fetch Tournament Details
+            var tournament = await _tournamentRepository.GetAsync(input.tournamentId);
+
+
+
+           
+            // Ensure that the current user ID is not null
+            if (!_currentUser.Id.HasValue)
+            {
+                throw new BusinessException("Current user ID is null.");
+            }
+
+            // Fetch current user's nationality
+            var currentUser = await _custUserRepository.GetAsync(user => user.UserId == _currentUser.Id.Value);
+            if (currentUser == null)
+            {
+                throw new BusinessException("Custom user record not found.");
+            }
+            
+
+            var userNationality = currentUser.Nationality;
+
+            if (string.IsNullOrEmpty(userNationality))
+            {
+                throw new BusinessException("User nationality is not set.");
+            }
+
+            
+            // Check if registration is allowed based on tournament and user's nationality
+            if (tournament.IsMalaysian && userNationality != "Malaysian")
+            {
+                throw new BusinessException("Only Malaysian users can register for this tournament.");
+            }
+
             var registration = new Registration
             {
                 CategoryId = input.CategoryId,
