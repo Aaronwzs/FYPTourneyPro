@@ -53,6 +53,8 @@ public class FYPTourneyProDbContext : AbpDbContext<FYPTourneyProDbContext>
     //Wallet
     public DbSet<Wallet> Wallet { get; set; }
 
+    public DbSet<AppForm> appForms { get; set; }
+
     public const string DbTablePrefix = "App";
     public const string DbSchema = null;
 
@@ -254,6 +256,11 @@ public class FYPTourneyProDbContext : AbpDbContext<FYPTourneyProDbContext>
         builder.Entity<Wallet>(b =>
         {
             b.ToTable("Wallets");
+
+        });
+        builder.Entity<AppForm>(b =>
+        {
+            b.ToTable("AppForms");
 
         });
     }

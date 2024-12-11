@@ -48,6 +48,8 @@ namespace FYPTourneyPro.Services.Organizer
             var tournament = await _tournamentRepository.GetAsync(input.tournamentId);
 
 
+
+           
             // Ensure that the current user ID is not null
             if (!_currentUser.Id.HasValue)
             {
@@ -55,8 +57,26 @@ namespace FYPTourneyPro.Services.Organizer
             }
 
             // Fetch current user's nationality
-            var currentUser = await _custUserRepository.GetAsync(_currentUser.Id.Value);
+            var currentUser = await _custUserRepository.GetAsync(user => user.UserId == _currentUser.Id.Value);
+            if (currentUser == null)
+            {
+                throw new BusinessException("Custom user record not found.");
+            }
+            
+
             var userNationality = currentUser.Nationality;
+
+            if (string.IsNullOrEmpty(userNationality))
+            {
+                throw new BusinessException("User nationality is not set.");
+            }
+
+            
+            // Check if registration is allowed based on tournament and user's nationality
+            if (tournament.IsMalaysian && userNationality != "Malaysian")
+            {
+                throw new BusinessException("Only Malaysian users can register for this tournament.");
+            }
 
             var registration = new Registration
             {

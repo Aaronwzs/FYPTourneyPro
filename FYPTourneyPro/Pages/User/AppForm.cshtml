@@ -1,0 +1,86 @@
+﻿@page
+@model FYPTourneyPro.Pages.User.AppFormModel
+
+@section scripts {
+    <abp-script src="/Pages/User/AppForm.js" />
+}
+
+<div class="container">
+    <abp-card>
+        <abp-card-header>
+            <abp-card-title>Application Form</abp-card-title>
+        </abp-card-header>
+        <abp-card-body>
+            <!-- Form for New Application -->
+            <form id="NewApplicationForm" class="row row-cols-lg-auto g-3 align-items-center mb-4">
+                <div class="col-12">
+                    <select id="RequestedRole" class="form-control" required>
+                        <option value="" disabled selected>Select Role</option>
+                        <option value="organizer">Organizer</option>
+                        <option value="referee">Referee</option>
+                    </select>
+                </div>
+                <div class="col-12">
+                    <textarea id="Description" class="form-control" placeholder="Description" required></textarea>
+                </div>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </abp-card-body>
+    </abp-card>
+
+    <abp-card>
+        <abp-card-header>
+            <abp-card-title>Applications</abp-card-title>
+        </abp-card-header>
+        <abp-card-body>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Role</th>
+                        <th>Description</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var form in Model.ApplicationForms)
+                    {
+                        <tr>
+                            <td>@form.UserId</td>
+                            <td>@form.RequestedRole</td>
+                            <td>@form.Description</td>
+                            <td class="status-cell">
+                                @if (form.IsApproved)
+                                {
+                                    <span>Approved</span>
+                                }
+                                else if (form.IsRejected)
+                                {
+                                    <span>Rejected</span>
+                                }
+                                else
+                                {
+                                    <span>Pending</span>
+                                }
+                            </td>
+                            <td>
+                                @if (!form.IsApproved && !form.IsRejected)
+                                {
+                                    <button class="btn btn-success btn-sm" onclick="approveApplication('@form.Id')">Approve</button>
+                                    <button class="btn btn-danger btn-sm" onclick="rejectApplication('@form.Id')">Reject</button>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </abp-card-body>
+    </abp-card>
+</div>
+
+
+
+

@@ -1,6 +1,6 @@
 ﻿namespace FYPTourneyPro.Services.Dtos.User
 {
-    public class Wallet
+    public class WalletDto
     {
 
         public Guid UserId { get; set; }

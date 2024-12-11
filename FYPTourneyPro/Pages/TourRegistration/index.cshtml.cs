@@ -40,6 +40,8 @@ namespace FYPTourneyPro.Pages.TourRegistration
         public async Task OnGetAsync(Guid tournamentId)
         {
 
+            TournamentId = tournamentId;
+
             // Get current user
             if (_currentUser.IsAuthenticated)
             {
@@ -49,8 +51,11 @@ namespace FYPTourneyPro.Pages.TourRegistration
             }
 
             Categories = await _categoryAppService.GetListByTournamentIdAsync(tournamentId);
+
+            //tournamentId = TournamentId;
             
             //Registrations = await _registrationAppService.GetRegistrationListByCategoryAsync(CategoryId);
+            
         }
     }
        
