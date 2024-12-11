@@ -6,30 +6,30 @@ stories:
   steps:
   - intent: greet
   - action: utter_greet
-  - intent: mood_great
-  - action: utter_happy
-
-- story: sad path 1
-  steps:
-  - intent: greet
-  - action: utter_greet
-  - intent: mood_unhappy
-  - action: utter_cheer_up
-  - action: utter_did_that_help
-  - intent: affirm
-  - action: utter_happy
-
-- story: sad path 2
-  steps:
-  - intent: greet
-  - action: utter_greet
-  - intent: mood_unhappy
-  - action: utter_cheer_up
-  - action: utter_did_that_help
-  - intent: deny
-  - action: utter_goodbye
 
 - story: user asks about tournament schedule
   steps:
   - intent: ask_schedule
   - action: action_fetch_schedule
+  
+- story: handle substitution question
+  steps:
+    - intent: ask_substitutions
+    - action: utter_ask_substitutions
+    - intent: ask_match_fairness
+    - action: utter_match_fairness
+
+- story: handle withdrawal and follow-up
+  steps:
+    - intent: ask_withdrawals
+    - action: utter_ask_withdrawals
+    - intent: affirm
+    - action: utter_cheer_up
+  
+- story: Fetch next match for logged-in users
+  steps:
+    - intent: ask_next_match
+    - action: action_extract_custom_data
+    - slot_was_set:
+        - isLoggedIn: true  # Check if the user is logged in
+    - action: action_fetch_next_match

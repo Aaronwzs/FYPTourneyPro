@@ -38,6 +38,8 @@ nlu:
     - of course
     - that sounds good
     - correct
+    - okay 
+    - good
 
 - intent: deny
   examples: |
@@ -104,3 +106,55 @@ nlu:
     - Show me matches for the player [ADMIN](player)
     - List matches in the tournament [de wsa](tournament_name)
     - When is the next match for [ABC1234](player)?
+    - 
+
+- intent: ask_registration
+  examples: |
+    - How do I register for the competition?
+    - Can I register as a user?
+    - What are the registration requirements?
+    - When is the registration period?
+    - How do I get a spot in the competition?
+    - What are the rules and regulations for registration?
+
+
+- intent: ask_substitutions
+  examples: |
+    - Are substitutions allowed during the match?
+    - Can a player be substituted during a badminton match?
+    - What is the rule on substitutions in the competition?
+    - Is substitution allowed?
+    - Can a teammate replace me during the match?
+    - Can I substitute a player during the match?
+
+
+- intent: ask_withdrawals
+  examples: |
+    - What happens if I withdraw from the match?
+    - Can I withdraw from the competition?
+    - What are the rules for withdrawals?
+    - What happens if a player retires during a match?
+    - What is the procedure for withdrawing from a tie?
+
+- intent: ask_match_fairness
+  examples: |
+    - Why not?
+    - Why aren't substitutions allowed?
+    - Why can't we substitute players?
+    - Why are substitutions prohibited?
+ 
+- intent: ask_next_match
+  examples: |
+    - When is my next match?
+    - What is my next match?
+    - When is the next match?
+    - What is the next match?
+    - When is the next game?
+    - What is the next game?
+    - When is the next tie?
+    - What is the next tie?
+    - When is the next match for me?
+    - What is the next match for me?
+    - When is the next game for me?
+    - What is the next game for me?
+    - When is

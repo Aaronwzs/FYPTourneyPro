@@ -124,8 +124,4 @@
   <ItemGroup>
     <Content Remove="$(UserProfile)\.nuget\packages\*\*\contentFiles\any\*\*.abppkg*" />
   </ItemGroup>
-	
-  <ItemGroup>
-    <Folder Include="Chatbot\" />
-  </ItemGroup>
 </Project>

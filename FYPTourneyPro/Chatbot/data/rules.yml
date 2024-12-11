@@ -11,3 +11,12 @@ rules:
   steps:
   - intent: bot_challenge
   - action: utter_iamabot
+
+- rule: Restrict next match for non-logged-in users
+  steps:
+    - intent: ask_next_match
+    - action: action_extract_custom_data
+    - slot_was_set:
+        - isLoggedIn: false  # Check if the user is not logged in
+    - action: utter_login_required
+  

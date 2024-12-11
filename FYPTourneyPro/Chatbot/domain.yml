@@ -4,12 +4,15 @@ intents:
   - greet
   - goodbye
   - affirm
-  - deny
   - mood_great
-  - mood_unhappy
   - bot_challenge
   - ask_tournament
   - ask_schedule
+  - ask_registration
+  - ask_substitutions
+  - ask_withdrawals
+  - ask_match_fairness
+  - ask_next_match
 
 entities:
   - player
@@ -28,28 +31,69 @@ slots:
       - type: from_entity
         entity: tournament_name
 
+  userId:
+    type: text
+    mappings:
+      - type: custom
+
+
+  isLoggedIn:
+    type: bool
+    influence_conversation: true
+    initial_value: false  # Default to not logged in
+    mappings:
+      - type: custom
+
 actions:
   - action_fetch_schedule
+  - action_fetch_next_match
+  - action_extract_custom_data
 
 responses:
   utter_greet:
   - text: "Hey! How are you?"
 
   utter_cheer_up:
-  - text: "Here is something to cheer you up:"
-    image: "https://i.imgur.com/nGF1K8f.jpg"
-
-  utter_did_that_help:
-  - text: "Did that help you?"
-
-  utter_happy:
-  - text: "Great, carry on!"
+  - text: |
+      "Great! Let me know if you have more questions."
+  - text: |
+      "I'm here to help. Let me know if you have more questions."  
+  - text : |
+      "Let me know if there's anything else I can assist you with."
+  
 
   utter_goodbye:
   - text: "Bye"
 
   utter_iamabot:
   - text: "I am a bot, powered by Rasa."
+  
+  utter_login_required:
+  - text: "You need to be logged in to view your next match."
+  
+  utter_ask_withdrawals:
+    - text: |
+        If a player or pair withdraws or retires from a tie, the opponent wins the match.
+    - text: |
+        In case of a withdrawal or retirement during a tie, the opponent is declared the winner.
+    - text: |
+        The opponent wins the match if a player or pair withdraws or retires from a tie.
+
+  utter_ask_substitutions:
+    - text: |
+        No substitutions are allowed during a badminton match.
+    - text: |
+        Substitutions are not permitted during the match.
+    - text: |
+        Players cannot be substituted during a badminton match.
+
+  utter_match_fairness:
+    - text: |
+        Substitutions are not allowed to ensure fairness and maintain the integrity of the match.
+    - text: |
+        This rule ensures that the match remains fair and consistent for both teams.
+    - text: |
+        All the tournament upholds the principles of fair play and sportsmanship.
 
 session_config:
   session_expiration_time: 60
