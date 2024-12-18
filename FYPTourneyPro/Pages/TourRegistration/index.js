@@ -1,4 +1,6 @@
-﻿$(function () {
+﻿
+
+$(function () {
     // Set current date for registration
     var today = new Date();
     var dateString = today.toISOString().split('T')[0];
@@ -100,6 +102,18 @@
         console.log("fYPTourneyPro.services.organizer.registration: ", fYPTourneyPro.services.organizer.registration)
         // Call the RegistrationAppService to create a new registration
         fYPTourneyPro.services.organizer.registration.create(registrationData).then((result) => {
+            console.log(fYPTourneyPro.services.notifications.notification)
+            var tourData = {
+                categoryId: categoryId,
+                username1: player1,
+                username2: player2,
+                tournamentId: $('#tournamentId').val(),
+                organizerId: result.organizerId
+            };
+
+            fYPTourneyPro.services.notifications.notification.savePlayerRegistrationNotification(player1, player2, registrationData.tournamentId)
+            fYPTourneyPro.services.notifications.notification.savePlayerJoinTourNotification(tourData)
+
             console.log("response: ", result)
             // On success, show an alert and reset the form
             alert('Registration Successful!');
@@ -110,3 +124,4 @@
         });
     });
 });
+

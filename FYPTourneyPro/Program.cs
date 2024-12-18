@@ -1,6 +1,8 @@
 using System;
 using FYPTourneyPro.Data;
 using FYPTourneyPro.Services.Chat;
+using FYPTourneyPro.Services.Notifications;
+using Polly;
 using Serilog;
 using Serilog.Events;
 using Volo.Abp.Data;
@@ -14,7 +16,11 @@ public class Program
         try
         {
             var builder = WebApplication.CreateBuilder(args);
+            
             builder.Services.AddSignalR();
+
+            builder.Services.AddCors();
+
             builder.Host.AddAppSettingsSecretsJson()
                 .UseAutofac()
                 .UseSerilog((context, services, loggerConfiguration) =>
@@ -48,7 +54,11 @@ public class Program
             await builder.AddApplicationAsync<FYPTourneyProModule>();
             var app = builder.Build();
 
+            app.UseCors(Policy => Policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+
             app.MapHub<Chathub>("/chatHub");
+
+            app.MapHub<NotificationsHub>("notifications");
 
             // https://stackoverflow.com/questions/69961449/net6-and-datetime-problem-cannot-write-datetime-with-kind-utc-to-postgresql-ty
             // to fix "Cannot write DateTime with Kind=Local to PostgreSQL type 'timestamp with time zone', only UTC is supported." issue

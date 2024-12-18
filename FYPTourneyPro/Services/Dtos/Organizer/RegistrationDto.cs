@@ -15,6 +15,7 @@
 
         public Guid tournamentId {  get; set; }
 
+        public Guid organizerId { get; set; }
         public string? CategoryName { get; set; }
     }
 }

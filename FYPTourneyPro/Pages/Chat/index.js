@@ -12,6 +12,14 @@ connection.on("ReceiveMessage", function (userId, message, creationTime) {
     document.getElementById("messagesList").appendChild(li);
 });
 
+connection.on("ReceiveNotification", (notificationMessage) => {
+    console.log("Notification:", notificationMessage);
+    const notificationBox = document.getElementById("notifications");
+    const newNotification = document.createElement("div");
+    newNotification.textContent = notificationMessage;
+    notificationBox.appendChild(newNotification);
+});
+
 
 // Start the connection
 connection.start().then(function () {
@@ -118,25 +126,6 @@ connection.start().then(function () {
         }
     }
 
-//Load all individual participants(chats)
-//async function loadParticipants() {
-//    try {
-//        const participantsContainer = document.getElementById("participantsContainer");
-
-//        fYPTourneyPro.services.chat.chat.getAllUsers().then((users) => {
-//            users.forEach(user => {
-//                const userDiv = document.createElement("div");
-//                userDiv.value = user.id;
-//                userDiv.textContent = user.userName;
-//                userDiv.addEventListener("click", () => {
-//                    openChatRoom();
-//                })
-//            }
-
-//        });
-//    } catch (error) {
-//        console.error("Error loading participants:", error);
-//}
 
     // Call loadParticipants on page load
     document.addEventListener("DOMContentLoaded", loadGroupParticipants);
