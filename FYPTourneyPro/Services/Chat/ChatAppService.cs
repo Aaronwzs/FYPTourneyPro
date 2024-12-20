@@ -9,6 +9,7 @@ using System.Linq;
 using FYPTourneyPro.Services.Dtos.Organizer;
 using FYPTourneyPro.Services.Dtos.Comments;
 using FYPTourneyPro.Services.Dtos.Posts;
+using Microsoft.AspNetCore.Mvc;
 
 
 
@@ -69,9 +70,9 @@ namespace FYPTourneyPro.Services.Chat
         //    }
         //}
 
-        public async Task<Guid> CreateGroupChatAsync(string groupName, List<Guid> participantIds)
+        public async Task<ChatRoomDto> CreateGroupChatAsync(string groupName, List<Guid> participantIds)
         {
-
+            bool isDuplicate;
             try
             {
                 var currentUserId = CurrentUser.Id; // Get the ID of the logged-in user
@@ -94,7 +95,11 @@ namespace FYPTourneyPro.Services.Chat
                 if (duplicateChatRoom.HasValue)
                 {
                     // If a duplicate exists, return its ID
-                    return duplicateChatRoom.Value;
+                    return new ChatRoomDto
+                    {
+                        Id = duplicateChatRoom.Value,
+                        isDuplicate = true
+                    };
                 }
 
                 // Create the new chat room
@@ -116,7 +121,11 @@ namespace FYPTourneyPro.Services.Chat
                     await _chatRoomParticipantRepository.InsertAsync(chatRoomParticipant);
                 }
 
-                return newChatRoom.Id; // Return the generated ID to the frontend
+                return new ChatRoomDto
+                {
+                    Id = newChatRoom.Id,
+                    isDuplicate = false
+                }; // Return the generated ID to the frontend
             }
             catch (Exception ex)
             {

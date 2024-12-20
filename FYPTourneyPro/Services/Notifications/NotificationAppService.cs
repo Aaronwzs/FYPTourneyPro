@@ -22,11 +22,11 @@ namespace FYPTourneyPro.Services.Notifications
         private readonly IIdentityUserRepository _userRepository;
         private readonly IRepository<Category, Guid> _categoryRepository;
         private readonly ICurrentUser _currentUser;
-
+        private readonly IRepository<ChatRoom, Guid> _chatRoomRepository;
 
         public NotificationAppService(IRepository<Notification, Guid> notificationRepository, IRepository<ChatRoomParticipant, Guid> chatRoomParticipantRepository,
             IUnitOfWorkManager unitOfWorkManager, IRepository<Tournament, Guid> tournamentRepository, IIdentityUserRepository userRepository, IRepository<Category, Guid> categoryRepository
-            , ICurrentUser currentUser)
+            , ICurrentUser currentUser, IRepository<ChatRoom, Guid> chatroomRepository)
         {
             _notificationRepository = notificationRepository;
             _chatRoomParticipantRepository = chatRoomParticipantRepository;
@@ -35,15 +35,22 @@ namespace FYPTourneyPro.Services.Notifications
             _userRepository = userRepository;
             _categoryRepository = categoryRepository;
             _currentUser = currentUser;
+            _chatRoomRepository = chatroomRepository;
         }
 
 
-        public async Task SaveChatNotification(Guid chatRoomId, Guid userId, string content)
+        public async Task SaveChatNotification(Guid chatRoomId, Guid userId)
         {
             var groupUsers = await _chatRoomParticipantRepository.GetListAsync(cp => cp.ChatRoomId == chatRoomId && cp.UserId != userId);
 
+            var chatroom = await _chatRoomRepository.GetAsync(chatRoomId);
+
             foreach (var user in groupUsers)
             {
+                var userFound = await _userRepository.GetAsync(user.UserId);
+
+                var content = $"New message from {userFound.UserName} in Chatroom {chatroom.Name}";
+
                 var notification = new Notification
                 {
                     Type = "ChatMessage",
@@ -56,6 +63,7 @@ namespace FYPTourneyPro.Services.Notifications
             }
 
             await _unitOfWorkManager.Current.SaveChangesAsync();
+
         }
 
         public async Task SavePlayerRegistrationNotification(string username1, string? username2, Guid tournamentId)
@@ -77,7 +85,8 @@ namespace FYPTourneyPro.Services.Notifications
             }
 
             var content = $"You have registered for Tournament {tournament.Name}";
-            foreach (var user in users) {
+            foreach (var user in users)
+            {
                 var notification = new Notification
                 {
                     Type = "Tournament",
@@ -85,7 +94,7 @@ namespace FYPTourneyPro.Services.Notifications
                     Content = content,
                     RelatedEntityId = tournamentId,
                 };
-            await _notificationRepository.InsertAsync(notification);
+                await _notificationRepository.InsertAsync(notification);
             }
         }
 
@@ -115,7 +124,7 @@ namespace FYPTourneyPro.Services.Notifications
             await _notificationRepository.InsertAsync(notification);
         }
 
-        public async Task<List<NotificationDto>> GetTournamentNotificationAsync()
+        public async Task<List<NotificationDto>> GetTournamentNotification()
         {
 
             var notifications = await _notificationRepository.GetListAsync(n => n.Type == "Tournament" && n.UserId == _currentUser.Id);
@@ -133,14 +142,12 @@ namespace FYPTourneyPro.Services.Notifications
                     CreationTime = notification.CreationTime,
                     CreatorId = notification.CreatorId.Value,
                 });
-
-                return notificationDtos;
             }
 
-            return null;
+            return notificationDtos;
         }
 
-        public async Task<List<NotificationDto>> GetChatNotificationAsync()
+        public async Task<List<NotificationDto>> GetChatNotification()
         {
 
             var notifications = await _notificationRepository.GetListAsync(n => n.Type == "ChatMessage" && n.UserId == _currentUser.Id);
@@ -158,14 +165,9 @@ namespace FYPTourneyPro.Services.Notifications
                     CreationTime = notification.CreationTime,
                     CreatorId = notification.CreatorId.Value,
                 });
-
-                return notificationDtos;
             }
 
-            return null;
+            return notificationDtos;
         }
-
     }
 }
-
-

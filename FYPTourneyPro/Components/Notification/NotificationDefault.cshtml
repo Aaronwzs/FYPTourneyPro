@@ -10,7 +10,7 @@
 
 <div class="dropdown" style="position: relative; display: flex; justify-content: flex-end; margin: 5px;">
     <button id="dropdownBtn" type="button" class="btn" style="background-color: #007bff; color: white;">
-        Notifications <span style="background-color: red; color: white; border-radius: 50%; padding: 2px 6px;">7</span>
+        Notifications
     </button>
     <div id="dropdownMenu" class="dropdown-menu"
          style="display: none; position: absolute; top: 100%; right: 0; z-index: 1000; background: white; border: 1px solid #ddd; padding: 10px; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);">
@@ -20,31 +20,78 @@
          <button id="notiChatBtn" type="button" class="btn" style="background-color: #007bff; color: white;">Chat</button>
          </div>
 
-
-        <div id="notiTournamentList" class="dropdownList" style="display: block;">Testing 1</div>
-        <div id="notiChatList" class="dropdownList" style="display: none;">Testing 2</div>
+        <div id="notiList" class="dropdownList" style="display: block;"></div>
     </div>
 </div>
 
 <style>
+    .dropDownItem:hover{
+        background-color: #f1f1f1;
+    }
+
+    .timestamp {
+        font-size: 0.9em; /* Smaller text for timestamp */
+        color: gray; /* Make it less prominent */
+        margin-left: 5px; /* Add space between text and timestamp */
+    }
 </style>
 
 <script>
+
+    function formatDate(isoString) {
+    const date = new Date(isoString);
+    return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+}
+
     document.getElementById('dropdownBtn').addEventListener('click', function(){
         var dropdownMenu = document.getElementById('dropdownMenu');
         dropdownMenu.style.display = dropdownMenu.style.display === 'none' ? 'block' : 'none';
     })
 
     document.getElementById('notiTournamentBtn').addEventListener('click', function(){
-        var notiTournamentList = document.getElementById('notiTournamentList');
-        notiTournamentList.style.display = notiTournamentList.style.display = 'block';
-        document.getElementById('notiChatList').style.display = 'none';
+        var notiList = document.getElementById('notiList');
+
+        fYPTourneyPro.services.notifications.notification.getTournamentNotification().then((result) => {
+            notiList.innerHTML = '';
+            result.forEach((item) => {
+                var div = document.createElement('div');
+                div.classList.add('dropDownItem');
+
+                    var formattedTime = formatDate(item.creationTime);
+
+                div.innerHTML = `${item.content} <span class="timespan">(${formattedTime})</span>`;
+                div.setAttribute('data-id', item.relatedEntityId);
+                notiList.appendChild(div);
+
+                //Takes the data-id and perform actions
+                div.addEventListener('click', function(){
+                    var id = this.getAttribute('data-id');
+                    console.log(id);
+                });
+            });
+        });
     })
 
     document.getElementById('notiChatBtn').addEventListener('click', function(){
-        var notiChatList = document.getElementById('notiChatList');
-        notiChatList.style.display = notiChatList.style.display = 'block';
-        document.getElementById('notiTournamentList').style.display = 'none';
+        var notiList = document.getElementById('notiList');
+
+                fYPTourneyPro.services.notifications.notification.getChatNotification().then((result) => {
+                    console.log(result);
+            notiList.innerHTML = '';
+            result.forEach((item) => {
+                var div = document.createElement('div');
+                div.classList.add('dropDownItem');
+                div.innerHTML = item.content;
+                div.setAttribute('data-id', item.relatedEntityId);
+                notiList.appendChild(div);
+
+                //Takes the data-id and perform actions
+                div.addEventListener('click', function(){
+                    var id = this.getAttribute('data-id');
+                    console.log(id);
+                });
+            });
+        });
     })
 
 

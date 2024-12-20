@@ -103,6 +103,7 @@ $(function () {
         // Call the RegistrationAppService to create a new registration
         fYPTourneyPro.services.organizer.registration.create(registrationData).then((result) => {
             console.log(fYPTourneyPro.services.notifications.notification)
+
             var tourData = {
                 categoryId: categoryId,
                 username1: player1,

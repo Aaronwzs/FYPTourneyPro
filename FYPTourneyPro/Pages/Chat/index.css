@@ -1,0 +1,102 @@
+﻿body {
+}
+
+/* General Chatroom Container */
+#chatroomContainer {
+    width: 400px;
+    margin: auto;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 16px;
+    background: #f9f9f9;
+    font-family: Arial, sans-serif;
+}
+
+button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* Style for the Create Group Button */
+#createChatButton {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+    #createChatButton:hover {
+        background-color: #0056b3;
+    }
+
+    /* Style for the Cancel Group Creation Button */
+    #createChatButton.cancel {
+        background-color: #dc3545;
+        color: white;
+    }
+
+        #createChatButton.cancel:hover {
+            background-color: #a71d2a;
+        }
+
+/* Submit Button */
+button[type="submit"] {
+    background-color: #28a745;
+    color: white;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+/* Chatroom Creation Form */
+#createGroupChatForm {
+    margin-top: 16px;
+    padding: 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #ffffff;
+}
+
+/* Participants Container */
+#participantsContainer {
+    max-height: 150px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    padding: 8px;
+    margin-top: 8px;
+}
+
+/* Individual Participant Checkbox */
+.participant {
+    margin: 5px 0;
+}
+
+/* Chatroom Rows */
+.chatroom {
+    padding: 12px;
+    margin: 8px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #ffffff;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+    .chatroom:hover {
+        background: #f1f1f1;
+    }
+
+    .chatroom h3 {
+        margin: 0 0 4px;
+        font-size: 16px;
+    }
+
+    .chatroom p {
+        margin: 0;
+        color: #666;
+        font-size: 14px;
+    }

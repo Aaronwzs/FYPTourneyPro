@@ -4,41 +4,56 @@
 @section scripts {
     <abp-script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></abp-script>
     <abp-script src="/Pages/Chat/index.js" />
+
+}
+
+@section styles{
+    <abp-style src="/Pages/Chat/index.css" />
 }
 
 @{
-    <div id="createGroupChatContainer">
-        <h2>Create Group Chat</h2>
-        <form id="createGroupForm">
-            <!-- Input for Group Name -->
-            <label for="groupName">Group Name:</label>
-            <input type="text" id="groupName" placeholder="Enter group name" required />
+    <div id="chatroomContainer">
+        <!-- Button to Create Group Chat -->
+        <button id="createChatButton">Create Chat Group</button>
 
-            <!-- Multi-Select Dropdown for Participants -->
-            <div id="participantsContainer">
-                <!-- Checkboxes will be added here by JavaScript -->
-            </div>
+        <!-- Chatroom Creation Form (Hidden by Default) -->
+        <div id="createGroupChatForm" style="display: none;">
+            <h2>Create Group Chat</h2>
+            <form id="createGroupForm">
+                <!-- Input for Group Name -->
+                <label for="groupName">Group Name:</label>
+                <input type="text"
+                       id="groupName"
+                       placeholder="Enter group name"
+                       required />
 
-            <!-- Button to Create Group -->
-            <button type="submit" id="createGroupButton">Create Group</button>
-        </form>
-    </div>
+                <!-- Searchable Participant List -->
+                <label for="searchParticipants">Search Participants:</label>
+                <input type="text"
+                       id="searchParticipants"
+                       placeholder="Search participants..." />
+                <div id="participantsContainer">
+                    <!-- Dynamic Checkboxes for Participants -->
+                    <p>Participants will be dynamically added here...</p>
+                </div>
 
-
-    <div id="chatRoomsList"></div>
-
-    <div id="chatMessagesContainer" style="display: none;">
-        <h2 id="chatRoomTitle"></h2>
-        <div id="messagesList"></div>
-        <div>
-            <input type="text" id="messageInput" placeholder="Type your message here...">
-            <button id="sendMessageButton">Send</button>
+                <!-- Button to Submit -->
+                <button type="submit">Create Group</button>
+            </form>
         </div>
     </div>
 
-    <div>
-        <h2>Notifications</h2>
-        <div id="notifications"></div>
-    </div>
+        <!-- Chatroom Rows -->
+        <div id="chatRoomsList">
+            <div class="chatroom">
+                <h3>General Chat</h3>
+                <p>Last message: Hello everyone!</p>
+            </div>
+            <div class="chatroom">
+                <h3>Project Discussion</h3>
+                <p>Last message: Let’s finalize the document.</p>
+            </div>
+            <!-- More chatroom rows -->
+        </div>
 
 }

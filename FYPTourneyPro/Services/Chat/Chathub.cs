@@ -17,20 +17,19 @@ namespace FYPTourneyPro.Services.Chat
 
         public async Task SendMessage(Guid chatRoomId, Guid userId, string message, DateTime creationTime)
         {
-            await Clients.Group(chatRoomId.ToString()).SendAsync("ReceiveMessage", userId, message, creationTime);
+            var changedRoomId = chatRoomId.ToString();
 
-            // 2. Notify others in the group (excluding the sender)
-            var notificationMessage = $"New message from {userId} in room {chatRoomId} at {creationTime}";
+            await Clients.Group(changedRoomId).SendAsync("ReceiveMessage", userId, message, creationTime);
 
-            await _notificationAppService.SaveChatNotification(chatRoomId, userId, notificationMessage);
-
-            await Clients.OthersInGroup(chatRoomId.ToString()).SendAsync("ReceiveNotification", notificationMessage);
+            await _notificationAppService.SaveChatNotification(chatRoomId, userId);
         }
+
 
         public async Task JoinRoom(string chatRoomId)
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, chatRoomId);
         }
+
 
         public async Task LeaveRoom(string chatRoomId)
         {
