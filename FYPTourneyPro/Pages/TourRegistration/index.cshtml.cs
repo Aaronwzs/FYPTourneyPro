@@ -52,6 +52,7 @@ namespace FYPTourneyPro.Pages.TourRegistration
 
             Categories = await _categoryAppService.GetListByTournamentIdAsync(tournamentId);
 
+
             //tournamentId = TournamentId;
             
             //Registrations = await _registrationAppService.GetRegistrationListByCategoryAsync(CategoryId);

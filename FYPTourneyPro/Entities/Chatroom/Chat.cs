@@ -16,7 +16,6 @@ namespace FYPTourneyPro.Entities.Chatroom
         public Guid? ChatRoomId { get; set; }  // Nullable: Links message to a chat room for group messages
         public Guid? ReceiverId { get; set; }  // Nullable: Used for direct messages to indicate the recipient
         public string Content { get; set; }
-        public ChatType ChatType { get; set; }
         public bool IsSeen { get; set; }
         public ChatRoom ChatRoom { get; set; } // Navigation property back to ChatRoom
     }

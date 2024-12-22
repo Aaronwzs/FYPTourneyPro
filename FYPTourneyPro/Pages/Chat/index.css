@@ -100,3 +100,11 @@ button[type="submit"] {
         color: #666;
         font-size: 14px;
     }
+
+
+.creation-time {
+    display: block; /* Force it to appear on a new line */
+    margin-top: 5px; /* Add some spacing above */
+    font-size: 0.9em; /* Slightly smaller font size */
+    color: #666; /* Use a lighter color to make it less prominent */
+}

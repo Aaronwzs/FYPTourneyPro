@@ -2,9 +2,7 @@
 @model FYPTourneyPro.Pages.Chat.IndexModel
 
 @section scripts {
-    <abp-script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></abp-script>
     <abp-script src="/Pages/Chat/index.js" />
-
 }
 
 @section styles{
@@ -44,16 +42,8 @@
     </div>
 
         <!-- Chatroom Rows -->
-        <div id="chatRoomsList">
-            <div class="chatroom">
-                <h3>General Chat</h3>
-                <p>Last message: Hello everyone!</p>
-            </div>
-            <div class="chatroom">
-                <h3>Project Discussion</h3>
-                <p>Last message: Let’s finalize the document.</p>
-            </div>
-            <!-- More chatroom rows -->
-        </div>
+    <div id="chatRoomsList">
+        <!-- Chat rooms will be dynamically added here -->
+    </div>
 
 }

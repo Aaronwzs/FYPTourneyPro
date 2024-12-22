@@ -11,5 +11,9 @@ namespace FYPTourneyPro.Services.Dtos.Posts
         public int? Downvotes { get; set; }
         public DateTime CreationTime { get; set; }
         public List<CommentDto>? Comments { get; set; } = new List<CommentDto>();
+
+        public Guid CreatedByUserId { get; set; }
+
+        public string CreatedByUsername { get; set; }
     }
 }

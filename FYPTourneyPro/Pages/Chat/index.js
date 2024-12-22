@@ -7,6 +7,7 @@ createChatButton.addEventListener("click", () => {
         createGroupChatForm.style.display = "block";
         createChatButton.textContent = "Cancel Group Creation";
         createChatButton.classList.add("cancel");
+        loadParticipants();
     } else {
         createGroupChatForm.style.display = "none";
         createChatButton.textContent = "Create Group Chat";
@@ -14,7 +15,7 @@ createChatButton.addEventListener("click", () => {
     }
 });
 
-// Dynamically Load Participants (Simulated List)
+
 
 const participantsContainer = document.getElementById("participantsContainer");
 
@@ -53,9 +54,6 @@ function loadParticipants(searchTerm = "") {
    
     });
 }
-
-// Initial Load of Participants
-loadParticipants();
 
 // Add Search Functionality
 const searchInput = document.getElementById("searchParticipants");
@@ -100,4 +98,61 @@ document.getElementById("createGroupForm").addEventListener("submit", (event) =>
         document.getElementById("createGroupForm").reset();
         createGroupChatForm.style.display = "none";
         createChatButton.textContent = "Create Group Chat";
+});
+
+
+//Chatroom rows
+function loadChatRooms() {
+    fYPTourneyPro.services.chat.chat.getUserChatRooms().then((chatRooms) => {
+
+        console.log("Original chatRooms:", chatRooms); // Debug: Log the unsorted array
+
+        // Sort chat rooms by last message creation time (newest first)
+        chatRooms.sort((a, b) => {
+            const timeA = new Date(a.creationTime).getTime(); // Convert to timestamp
+            const timeB = new Date(b.creationTime).getTime();
+            return timeB - timeA; // Descending order
+        });
+
+        console.log("Sorted chatRooms:", chatRooms); // Debug: Log the sorted array
+        chatRooms.forEach((chatRoom) => {
+
+            const div = document.createElement("div");
+            div.classList.add("chatroom");
+            div.value = chatRoom.chatRoomId;
+
+            const title = document.createElement("h3")
+            title.textContent = `${chatRoom.name}`;
+
+            const content = document.createElement("p")
+
+            if (chatRoom.username) {
+                content.textContent = `${chatRoom.username} - `;
+                content.textContent += `${chatRoom.lastMessage}   `;
+
+                const formattedCreationTime = new Date(chatRoom.creationTime).toLocaleString();
+
+                const creationTime = document.createElement("span");
+                creationTime.textContent = `Created on: ${formattedCreationTime}`;
+                creationTime.classList.add("creation-time"); // Add a CSS class
+                content.append(creationTime);
+            }
+
+            div.addEventListener("click", () => {
+                console.log(`Navigating to chat room: ${chatRoom.name}`);
+                // Redirect to chat page with chatRoomId as a query parameter
+                window.location.href = `/Chat/Chatroom?chatRoomId=${chatRoom.chatRoomId}`;
+            });
+
+            div.append(title)
+            div.append(content)
+
+            document.getElementById("chatRoomsList").append(div);
+        });
+
     });
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    loadChatRooms(); // Load chat rooms when the page is ready
+});
