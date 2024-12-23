@@ -1,4 +1,5 @@
-﻿using Volo.Abp.Domain.Entities;
+﻿using FYPTourneyPro.Services.Dtos.User;
+using Volo.Abp.Domain.Entities;
 
 namespace FYPTourneyPro.Entities.User
 {
@@ -6,5 +7,7 @@ namespace FYPTourneyPro.Entities.User
     {
         public Guid UserId { get; set; }
        public decimal Balance { get; set; } = 0m;
+
+      
     }
 }

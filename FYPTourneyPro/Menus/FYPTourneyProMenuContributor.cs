@@ -63,6 +63,15 @@ public class FYPTourneyProMenuContributor : IMenuContributor
         administration.SetSubItemOrder(SettingManagementMenuNames.GroupName, 6);
 
         context.Menu.AddItem(
+               new ApplicationMenuItem(
+                   "WalletManagement",
+                   "Wallet",
+                   url: "/User/Wallet", // Replace with dynamic user ID handling
+                   icon: "fa fa-wallet"
+               )
+           );
+
+        context.Menu.AddItem(
             new ApplicationMenuItem(
                 "BooksStore",
                 l["Menu:FYPTourneyPro"],

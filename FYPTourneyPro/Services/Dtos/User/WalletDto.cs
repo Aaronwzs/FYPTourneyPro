@@ -1,9 +1,17 @@
-﻿namespace FYPTourneyPro.Services.Dtos.User
+﻿using FYPTourneyPro.Entities.User;
+using Volo.Abp.Application.Dtos;
+
+namespace FYPTourneyPro.Services.Dtos.User
 {
-    public class WalletDto
+    public class WalletDto : EntityDto<Guid>
     {
 
         public Guid UserId { get; set; }
-        public decimal balance { get; set; }
+        public decimal Balance { get; set; }
+        public decimal TopUpAmount { get; set; }
+
+        public decimal WithdrawAmount { get; set; }
+
+        public decimal RegFee { get; set;}
     }
 }

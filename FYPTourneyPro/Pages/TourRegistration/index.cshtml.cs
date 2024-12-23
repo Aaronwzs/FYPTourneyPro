@@ -39,13 +39,13 @@ namespace FYPTourneyPro.Pages.TourRegistration
 
         public async Task OnGetAsync(Guid tournamentId)
         {
-
+            UserId = _currentUser.Id.Value; // Get UserId from ICurrentUser
             TournamentId = tournamentId;
 
             // Get current user
             if (_currentUser.IsAuthenticated)
             {
-                UserId = _currentUser.Id.Value; // Get UserId from ICurrentUser
+               
                 var currentUser = await _userRepository.GetAsync(UserId);
                 UserName = currentUser.UserName;
             }
