@@ -56,6 +56,7 @@ namespace FYPTourneyPro.Services.Posts
                     Title = post.Title,
                     Content = post.Content,
                     CreationTime = post.CreationTime,
+                    CreatedByUserId = post.CreatedByUserId,
                     Upvotes = post.Upvotes,
                     Downvotes = post.Downvotes,
                     Comments = post.Comments.Select(comment => new CommentDto

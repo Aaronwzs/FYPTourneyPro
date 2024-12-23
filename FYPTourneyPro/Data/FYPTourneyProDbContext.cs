@@ -19,12 +19,16 @@ using FYPTourneyPro.Entities.Chatroom;
 using Volo.Abp.Identity;
 
 using FYPTourneyPro.Entities.User;
+using FYPTourneyPro.Entities.Notification;
+using Volo.Abp.Domain.Entities;
 
 namespace FYPTourneyPro.Data;
 
 public class FYPTourneyProDbContext : AbpDbContext<FYPTourneyProDbContext>
 {
     public DbSet<Book> Books { get; set; }
+
+    public DbSet<Notification> Notification { get; set; }
 
     public DbSet<TodoItem> TodoItems { get; set; }
     public DbSet<Post> Post { get; set; }
@@ -92,6 +96,12 @@ public class FYPTourneyProDbContext : AbpDbContext<FYPTourneyProDbContext>
         builder.Entity<TodoItem>(b =>
         {
             b.ToTable("TodoItems");
+        });
+
+        builder.Entity<Notification>(b =>
+        {
+            b.ToTable("Notifications");
+            b.Property(n => n.IsRead).HasDefaultValue(false);
         });
 
         builder.Entity<Post>(b =>

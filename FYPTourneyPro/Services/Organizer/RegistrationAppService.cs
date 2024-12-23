@@ -49,6 +49,7 @@ namespace FYPTourneyPro.Services.Organizer
 
 
 
+
            
             // Ensure that the current user ID is not null
             if (!_currentUser.Id.HasValue)
@@ -112,7 +113,8 @@ namespace FYPTourneyPro.Services.Organizer
                 Id = createdRegistration.Id,
                 CategoryId = createdRegistration.CategoryId,
                 RegDate = createdRegistration.RegDate,
-                TotalAmount = createdRegistration.totalAmount
+                TotalAmount = createdRegistration.totalAmount,
+                organizerId = tournament.UserId,
             };
         }
 

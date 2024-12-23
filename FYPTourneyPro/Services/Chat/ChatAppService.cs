@@ -9,6 +9,10 @@ using System.Linq;
 using FYPTourneyPro.Services.Dtos.Organizer;
 using FYPTourneyPro.Services.Dtos.Comments;
 using FYPTourneyPro.Services.Dtos.Posts;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualBasic;
+using FYPTourneyPro.Entities.Organizer;
+using JetBrains.Annotations;
 
 
 
@@ -69,9 +73,9 @@ namespace FYPTourneyPro.Services.Chat
         //    }
         //}
 
-        public async Task<Guid> CreateGroupChatAsync(string groupName, List<Guid> participantIds)
+        public async Task<ChatRoomDto> CreateGroupChatAsync(string groupName, List<Guid> participantIds)
         {
-
+            bool isDuplicate;
             try
             {
                 var currentUserId = CurrentUser.Id; // Get the ID of the logged-in user
@@ -94,7 +98,11 @@ namespace FYPTourneyPro.Services.Chat
                 if (duplicateChatRoom.HasValue)
                 {
                     // If a duplicate exists, return its ID
-                    return duplicateChatRoom.Value;
+                    return new ChatRoomDto
+                    {
+                        Id = duplicateChatRoom.Value,
+                        isDuplicate = true
+                    };
                 }
 
                 // Create the new chat room
@@ -116,7 +124,11 @@ namespace FYPTourneyPro.Services.Chat
                     await _chatRoomParticipantRepository.InsertAsync(chatRoomParticipant);
                 }
 
-                return newChatRoom.Id; // Return the generated ID to the frontend
+                return new ChatRoomDto
+                {
+                    Id = newChatRoom.Id,
+                    isDuplicate = false
+                }; // Return the generated ID to the frontend
             }
             catch (Exception ex)
             {
@@ -134,20 +146,36 @@ namespace FYPTourneyPro.Services.Chat
 
             var chatRooms = await _chatRoomRepository.GetListAsync(cr => chatRoomIds.Contains(cr.Id));
 
-            var chatRoomParticipantData = chatRoomParticipants.Select(participant =>
+            var lastChatMessage = await _chatMessageRepository.GetListAsync(cmsg => chatRoomIds.Contains(cmsg.ChatRoomId.Value));
+
+            var chatRoomParticipantData = new List<ChatRoomParticipantDto>();
+
+           foreach(var participant in chatRoomParticipants)
             {
                 // Assuming chatRooms is available and contains all chat rooms
                 var chatRoom = chatRooms.FirstOrDefault(cr => cr.Id == participant.ChatRoomId);
+                
+                var lastMessage = lastChatMessage.Where(cm => cm.ChatRoomId == participant.ChatRoomId).OrderByDescending(msg => msg.CreationTime).FirstOrDefault();
+
+                
+                if (lastMessage == null)
+
+                {
+                    continue; // Skip this participant
+                }
+                var lastMessageUser = await _userRepository.GetAsync(lastMessage.CreatorId.Value);
 
                 // Manually combine ChatRoom and ChatRoomParticipant information
-                return new ChatRoomParticipantDto
+                chatRoomParticipantData.Add(new ChatRoomParticipantDto
                 {
                     Id = participant.Id,                          // From ChatRoomParticipant
                     ChatRoomId = participant.ChatRoomId,          // From ChatRoomParticipant
                     Name = chatRoom.Name,         // From ChatRoom (Name)
-                    LastActivity = chatRoom?.LastModificationTime ?? participant.CreationTime
-                };
-            }).ToList();
+                    LastMessage = lastMessage?.Content,
+                    Username = lastMessageUser.UserName,
+                    CreationTime = lastMessage.CreationTime
+                });
+            }
 
             return chatRoomParticipantData;
         }
@@ -156,39 +184,67 @@ namespace FYPTourneyPro.Services.Chat
         {
             var chatMessages = await _chatMessageRepository.GetListAsync(cr => cr.ChatRoomId == chatRoomId);
 
+            var chatMessageDtos = new List<ChatMessageDto>();
 
-            return chatMessages
-                .Select(message => new ChatMessageDto
+
+            var chatRoom = await _chatRoomRepository.GetAsync(chatRoomId);
+
+            foreach (var message in chatMessages)
+            {
+                var user = await _userRepository.GetAsync(message.CreatorId.Value);
+
+                chatMessageDtos.Add(new ChatMessageDto
                 {
                     CreatorId = message.CreatorId.Value,
                     CreationTime = message.CreationTime,
-                    Content = message.Content
-                }).ToList();
-        }
+                    ChatRoomName = chatRoom.Name,
+                    Content = message.Content,
+                    Username = user.UserName // Assuming user has a UserName property
+                });
+            }
 
-        public async Task<ChatMessageDto> CreateChatMessagesAsync(ChatMessageDto input)
+            return chatMessageDtos;
+        }
+        public async Task<List<ChatRoomParticipantDto>> GetUsersInChatroomAsync(Guid chatRoomId)
+        {
+            var userFound = await _chatRoomParticipantRepository.GetListAsync(crp => crp.ChatRoomId == chatRoomId);
+
+            var usersInChatRoom = new List<ChatRoomParticipantDto>();
+
+            foreach(var user in userFound)
+            {
+                var usernameSearch = await _userRepository.GetAsync(user.UserId);
+
+                usersInChatRoom.Add(new ChatRoomParticipantDto
+                {
+                    Username = usernameSearch.UserName
+                });
+                
+            }
+            return usersInChatRoom;
+        }
+        public async Task<ChatMessageDto> CreateChatMessagesAsync(Guid chatRoomId, string content)
         {
             try
             {
-                var chatType = input.ReceiverId.HasValue ? ChatType.Direct : ChatType.Group;
                 var chatMessages = new ChatMessage
                 {
-                    ChatRoomId = input?.ChatRoomId,
-                    ReceiverId = input?.ReceiverId,
-                    ChatType = chatType,
-                    Content = input.Content,
+                    ChatRoomId = chatRoomId,
+                    Content = content,
                     IsSeen = false,
                 };
 
                 var message = await _chatMessageRepository.InsertAsync(chatMessages);
 
+                var userFound = await _userRepository.GetAsync(message.CreatorId.Value);
+
                 return new ChatMessageDto
                 {
-                    ChatRoomId = message.ChatRoomId,
+                    ChatRoomId = message.ChatRoomId.Value,
                     Content = message.Content,
                     IsSeen = message.IsSeen,
                     CreationTime = message.CreationTime,
-                    CreatorId = message.CreatorId.Value,
+                    Username = userFound.UserName,
                 };
             }
             catch (Exception ex)

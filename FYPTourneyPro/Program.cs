@@ -1,6 +1,8 @@
 using System;
 using FYPTourneyPro.Data;
 using FYPTourneyPro.Services.Chat;
+using FYPTourneyPro.Services.Notifications;
+using Polly;
 using Serilog;
 using Serilog.Events;
 using Volo.Abp.Data;
@@ -14,7 +16,11 @@ public class Program
         try
         {
             var builder = WebApplication.CreateBuilder(args);
+            
             builder.Services.AddSignalR();
+
+            builder.Services.AddCors();
+
             builder.Host.AddAppSettingsSecretsJson()
                 .UseAutofac()
                 .UseSerilog((context, services, loggerConfiguration) =>
@@ -47,6 +53,8 @@ public class Program
             }
             await builder.AddApplicationAsync<FYPTourneyProModule>();
             var app = builder.Build();
+
+            app.UseCors(Policy => Policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 
             app.MapHub<Chathub>("/chatHub");
 

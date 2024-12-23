@@ -57,6 +57,11 @@ using Volo.Abp.BlobStoring.Database.EntityFrameworkCore;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.PostgreSql;
 using Volo.Abp.Studio.Client.AspNetCore;
+using Volo.Abp.Ui.LayoutHooks;
+using FYPTourneyPro.Components;
+using Volo.Abp.AspNetCore.Mvc.UI.Theming;
+using FYPTourneyPro.Components.Chatbot;
+using FYPTourneyPro.Components.Notification;
 
 namespace FYPTourneyPro;
 
@@ -189,6 +194,22 @@ public class FYPTourneyProModule : AbpModule
             options.Conventions.AuthorizePage("/Books/CreateModal", FYPTourneyProPermissions.Books.Create);
             options.Conventions.AuthorizePage("/Books/EditModal", FYPTourneyProPermissions.Books.Edit);
         });
+
+        Configure<AbpLayoutHookOptions>(options =>
+        {
+            options.Add(
+                LayoutHooks.Body.Last, // Place it at the end of <body>
+                typeof(ChatbotViewComponent),
+                layout: StandardLayouts.Application
+            );
+
+            options.Add(
+                  LayoutHooks.PageContent.First, // Adds content just before the page body
+                   typeof(NotificationViewComponent),
+                   layout: StandardLayouts.Application
+                   );
+        });
+
     }
 
     private void ConfigureAuthentication(ServiceConfigurationContext context)

@@ -1,4 +1,6 @@
-﻿$(function () {
+﻿
+
+$(function () {
     // Set current date for registration
     var today = new Date();
     var dateString = today.toISOString().split('T')[0];
@@ -113,23 +115,72 @@
 
         console.log("Reg Data: ", registrationData)
         console.log("fYPTourneyPro.services.organizer.registration: ", fYPTourneyPro.services.organizer.registration)
-        console.log("fYPTourneyPro.services.users.wallet: ", fYPTourneyPro.services.users.wallet)
+//        // Call the RegistrationAppService to create a new registration
 
-        // Start payment process
-        fYPTourneyPro.services.users.wallet.payment(paymentData).then(function (result) {
-            console.log("Payment successful:", result);
-            abp.notify.success('Paid successfully.');
+//        fYPTourneyPro.services.organizer.registration.create(registrationData).then((result) => {
+//            console.log("response: ", result)
+//            console.log(fYPTourneyPro.services.notifications.notification)
 
-            // Now proceed to create registration
-            return fYPTourneyPro.services.organizer.registration.create(registrationData);
-        }).then(function (result) {
-            console.log("Registration response: ", result);
-            alert('Registration Successful!');
-            $('#registrationForm')[0].reset();
-        }).catch(function (error) {
-            // Catch errors from either payment or registration
-            abp.notify.error('Error: ' + error.message);
-            console.error("Error during payment or registration:", error);
-        });
+//            var tourData = {
+//                categoryId: categoryId,
+//                username1: player1,
+//                username2: player2,
+//                tournamentId: $('#tournamentId').val(),
+//                organizerId: result.organizerId
+//            };
+
+//            fYPTourneyPro.services.notifications.notification.savePlayerRegistrationNotification(player1, player2, registrationData.tournamentId)
+//            fYPTourneyPro.services.notifications.notification.savePlayerJoinTourNotification(tourData)
+
+
+//            // On success, show an alert and reset the form
+//            alert('Registration Successful!');
+//            $('#registrationForm')[0].reset();
+//        }).catch(function (error) {
+//            // Catch errors from either payment or registration
+//            abp.notify.error('Error: ' + error.message);
+//            console.error("Error during payment or registration:", error);
+//        });
+//    });
+//});
+
+
+
+
+
+
+fYPTourneyPro.services.users.wallet.payment(paymentData).then(function (result) {
+    console.log("Payment successful:", result);
+    abp.notify.success('Paid successfully.');
+
+    // Now proceed to create registration
+    return fYPTourneyPro.services.organizer.registration.create(registrationData);
+}).then(function (result) {
+    console.log("Registration response: ", result);
+
+    console.log("response: ", result)
+    console.log(fYPTourneyPro.services.notifications.notification)
+
+    var tourData = {
+        categoryId: categoryId,
+        username1: player1,
+        username2: player2,
+        tournamentId: $('#tournamentId').val(),
+        organizerId: result.organizerId
+    };
+
+    fYPTourneyPro.services.notifications.notification.savePlayerRegistrationNotification(player1, player2, registrationData.tournamentId)
+    fYPTourneyPro.services.notifications.notification.savePlayerJoinTourNotification(tourData)
+
+
+
+    alert('Registration Successful!');
+    $('#registrationForm')[0].reset();
+}).catch(function (error) {
+    // Catch errors from either payment or registration
+    abp.notify.error('Error: ' + error.message);
+    console.error("Error during payment or registration:", error);
+});
     });
 });
+

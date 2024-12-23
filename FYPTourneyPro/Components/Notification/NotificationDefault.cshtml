@@ -1,0 +1,141 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+
+@{
+   
+}
+
+
+<div class="dropdown" style="position: relative; display: flex; justify-content: flex-end; margin: 5px;">
+    <button id="dropdownBtn" type="button" class="btn btn-primary">
+        Notifications
+    </button>
+    <div id="dropdownMenu" class="dropdown-menu"
+         style="display: none; position: absolute; top: 100%; right: 0; z-index: 1000; background: white; border: 1px solid #ddd; padding: 10px; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);">
+       
+         <div id="notiBtnContainer" style="justify-content: space-between;">
+            <button id="notiTournamentBtn" type="button" class="btn btn-secondary">Tournament</button>
+            <button id="notiChatBtn" type="button" class="btn btn-secondary">Chat</button>
+         </div>
+
+        <div id="notiList" class="dropdownList" style="display: block;"></div>
+    </div>
+</div>
+
+<style>
+    #dropdownMenu {
+        max-height: 300px; /* Limit height to make it scrollable */
+        overflow-y: auto; /* Enable vertical scrolling */
+        border-radius: 5px; /* Add rounded corners */
+        font-family: Arial, sans-serif; /* Consistent font */
+        width: 500px; /* Set consistent width */
+    }
+
+    .dropDownItem {
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: white;
+        transition: background-color 0.3s;
+    }
+
+        .dropDownItem:hover {
+            background-color: #f1f1f1; /* Light gray for hover */
+        }
+
+    .timestamp {
+        font-size: 0.8em; /* Smaller timestamp */
+        color: gray;
+    }
+
+    .notiButton {
+        width: 49%; /* Equal-sized buttons in the header */
+        margin-bottom: 10px;
+    }
+
+    .notiHeader {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+        .notiHeader h5 {
+            margin: 0;
+            font-size: 1em;
+            color: #007bff;
+        }
+</style>
+
+<script>
+
+    function formatDate(isoString) {
+    const date = new Date(isoString);
+    return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+}
+
+    document.getElementById('dropdownBtn').addEventListener('click', function(){
+        var dropdownMenu = document.getElementById('dropdownMenu');
+        dropdownMenu.style.display = dropdownMenu.style.display === 'none' ? 'block' : 'none';
+    })
+
+    document.getElementById('notiTournamentBtn').addEventListener('click', function(){
+        var notiList = document.getElementById('notiList');
+
+        fYPTourneyPro.services.notifications.notification.getTournamentNotification().then((result) => {
+
+            result.sort((a, b) => new Date(b.creationTime) - new Date(a.creationTime));
+
+            notiList.innerHTML = '';
+            result.forEach((item) => {
+                var div = document.createElement('div');
+                div.classList.add('dropDownItem');
+
+                    var formattedTime = formatDate(item.creationTime);
+
+                div.innerHTML = `${item.content} <span class="timespan">(${formattedTime})</span>`;
+                div.setAttribute('data-id', item.relatedEntityId);
+                notiList.appendChild(div);
+
+                //Takes the data-id and perform actions
+                div.addEventListener('click', function(){
+                    var id = this.getAttribute('data-id');
+                    console.log(id);
+                });
+            });
+        });
+    })
+
+    document.getElementById('notiChatBtn').addEventListener('click', function(){
+        var notiList = document.getElementById('notiList');
+
+                fYPTourneyPro.services.notifications.notification.getChatNotification().then((result) => {
+                    console.log(result);
+                result.sort((a, b) => new Date(b.creationTime) - new Date(a.creationTime));
+
+            notiList.innerHTML = '';
+            result.forEach((item) => {
+                var div = document.createElement('div');
+                div.classList.add('dropDownItem');
+                    var formattedTime = formatDate(item.creationTime);
+                    div.innerHTML = `${item.content}  <span class="timespan">(${formattedTime})</span>`;
+                div.setAttribute('data-id', item.relatedEntityId);
+                notiList.appendChild(div);
+
+                //Takes the data-id and perform actions
+                div.addEventListener('click', function(){
+                    var id = this.getAttribute('data-id');
+                        window.location.href = `/Chat/Chatroom?chatRoomId=${id}`
+                    console.log(id);
+                });
+            });
+        });
+    })
+
+
+</script>

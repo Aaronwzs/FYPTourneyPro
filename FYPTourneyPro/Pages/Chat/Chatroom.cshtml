@@ -1,0 +1,34 @@
+﻿@page
+@model FYPTourneyPro.Pages.Chat.ChatroomModel
+@{
+}
+
+@section scripts {
+    <abp-script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></abp-script>
+    <abp-script src="/Pages/Chat/Chatroom.js" />
+}
+
+@section styles{
+    <abp-style src="/Pages/Chat/Chatroom.css"/>
+
+}
+
+<h1 id="chatRoomTitle"></h1>
+
+<div id="chatContainer">
+    <!-- Messages will be dynamically added here -->
+</div>
+
+<div id="sendMessageContainer">
+    <input type="text" id="messageInput" placeholder="Type your message..." />
+    <button id="sendMessageButton">Send</button>
+</div>
+
+<div id="membersContainer">
+    <h3>Members</h3>
+    <ul id="membersList">
+        <!-- Members will be dynamically added here -->
+    </ul>
+</div>
+
+

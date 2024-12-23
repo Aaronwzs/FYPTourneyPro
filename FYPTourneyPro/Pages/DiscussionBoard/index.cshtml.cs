@@ -40,6 +40,13 @@ namespace FYPTourneyPro.Pages.DiscussionBoard
 
             Posts = await _postAppService.GetAllAsync();
 
+
+            foreach (var post in Posts)
+            {
+                var user = await _userRepository.GetAsync(post.CreatedByUserId);
+                post.CreatedByUsername = user.UserName; // Assuming you add a `CreatedByUserName` property to your post model
+            }
+
             YourPosts = await _postAppService.GetListAsyncUid();
         }
     }

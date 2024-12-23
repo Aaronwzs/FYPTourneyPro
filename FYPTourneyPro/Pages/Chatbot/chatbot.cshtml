@@ -1,0 +1,24 @@
+﻿@page
+@model FYPTourneyPro.Pages.Chatbot.chatbotModel
+@{
+    ViewData["Title"] = "Chatbot";
+}
+<h1>Test API Interaction</h1>
+
+<script>
+    fetch('https://localhost:44339/api/user/current-id') // Replace with your actual API endpoint
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log('API Response:', data);
+        document.body.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+      })
+      .catch(error => {
+        console.error('Error fetching API:', error);
+        document.body.innerHTML = `<p>Error: ${error.message}</p>`;
+      });
+</script>
