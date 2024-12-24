@@ -43,11 +43,17 @@ namespace FYPTourneyPro.Services.Organizer
 
         public async Task<List<IGrouping<Guid, MatchParticipant>>>? GenerateDrawAsync(MatchParticipantDto input)
         {
+            var category = await _categoryRepository.GetAsync(input.CategoryId);
+            var matchlist = await _matchRepository.GetListAsync(m => m.CategoryId == input.CategoryId);
+            if (matchlist.Count == 0)//there is no matches)
+            {
+                // perform the generate draw
+           
             try
             {
 
 
-                var category = await _categoryRepository.GetAsync(input.CategoryId);
+                
                 var isSingle = category.isPair != null;
                 var result = new List<MatchParticipantDto> { };
 
@@ -276,7 +282,12 @@ namespace FYPTourneyPro.Services.Organizer
                 Console.WriteLine("error:", ex.Message);
                 return null;
             }
-
+            }
+            else
+            {
+                //throw exception
+                throw new Exception($"Matches are already Generated. Each draw can only generate once!.");
+            }
 
         }
 

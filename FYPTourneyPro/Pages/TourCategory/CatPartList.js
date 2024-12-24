@@ -109,6 +109,9 @@ function openScoreModal(matchId) {
             //put 2 participants into this matchParticipant list
             matchParticipants = participants;
 
+            
+
+
             //const participantsList = document.getElementById('participantsList');
             const winnerDropdown = document.getElementById('winnerId');
             //participantsList.innerHTML = '';
@@ -118,15 +121,22 @@ function openScoreModal(matchId) {
                 // Add participant to winner dropdown
                 const option = document.createElement('option');
                 option.value = participant.userId;
-                option.textContent = participant.userName; // Replace with a proper display name
+                //option.textContent = participant.userName; // Replace with a proper display name
+                option.textContent = participant.fullName;
                 winnerDropdown.appendChild(option);
             });
             //get 2 data in list
             //cater for doubles
             // option.value = participant.pairId;
-            $('#player1').text(participants[0].userName);
+
+            var mpFullName = participants[0].fullName;
+            console.log('mpFullName: ', mpFullName)
+
+
+
+            $('#player1').text(participants[0].fullName);
             $('#player1').data('id', participants[0].id);
-            $('#player2').text(participants[1].userName);
+            $('#player2').text(participants[1].fullName);
             $('#player2').data('id', participants[1].id);
 
 
