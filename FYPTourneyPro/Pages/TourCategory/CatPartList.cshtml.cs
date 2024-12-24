@@ -1,6 +1,7 @@
 using FYPTourneyPro.Entities.Organizer;
+using FYPTourneyPro.Services;
 using FYPTourneyPro.Services.Dtos.Organizer;
-
+using FYPTourneyPro.Services.Dtos.User;
 using FYPTourneyPro.Services.Organizer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -14,6 +15,8 @@ namespace FYPTourneyPro.Pages.TourCategory
        private readonly MatchParticipantAppService _matchParticipantAppService;
         private readonly MatchAppService _matchAppService;
         private readonly MatchScoreAppService _matchScoreAppService;
+        private readonly CustomUserAppService _customUserAppService;
+
 
         [BindProperty(SupportsGet = true)]
         public Guid categoryId { get; set; }
@@ -24,13 +27,18 @@ namespace FYPTourneyPro.Pages.TourCategory
         public List<MatchParticipantDto> MatchParticipants { get; set; }
         public List<MatchScoreDto> MatchScores { get; set; }
         public string Message { get; set; }
+        public Guid userId1 { get; set; }
+        public Guid? userId2 { get; set; }
+
+        public List<UserDto> customUser { get; set; }
 
 
         public CatPartListModel(CategoryAppService categoryAppService, 
             RegistrationAppService registrationAppService,
             MatchParticipantAppService matchParticipantAppService,
             MatchAppService matchAppService,
-            MatchScoreAppService matchScoreAppService
+            MatchScoreAppService matchScoreAppService,
+            CustomUserAppService customUserAppService
             )
         {
             _categoryAppService = categoryAppService;
@@ -38,6 +46,7 @@ namespace FYPTourneyPro.Pages.TourCategory
             _matchParticipantAppService = matchParticipantAppService;
             _matchAppService = matchAppService;
             _matchScoreAppService= matchScoreAppService;
+            _customUserAppService = customUserAppService;
 
         }
 
@@ -48,12 +57,31 @@ namespace FYPTourneyPro.Pages.TourCategory
             // Get category details
             Category = await _categoryAppService.GetAsync(CategoryId);
 
+            
+            
+
+
 
             // Get list of registrations for the category
             Registrations = await _registrationAppService.GetRegistrationListByCategoryAsync(CategoryId);
 
+            //for (int i = 0; i < Registrations.Count; i++)
+            //{
+            //    userId1 = Registrations[i].UserId1;
+            //    userId2 = Registrations[i].UserId2;
 
-           
+            //    customUser = await _customUserAppService.GetListAsync(userId1);
+            //    List<UserDto> customUser2 = null;
+            //    if (userId2.HasValue)
+            //    {
+            //        customUser2 = await _customUserAppService.GetListAsync(userId2.Value);
+            //    }
+
+
+
+            //}
+
+
 
             // Get the generated matches for the category
             Matches = await _matchAppService.GetMatchesByCategoryIdAsync(CategoryId);
@@ -62,8 +90,18 @@ namespace FYPTourneyPro.Pages.TourCategory
             MatchParticipants = new List<MatchParticipantDto>();
             foreach (var match in Matches)
             {
+                //get the matchParticipants for this match in matches( should have 2 )
                 var participants = await _matchParticipantAppService.GetMatchParticipantsByMatchIdAsync(match.Id);
                 MatchParticipants.AddRange(participants);
+
+                
+                //Get the userId from matchParticipants parse it to customUserAppService to get FUllName
+                //var matchParticipantUserId? = MatchParticipants[0].userId;
+
+                //var custUser = await _customUserAppService.GetAsync(matchParticipantUserId);
+
+
+
             }
 
             // Get the match scores for the matches
@@ -75,18 +113,18 @@ namespace FYPTourneyPro.Pages.TourCategory
             }
 
         }
-        public async Task<IActionResult> OnGetMatchParticipants()
-        {
-            MatchParticipants = new List<MatchParticipantDto>();
-            foreach (var match in Matches)
-            {
-                var participants = await _matchParticipantAppService.GetMatchParticipantsByMatchIdAsync(match.Id);
-                MatchParticipants.AddRange(participants);
-            }
+        //public async Task<IActionResult> OnGetMatchParticipants()
+        //{
+        //    MatchParticipants = new List<MatchParticipantDto>();
+        //    foreach (var match in Matches)
+        //    {
+        //        var participants = await _matchParticipantAppService.GetMatchParticipantsByMatchIdAsync(match.Id);
+        //        MatchParticipants.AddRange(participants);
+        //    }
 
-            // Return as JSON
-            return new JsonResult(MatchParticipants);
-        }
+        //    // Return as JSON
+        //    return new JsonResult(MatchParticipants);
+        //}
 
 
         // Handle the form submission when the "Generate Draw" button is clicked

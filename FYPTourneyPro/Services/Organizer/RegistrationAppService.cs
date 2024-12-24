@@ -8,13 +8,14 @@ using Volo.Abp.Users;
 using static Volo.Abp.Identity.IdentityPermissions;
 using Volo.Abp.Identity;
 using Volo.Abp;
-using FYPTourneyPro.Entities.User;
+using FYPTourneyPro.Entities.UserM;
+using Volo.Abp.Domain.Entities;
 
 namespace FYPTourneyPro.Services.Organizer
 {
     public class RegistrationAppService : ApplicationService
     {
-        private readonly IRepository<Entities.User.User, Guid> _custUserRepository;  // Custom User repository
+        private readonly IRepository<CustomUser, Guid> _custUserRepository;  // Custom User repository
         private readonly IRepository<Tournament, Guid> _tournamentRepository;
         private readonly IRepository<Registration, Guid> _registrationRepository;
         private readonly IRepository<Category, Guid> _categoryRepository;
@@ -28,7 +29,7 @@ namespace FYPTourneyPro.Services.Organizer
             IRepository<Tournament, Guid> tournamentRepository,
             IRepository<Registration, Guid> registrationRepository,
             IRepository<Category, Guid> categoryRepository,
-            IRepository<Entities.User.User, Guid> custUserRepository,
+            IRepository<CustomUser, Guid> custUserRepository,
             IRepository<Participant, Guid> participantRepository, ICurrentUser currentUser, IIdentityUserRepository userRepository)
         {
             _tournamentRepository = tournamentRepository;
@@ -89,8 +90,8 @@ namespace FYPTourneyPro.Services.Organizer
             var createdRegistration = await _registrationRepository.InsertAsync(registration);
             
             var pairId = Guid.NewGuid();
-            var user1 = await _userRepository.GetListAsync(userName: input.userName1);
-            var user2 = await _userRepository.GetListAsync(userName: input.userName2);
+            var user1 = await _userRepository.GetListAsync(userName: input.UserName1);
+            var user2 = await _userRepository.GetListAsync(userName: input.UserName2);
             var userId1 = user1[0].Id;
             var userId2 = user2[0].Id;
 
@@ -235,10 +236,10 @@ namespace FYPTourneyPro.Services.Organizer
                     Id = reg.Id,
                     RegDate = reg.RegDate,
                     TotalAmount = reg.totalAmount,
-                    userId1 = user1.Id,
-                    userId2 = user2 != null ? user2.Id : null,
-                    userName1 = user1.UserName,
-                    userName2 = user2 != null ? user2.UserName : null,
+                    UserId1 = user1.Id,
+                    UserId2 = user2 != null ? user2.Id : null,
+                    UserName1 = user1.UserName,
+                    UserName2 = user2 != null ? user2.UserName : null,
                     CategoryId = reg.CategoryId,
                     CategoryName = category.Name
                 });
@@ -250,12 +251,10 @@ namespace FYPTourneyPro.Services.Organizer
         {
             var registrations = await _registrationRepository.GetListAsync(p => p.CategoryId == CategoryId);
 
-
+            var customUser = await _userRepository.GetListAsync();
             //loop participants, each part get registrationid, use regId to get registrationData, then get categoryId from registration data, when get catId, get the cat data, catId.catName
 
-            List<RegistrationDto> RegistrationListDto = new List<RegistrationDto>();
-
-            
+            List<RegistrationDto> RegistrationListDto = new List<RegistrationDto>();  
 
             //check if response is empty then return the empty list
             if (registrations.Count == 0)
@@ -266,34 +265,36 @@ namespace FYPTourneyPro.Services.Organizer
             foreach (var reg in registrations)
             {
                 var regId = reg.Id;
+
                 // get participant
                 var participants = await _participantRepository.GetListAsync(p => p.RegistrationId == regId);
                 IdentityUser? user1 = null;
                 IdentityUser? user2 = null;
 
-                //if (participants[0].PairId != null)
-                //{
-                //    user1 = await _userRepository.GetAsync(participants[0].UserId);
-                //    user1 = await _userRepository.GetAsync(participants[1].UserId);
-                //}
-                //else
-                //{
-                //    user1 = await _userRepository.GetAsync(participants[0].UserId);
-                //}
+                var custUser1FN = "";
+                var custUser2FN = "";
 
-
+               
                 // Get the first participant
                 if (participants.Count > 0)
                 {
                     user1 = await _userRepository.GetAsync(participants[0].UserId);
+
+                    var custUser1 = await _custUserRepository.FirstOrDefaultAsync(x => x.UserId == participants[0].UserId);
+                    if (customUser == null)
+                    {
+                        throw new EntityNotFoundException($"No CustomUser found with UserId: {participants[0].UserId}");
+                    }
+                    custUser1FN = custUser1.FullName;
                 }
 
                 // Get the second participant if it exists
                 if (participants.Count > 1)
                 {
                     user2 = await _userRepository.GetAsync(participants[1].UserId);
+                    var custUser2 = await _custUserRepository.GetAsync(participants[1].UserId);
+                   custUser2FN = custUser2.FullName;
                 }
-
 
                 var category = await _categoryRepository.GetAsync(reg.CategoryId);
 
@@ -302,13 +303,16 @@ namespace FYPTourneyPro.Services.Organizer
                     Id = reg.Id,
                     RegDate = reg.RegDate,
                     TotalAmount = reg.totalAmount,
-                    userId1 = user1.Id,
-                    userId2 = user2 != null ? user2.Id : null,
-                    userName1 = user1.UserName,
-                    userName2 = user2 != null ? user2.UserName : null,
+                    UserId1 = user1.Id,
+                    UserId2 = user2 != null ? user2.Id : null,
+                    UserName1 = user1.UserName,
+                    UserName2 = user2 != null ? user2.UserName : null,
                     CategoryId = reg.CategoryId,
-                    CategoryName = category.Name
-                    
+                    CategoryName = category.Name,
+                    FullName1 = custUser1FN,
+                    FullName2 = custUser2FN
+
+
                 });
             }
             return RegistrationListDto;

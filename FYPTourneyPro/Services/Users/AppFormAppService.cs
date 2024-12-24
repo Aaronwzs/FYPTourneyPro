@@ -1,5 +1,7 @@
 ﻿using FYPTourneyPro.Entities.Organizer;
-using FYPTourneyPro.Entities.User;
+
+using FYPTourneyPro.Entities.UserM;
+
 using FYPTourneyPro.Services.Dtos.Organizer;
 using FYPTourneyPro.Services.Dtos.User;
 using Volo.Abp;

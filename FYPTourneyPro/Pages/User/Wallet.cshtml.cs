@@ -48,6 +48,13 @@ namespace FYPTourneyPro.Pages.User
         {
             UserId = _currentUser.Id.Value; // Get UserId from ICurrentUser
 
+            // Get current user information
+            if (_currentUser.IsAuthenticated)
+            {
+                var currentUser = await _userRepository.GetAsync(UserId);
+                UserName = currentUser.UserName;
+            }
+
             // Get the list of wallets
             var wallets = await _walletAppService.GetListAsync();
 
@@ -64,15 +71,10 @@ namespace FYPTourneyPro.Pages.User
                 // If the wallet does not exist, create a new one
                 await _walletAppService.CreateAsync(UserId);
                 // Optionally retrieve the new wallet to use in the UI
-                Wallet = await _walletAppService.GetWalletAsync(UserId);
+               
             }
 
-            // Get current user information
-            if (_currentUser.IsAuthenticated)
-            {
-                var currentUser = await _userRepository.GetAsync(UserId);
-                UserName = currentUser.UserName;
-            }
+           
         }
 
         

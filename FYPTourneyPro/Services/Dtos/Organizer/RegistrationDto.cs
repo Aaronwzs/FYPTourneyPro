@@ -7,15 +7,18 @@
        
         public DateTime RegDate { get; set; }
         public double TotalAmount { get; set; }
-        public Guid userId1 { get; set; }
-        public Guid? userId2 { get; set; }
+        public Guid UserId1 { get; set; }
+        public Guid? UserId2 { get; set; }
 
-        public string userName1 {  get; set; }
-        public string? userName2 { get; set; }
+        public string UserName1 {  get; set; }
+        public string? UserName2 { get; set; }
 
         public Guid tournamentId {  get; set; }
 
         public Guid organizerId { get; set; }
         public string? CategoryName { get; set; }
+
+        public string? FullName1 { get; set; }
+        public string? FullName2 { get; set;}
     }
 }

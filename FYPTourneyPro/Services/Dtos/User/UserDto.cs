@@ -35,5 +35,6 @@ namespace FYPTourneyPro.Services.Dtos.User
         [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPasswordLength))]
         [DataType(DataType.Password)]
         public string Password { get; set; }
+
     }
 }

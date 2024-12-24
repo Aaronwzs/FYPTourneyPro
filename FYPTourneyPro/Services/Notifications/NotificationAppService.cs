@@ -105,12 +105,12 @@ namespace FYPTourneyPro.Services.Notifications
             var category = await _categoryRepository.GetAsync(input.CategoryId);
 
 
-            var content = $"{input.userName1} has joined category {category.Name} in tournament {tournament.Name}";
+            var content = $"{input.FullName1} has joined category {category.Name} in tournament {tournament.Name}";
 
 
-            if (input.userName2 != null)
+            if (input.FullName2 != null)
             {
-                content = $"{input.userName1} and {input.userName2} have joined category {category.Name} your tournament {tournament.Name}";
+                content = $"{input.FullName1} and {input.FullName2} have joined category {category.Name} your tournament {tournament.Name}";
             }
 
             var notification = new Notification

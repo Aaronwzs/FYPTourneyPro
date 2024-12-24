@@ -1,5 +1,5 @@
 ﻿using FYPTourneyPro.Entities.TodoList;
-using FYPTourneyPro.Entities.User;
+using FYPTourneyPro.Entities.UserM;
 using FYPTourneyPro.Services.Dtos.Organizer;
 using FYPTourneyPro.Services.Dtos.TodoItems;
 using FYPTourneyPro.Services.Dtos.User;

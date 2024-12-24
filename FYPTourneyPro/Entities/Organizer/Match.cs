@@ -11,5 +11,7 @@ namespace FYPTourneyPro.Entities.Organizer
 
         public Guid CategoryId { get; set; }
 
+        public Guid? nextMatchId { get; set; } 
+
     }
 }

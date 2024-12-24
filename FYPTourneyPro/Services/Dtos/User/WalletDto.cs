@@ -1,4 +1,4 @@
-﻿using FYPTourneyPro.Entities.User;
+﻿using FYPTourneyPro.Entities.UserM;
 using Volo.Abp.Application.Dtos;
 
 namespace FYPTourneyPro.Services.Dtos.User
