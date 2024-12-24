@@ -1,7 +1,10 @@
 ﻿using FYPTourneyPro.Entities.Organizer;
 using FYPTourneyPro.Entities.UserM;
+using FYPTourneyPro.Permissions;
 using FYPTourneyPro.Services.Dtos.Organizer;
+using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Services;
+using Volo.Abp.Authorization;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Identity;
 using Volo.Abp.Uow;
@@ -18,6 +21,7 @@ namespace FYPTourneyPro.Services.Organizer
         private readonly IRepository<MatchParticipant, Guid> _matchParticipantRepository;
         private readonly IUnitOfWorkManager _unitOfWorkManager;
         private readonly IRepository<CustomUser, Guid> _customUserRepository;
+        private readonly IAuthorizationService _authorizationService;
 
         public MatchParticipantAppService(
             IRepository<Match, Guid> matchRepository,
@@ -27,7 +31,8 @@ namespace FYPTourneyPro.Services.Organizer
             IRepository<Registration, Guid> registrationRepository,
             IIdentityUserRepository userRepository,
             IUnitOfWorkManager unitOfWorkManager,
-            IRepository<CustomUser, Guid> customerUserRepository
+            IRepository<CustomUser, Guid> customerUserRepository,
+            IAuthorizationService authorizationService
             )
         {
             _participantRepository = participantRepository;
@@ -39,10 +44,18 @@ namespace FYPTourneyPro.Services.Organizer
             _matchParticipantRepository = matchParticipantRepository;
             _unitOfWorkManager = unitOfWorkManager;
             _customUserRepository = customerUserRepository;
+            _authorizationService = authorizationService;
         }
 
         public async Task<List<IGrouping<Guid, MatchParticipant>>>? GenerateDrawAsync(MatchParticipantDto input)
         {
+            // Check if the user has permission to delete a todo item
+            var isAuthorized = await _authorizationService.IsGrantedAsync(FYPTourneyProPermissions.Draws.Generate);
+            if (!isAuthorized)
+            {
+                throw new AbpAuthorizationException($"You are not authorized to update tournaments. Required permission: {FYPTourneyProPermissions.Draws.Generate}");
+            }
+
             var category = await _categoryRepository.GetAsync(input.CategoryId);
             var matchlist = await _matchRepository.GetListAsync(m => m.CategoryId == input.CategoryId);
             if (matchlist.Count == 0)//there is no matches)

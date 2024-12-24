@@ -12,7 +12,7 @@
         <abp-card-header>
             <div class="d-flex justify-content-between align-items-center">
             <abp-card-title>
-                CATEGORY
+                Tournament View
             </abp-card-title>
              @if (Model.Tournament.RegistrationStartDate <= DateTime.Now && Model.Tournament.RegistrationEndDate >= DateTime.Now)
             {
@@ -34,8 +34,25 @@
                 
                 <div class="col-md-6">
 
+
+                    <!-- Tournament Details Section -->
+                    <div class="tournament-details p-3">
+                        <h4>Tournament Details</h4>
+                        <p><strong>Name:</strong> @Model.Tournament.Name</p>
+                        <p><strong>Description:</strong> @Model.Tournament.Description</p>
+                        <p><strong>Registration Period:</strong> @Model.Tournament.RegistrationStartDate.ToString("g") to @Model.Tournament.RegistrationEndDate.ToString("g")</p>
+                        <p><strong>Event Dates:</strong> @Model.Tournament.StartDate.ToString("g") to @Model.Tournament.EndDate.ToString("g")</p>
+                        <p><strong>Hotline Number:</strong> @Model.Tournament.HotlineNum</p>
+                        <p><strong>Is Malaysian:</strong> @(Model.Tournament.isMalaysian ? "Yes" : "No")</p>
+                        <p><strong>Rules and Regulations:</strong> @Model.Tournament.RulesAndRegulations</p>
+                    </div>
+                 
+
+
                     <!-- FORM FOR NEW CATEGORY STARTS-->
+                    <h4>Category</h4>
                     <form id="NewCategoryForm" class="row row-cols-lg-auto g-3 align-items-center mb-4">
+                        
                         <div class="col-12">
                             <input type="hidden" id="TournamentId" value="@Model.TournamentId" />
                             <input id="CategoryName" type="text" class="form-control" placeholder="Category Name" required>

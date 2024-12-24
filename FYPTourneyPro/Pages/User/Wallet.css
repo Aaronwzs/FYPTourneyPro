@@ -1,0 +1,91 @@
+﻿/* General Styles */
+.container {
+    margin-top: 20px;
+}
+
+/* Card Styles */
+abp-card {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+abp-card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #ddd;
+}
+
+abp-card-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+/* Wallet Header */
+h1 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+h2 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+h3 {
+    font-size: 1.25rem;
+    color: #333;
+}
+
+/* Form Styles */
+form {
+    margin: 20px 0;
+}
+
+label {
+    font-weight: bold;
+}
+
+input[type="number"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+    max-width: 300px; /* Limiting the width */
+    margin-top: 5px;
+}
+
+button {
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+    button:hover {
+        background-color: #0056b3;
+    }
+
+/* Alert Styles */
+.alert {
+    padding: 10px;
+    border-radius: 4px;
+    margin-top: 20px;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .container {
+        padding: 0 15px;
+    }
+
+    h1, h2, h3 {
+        text-align: center;
+    }
+
+    input[type="number"], button {
+        width: 100%;
+    }
+}

@@ -1,7 +1,10 @@
+using FYPTourneyPro.Entities.UserM;
 using FYPTourneyPro.Services.Dtos.User;
 using FYPTourneyPro.Services.Users;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Volo.Abp.Domain.Entities;
+using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Identity;
 using Volo.Abp.Users;
 
@@ -13,6 +16,7 @@ namespace FYPTourneyPro.Pages.User
 
         private readonly IIdentityUserRepository _userRepository;
         private readonly ICurrentUser _currentUser;
+        private readonly IRepository<CustomUser, Guid> _customUserRepository;
 
         //public WalletModel(WalletAppService walletAppService, IIdentityUserRepository userRepository,
         //    ICurrentUser currentUser)
@@ -23,11 +27,13 @@ namespace FYPTourneyPro.Pages.User
         //}
 
         public WalletModel(IIdentityUserRepository userRepository,
-            ICurrentUser currentUser,WalletAppService walletAppService)
+            ICurrentUser currentUser,WalletAppService walletAppService,
+            IRepository<CustomUser, Guid> customUserRepository)
         {
             _userRepository = userRepository;
             _currentUser = currentUser;
             _walletAppService = walletAppService;
+            _customUserRepository = customUserRepository;
         }
 
         [BindProperty]
@@ -43,10 +49,13 @@ namespace FYPTourneyPro.Pages.User
         public decimal WithdrawAmount { get; set; }
 
         public string UserName { get; set; }
+        public string FullName {  get; set; }
 
         public async Task OnGetAsync()
         {
             UserId = _currentUser.Id.Value; // Get UserId from ICurrentUser
+
+
 
             // Get current user information
             if (_currentUser.IsAuthenticated)
@@ -55,8 +64,19 @@ namespace FYPTourneyPro.Pages.User
                 UserName = currentUser.UserName;
             }
 
-            // Get the list of wallets
-            var wallets = await _walletAppService.GetListAsync();
+            var customUser = await _customUserRepository.FirstOrDefaultAsync(x => x.UserId == UserId);
+            if (customUser == null)
+            {
+                throw new EntityNotFoundException($"No CustomUser found with UserId: {UserId}");
+            }
+           
+            FullName = customUser.FullName;
+        
+
+
+
+        // Get the list of wallets
+        var wallets = await _walletAppService.GetListAsync();
 
             // Check if the current user has a wallet
             var existingWallet = wallets.FirstOrDefault(w => w.UserId == UserId);

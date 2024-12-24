@@ -22,4 +22,36 @@ public static class FYPTourneyProPermissions
         public const string Edit = Default + ".Edit";
         public const string Delete = Default + ".Delete";
     }
+
+
+    //Added tour
+    public static class Tournaments
+    {
+        public const string Default = GroupName + ".Tournaments";
+        public const string Create = Default + ".Create";
+        public const string Edit = Default + ".Edit";
+        public const string Delete = Default + ".Delete";
+    }
+
+    public static class Categories
+    {
+        public const string Default = GroupName + ".Categories";
+        public const string Create = Default + ".Create";
+        
+        public const string Delete = Default + ".Delete";
+    }
+
+    public static class Draws
+    {
+        public const string Default = GroupName + ".Draws";
+        public const string Generate = Default + ".Generate";
+    }
+    public static class MatchScores
+    {
+        public const string Default = GroupName + ".Scores";
+        public const string Save = Default + ".Save";
+    }
+
+
+
 }

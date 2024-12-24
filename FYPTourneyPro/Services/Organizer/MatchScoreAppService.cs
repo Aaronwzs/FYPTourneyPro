@@ -8,6 +8,9 @@ using Serilog.Filters;
 using FYPTourneyPro.Migrations;
 using FYPTourneyPro.Entities.UserM;
 using Volo.Abp.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
+using FYPTourneyPro.Permissions;
+using Volo.Abp.Authorization;
 
 namespace FYPTourneyPro.Services.Organizer
 {
@@ -18,20 +21,30 @@ namespace FYPTourneyPro.Services.Organizer
         private readonly IRepository<Participant, Guid> _participantRepository;
         private readonly IRepository<Match, Guid> _matchRepository;
         private readonly IRepository<CustomUser, Guid> _customUserRepository;
+        private readonly IAuthorizationService _authorizationService;
 
 
         public MatchScoreAppService(IRepository<MatchParticipant, Guid> matchParticipantRepository, IRepository<MatchScore, Guid> matchScoreRepository,
-            IRepository<Participant,Guid> participantRepository, IRepository<Match, Guid> matchRepository, IRepository<CustomUser, Guid> customUserRepostory)
+            IRepository<Participant,Guid> participantRepository, IRepository<Match, Guid> matchRepository, IRepository<CustomUser, Guid> customUserRepostory, IAuthorizationService authorizationService)
         {
             _matchParticipantRepository = matchParticipantRepository;
             _matchScoreRepository = matchScoreRepository;
             _participantRepository = participantRepository;
             _matchRepository = matchRepository;
             _customUserRepository = customUserRepostory;
+            _authorizationService = authorizationService;
         }
 
         public async Task SaveScoreAsync(MatchScoreDto input)
         {
+
+            // Check if the user has permission to delete a todo item
+            var isAuthorized = await _authorizationService.IsGrantedAsync(FYPTourneyProPermissions.MatchScores.Save);
+            if (!isAuthorized)
+            {
+                throw new AbpAuthorizationException($"You are not authorized to update tournaments. Required permission: {FYPTourneyProPermissions.MatchScores.Save}");
+            }
+
             var matchParticipant = await _matchParticipantRepository.GetAsync(input.MatchParticipantId);
             var winnerId = Guid.Parse(input.WinnerId.ToString());
 
