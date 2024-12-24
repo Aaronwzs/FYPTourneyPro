@@ -23,9 +23,37 @@
     text-decoration: none;
     color: #333;
     cursor: pointer;
+    font-size: 1.1em;
+    transition: color 0.3s ease;
+    padding-left: 10px;
 }
 
     .tournament-link:hover {
         color: #007bff;
         text-decoration: underline;
     }
+
+
+/* Edit Button Styles */
+.edit-tournament {
+    background: none; /* No background */
+    border: none; /* Remove border */
+    color: #333; /* Default text color */
+    cursor: pointer; /* Pointer cursor on hover */
+    padding: 0; /* Remove padding */
+    margin-left: 10px; /* Space between icons */
+}
+
+    .edit-tournament i {
+        font-size: 1.25em; /* Adjust size if necessary */
+        transition: color 0.3s ease; /* Smooth color transition */
+    }
+
+    /* Change color on hover */
+    .edit-tournament:hover i {
+        color: orange; /* Change to orange on hover */
+    }
+
+.create-tournament-btn {
+    margin-bottom: 20px; /* Adjust the value as needed */
+}

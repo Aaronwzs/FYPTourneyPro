@@ -1,11 +1,13 @@
 ﻿using FYPTourneyPro.Entities.Organizer;
 
 using FYPTourneyPro.Entities.UserM;
-
+using FYPTourneyPro.Permissions;
 using FYPTourneyPro.Services.Dtos.Organizer;
 using FYPTourneyPro.Services.Dtos.User;
+using Microsoft.AspNetCore.Authorization;
 using Volo.Abp;
 using Volo.Abp.Application.Services;
+using Volo.Abp.Authorization;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Identity;
 using Volo.Abp.ObjectMapping;
@@ -21,17 +23,23 @@ namespace FYPTourneyPro.Services.Users
         private readonly IRepository<IdentityRole, Guid> _roleRepository;
         private readonly IdentityUserManager _userManager;
         private readonly IIdentityUserRepository _userRepository;
+        private readonly IAuthorizationService _authorizationService;
 
-        public AppFormAppService(IRepository<AppForm, Guid> applicationFormRepository, ICurrentUser currentUser,
-             IRepository<IdentityRole, Guid> roleRepository,
-     IdentityUserManager userManager,
-    IIdentityUserRepository userRepository)
+
+        public AppFormAppService(IRepository<AppForm, 
+                Guid> applicationFormRepository, 
+                ICurrentUser currentUser,
+                IRepository<IdentityRole, Guid> roleRepository,
+                IdentityUserManager userManager,
+                IIdentityUserRepository userRepository, 
+                IAuthorizationService authorizationService)
         {
             _applicationFormRepository = applicationFormRepository;
             _currentUser = currentUser;
             _roleRepository = roleRepository;
             _userManager = userManager;
             _userRepository = userRepository;
+            _authorizationService = authorizationService;
         }
 
         public async Task<AppFormDto> CreateAsync(AppFormDto input)
@@ -77,6 +85,13 @@ namespace FYPTourneyPro.Services.Users
 
         public async Task ApproveAsync(Guid id)
         {
+
+            // Check if the user has permission to delete a todo item
+            var isAuthorized = await _authorizationService.IsGrantedAsync(FYPTourneyProPermissions.AppForms.Approve);
+            if (!isAuthorized)
+            {
+                throw new AbpAuthorizationException($"You are not authorized to update tournaments. Required permission: {FYPTourneyProPermissions.AppForms.Approve}");
+            }
             var application = await _applicationFormRepository.GetAsync(id);
             application.IsApproved = true;
 
@@ -112,6 +127,12 @@ namespace FYPTourneyPro.Services.Users
 
         public async Task RejectAsync(Guid id)
         {
+            // Check if the user has permission to delete a todo item
+            var isAuthorized = await _authorizationService.IsGrantedAsync(FYPTourneyProPermissions.AppForms.Reject);
+            if (!isAuthorized)
+            {
+                throw new AbpAuthorizationException($"You are not authorized to update tournaments. Required permission: {FYPTourneyProPermissions.AppForms.Reject}");
+            }
             var application = await _applicationFormRepository.GetAsync(id);
             application.IsRejected = true;
             await _applicationFormRepository.UpdateAsync(application);

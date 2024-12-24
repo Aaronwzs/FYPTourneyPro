@@ -1,7 +1,9 @@
 ﻿
 
 using FYPTourneyPro.Entities.Organizer;
+using FYPTourneyPro.Permissions;
 using FYPTourneyPro.Services.Dtos.Organizer;
+using Microsoft.AspNetCore.Authorization;
 using System.Linq;
 using Volo.Abp.Authorization;
 using Volo.Abp.Domain.Repositories;
@@ -13,11 +15,14 @@ namespace FYPTourneyPro.Services.Organizer
     {
         private readonly IRepository<Tournament, Guid> _tournamentRepository;
         private readonly ICurrentUser _currentUser;
+        private readonly IAuthorizationService _authorizationService;
 
-        public TournamentAppService(IRepository<Tournament, Guid> tournamentRepository, ICurrentUser currentUser)
+
+        public TournamentAppService(IRepository<Tournament, Guid> tournamentRepository, ICurrentUser currentUser, IAuthorizationService authorizationService)
         {
             _tournamentRepository = tournamentRepository;
             _currentUser = currentUser;
+            _authorizationService = authorizationService;
         }
 
         public async Task<List<TournamentDto>> GetListAsync()
@@ -85,61 +90,77 @@ namespace FYPTourneyPro.Services.Organizer
 
         public async Task<TournamentDto> CreateAsync(TournamentDto input)
         {
-            if (_currentUser.IsAuthenticated)
+            //check if user has permission to create a todoItem
+            var isAuthorized = await _authorizationService.IsGrantedAsync(FYPTourneyProPermissions.Tournaments.Create);
+            if (isAuthorized)
             {
-                if (input.RegistrationStartDate > input.RegistrationEndDate)
+                if (_currentUser.IsAuthenticated)
                 {
-                    throw new Exception("Registration start date cannot be later than registration end date.");
+                    if (input.RegistrationStartDate > input.RegistrationEndDate)
+                    {
+                        throw new Exception("Registration start date cannot be later than registration end date.");
+                    }
+
+                    // Validation for Start Date and Registration End Date
+                    if (input.StartDate <= input.RegistrationEndDate)
+                    {
+                        throw new Exception("Start date must be later than the registration end date.");
+                    }
+
+                    // Validation for End Date and Start Date
+                    if (input.EndDate <= input.StartDate)
+                    {
+                        throw new Exception("End date must be later than the start date.");
+                    }
+
+                    var tournament = await _tournamentRepository.InsertAsync(new Tournament
+                    {
+                        Name = input.Name,
+                        Description = input.Description,
+                        RegStartDate = input.RegistrationStartDate,
+                        RegEndDate = input.RegistrationEndDate,
+                        StartDate = input.StartDate,
+                        EndDate = input.EndDate,
+                        UserId = _currentUser.Id.Value,
+                        HotlineNum = input.HotlineNum,
+                        RulesAndRegulations = input.RulesAndRegulations,
+                        IsMalaysian = input.isMalaysian
+                    });
+
+                    return new TournamentDto
+                    {
+                        Id = tournament.Id,
+                        Name = tournament.Name,
+                        Description = tournament.Description,
+                        RegistrationStartDate = tournament.RegStartDate,
+                        RegistrationEndDate = tournament.RegEndDate,
+                        StartDate = tournament.StartDate,
+                        EndDate = tournament.EndDate,
+                        HotlineNum = tournament.HotlineNum,
+                        isMalaysian = tournament.IsMalaysian,
+                        RulesAndRegulations = tournament.RulesAndRegulations
+                    };
+
                 }
-
-                // Validation for Start Date and Registration End Date
-                if (input.StartDate <= input.RegistrationEndDate)
+                else
                 {
-                    throw new Exception("Start date must be later than the registration end date.");
+                    throw new Exception("User must be logged in to create a tournament.");
                 }
-
-                // Validation for End Date and Start Date
-                if (input.EndDate <= input.StartDate)
-                {
-                    throw new Exception("End date must be later than the start date.");
-                }
-
-                var tournament = await _tournamentRepository.InsertAsync(new Tournament
-                {
-                    Name = input.Name,
-                    Description = input.Description,
-                    RegStartDate = input.RegistrationStartDate,
-                    RegEndDate = input.RegistrationEndDate,
-                    StartDate = input.StartDate,
-                    EndDate = input.EndDate,
-                    UserId = _currentUser.Id.Value,
-                    HotlineNum= input.HotlineNum,
-                    RulesAndRegulations= input.RulesAndRegulations,
-                    IsMalaysian = input.isMalaysian
-                });
-
-                return new TournamentDto
-                {
-                    Id = tournament.Id,
-                    Name = tournament.Name,
-                    Description = tournament.Description,
-                    RegistrationStartDate = tournament.RegStartDate,
-                    RegistrationEndDate = tournament.RegEndDate,
-                    StartDate = tournament.StartDate,
-                    EndDate = tournament.EndDate,
-                    HotlineNum = tournament.HotlineNum,
-                    isMalaysian = tournament.IsMalaysian,
-                    RulesAndRegulations = tournament.RulesAndRegulations
-                };
-
             }
             else
             {
-                throw new Exception("User must be logged in to create a tournament.");
+                throw new AbpAuthorizationException($"You are not authorized to create Tournaments . Required permission: {FYPTourneyProPermissions.Tournaments.Create}");
             }
         }
             public async Task<TournamentDto> UpdateAsync(Guid id, TournamentDto input)
         {
+
+            // Check if the user has permission to delete a todo item
+            var isAuthorized = await _authorizationService.IsGrantedAsync(FYPTourneyProPermissions.Tournaments.Edit);
+            if (!isAuthorized)
+            {
+                throw new AbpAuthorizationException($"You are not authorized to update tournaments. Required permission: {FYPTourneyProPermissions.Tournaments.Edit}");
+            }
 
             if (input.RegistrationStartDate > input.RegistrationEndDate)
             {
@@ -186,6 +207,13 @@ namespace FYPTourneyPro.Services.Organizer
         }
         public async Task DeleteAsync(Guid id)
         {
+
+            // Check if the user has permission to delete a todo item
+            var isAuthorized = await _authorizationService.IsGrantedAsync(FYPTourneyProPermissions.Tournaments.Delete);
+            if (!isAuthorized)
+            {
+                throw new AbpAuthorizationException($"You are not authorized to create todo items. Required permission: {FYPTourneyProPermissions.Tournaments.Delete}");
+            }
             await _tournamentRepository.DeleteAsync(id);
         }
     }

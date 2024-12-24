@@ -1,4 +1,16 @@
 ﻿$(function () {
+
+    // Collapse and uncollapse Category form
+    $('#createCategoryButton').on('click', function () {
+        const tournamentForm = document.getElementById('NewCategoryForm');
+        if (tournamentForm.style.display === 'none' || tournamentForm.style.display === '') {
+            tournamentForm.style.display = 'block'; // Show the form
+        } else {
+            tournamentForm.style.display = 'none'; // Hide the form
+        }
+    });
+
+
     // Adding a New Category  
     $('#NewCategoryForm').submit(function (e) {
         e.preventDefault();

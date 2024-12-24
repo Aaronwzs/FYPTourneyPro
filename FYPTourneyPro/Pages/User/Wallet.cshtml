@@ -6,7 +6,9 @@
 @section scripts {
     <abp-script src="/Pages/User/Wallet.js" />
 }
-
+@section styles {
+    <abp-style src="/Pages/User/Wallet.css" />
+}
 
 <div class="container">
     
@@ -19,7 +21,7 @@
         <abp-card-body>
             <h1>Your wallet</h1>
             @if (User.Identity.IsAuthenticated) {
-            <h2>Wallet for User: @Model.UserId</h2>
+            <h2>Wallet for User: @Model.FullName</h2>
 
                 <input id="userId" value="@Model.UserId" hidden />
             @if (Model.Wallet != null)

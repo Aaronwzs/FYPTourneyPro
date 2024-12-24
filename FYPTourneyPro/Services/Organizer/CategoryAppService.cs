@@ -1,9 +1,11 @@
 ﻿using FYPTourneyPro.Entities.Organizer;
 using FYPTourneyPro.Entities.TodoList;
+using FYPTourneyPro.Permissions;
 using FYPTourneyPro.Services.Dtos.Organizer;
-
+using Microsoft.AspNetCore.Authorization;
 using OpenQA.Selenium;
 using SendGrid.Helpers.Errors.Model;
+using Volo.Abp.Authorization;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 
@@ -13,11 +15,14 @@ namespace FYPTourneyPro.Services.Organizer
     {
 
         private readonly IRepository<Category, Guid> _categoryRepository;
+        private readonly IAuthorizationService _authorizationService;
 
 
-        public CategoryAppService(IRepository<Category, Guid> categoryRepository)
+        public CategoryAppService(IRepository<Category, Guid> categoryRepository,
+            IAuthorizationService authorizationService)
         {
             _categoryRepository = categoryRepository;
+            _authorizationService = authorizationService;
         }
 
         public async Task<List<CategoryDto>> GetListAsync()
@@ -48,6 +53,11 @@ namespace FYPTourneyPro.Services.Organizer
 
         public async Task<CategoryDto> CreateAsync(CategoryDto input)
         {
+            var isAuthorized = await _authorizationService.IsGrantedAsync(FYPTourneyProPermissions.Categories.Create);
+            if (!isAuthorized)
+            {
+                throw new AbpAuthorizationException($"You are not authorized to create todo items. Required permission: {FYPTourneyProPermissions.Categories.Create}");
+            }
             var category = new Category
             {
                 Name = input.Name,
@@ -72,6 +82,12 @@ namespace FYPTourneyPro.Services.Organizer
 
         public async Task DeleteAsync(Guid id)
         {
+            var isAuthorized = await _authorizationService.IsGrantedAsync(FYPTourneyProPermissions.Categories.Delete);
+            if (!isAuthorized)
+            {
+                throw new AbpAuthorizationException($"You are not authorized to create todo items. Required permission: {FYPTourneyProPermissions.Categories.Delete}");
+            }
+
             await _categoryRepository.DeleteAsync(id);
         }
         

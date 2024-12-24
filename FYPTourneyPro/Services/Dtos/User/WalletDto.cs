@@ -13,5 +13,7 @@ namespace FYPTourneyPro.Services.Dtos.User
         public decimal WithdrawAmount { get; set; }
 
         public decimal RegFee { get; set;}
+
+        public string? FullName { get; set; }
     }
 }
