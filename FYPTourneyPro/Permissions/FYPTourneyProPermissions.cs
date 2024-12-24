@@ -52,6 +52,12 @@ public static class FYPTourneyProPermissions
         public const string Save = Default + ".Save";
     }
 
+    public static class AppForms
+    {
+        public const string Default = GroupName + ".AppForms";
+        public const string Approve = Default + ".Approve";
+        public const string Reject = Default + ".Reject";
+    }
 
 
 }

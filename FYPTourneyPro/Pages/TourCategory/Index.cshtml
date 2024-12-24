@@ -46,12 +46,12 @@
                         <p><strong>Is Malaysian:</strong> @(Model.Tournament.isMalaysian ? "Yes" : "No")</p>
                         <p><strong>Rules and Regulations:</strong> @Model.Tournament.RulesAndRegulations</p>
                     </div>
-                 
-
+                    <h4>Category</h4>
+                    <button id="createCategoryButton" class="btn btn-secondary mb-3">Create Category</button>
 
                     <!-- FORM FOR NEW CATEGORY STARTS-->
-                    <h4>Category</h4>
-                    <form id="NewCategoryForm" class="row row-cols-lg-auto g-3 align-items-center mb-4">
+                    
+                    <form id="NewCategoryForm" class="row row-cols-lg-auto g-3 align-items-center mb-4" style="display: none;">
                         
                         <div class="col-12">
                             <input type="hidden" id="TournamentId" value="@Model.TournamentId" />

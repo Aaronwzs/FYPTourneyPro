@@ -25,6 +25,11 @@ public class FYPTourneyProPermissionDefinitionProvider : PermissionDefinitionPro
         todoItemPermission.AddChild(FYPTourneyProPermissions.TodoItems.Delete, L("Permission:TodoItems.Delete"));
 
 
+        var tournamentPermission = myGroup.AddPermission(FYPTourneyProPermissions.Tournaments.Default, L("Permission:Tournaments"));
+        tournamentPermission.AddChild(FYPTourneyProPermissions.Tournaments.Create, L("Permission:Tournaments.Create"));
+        tournamentPermission.AddChild(FYPTourneyProPermissions.Tournaments.Edit, L("Permission:Tournaments.Edit"));
+        tournamentPermission.AddChild(FYPTourneyProPermissions.Tournaments.Delete, L("Permission:Tournaments.Delete"));
+
 
         var categoryPermission = myGroup.AddPermission(FYPTourneyProPermissions.Categories.Default, L("Permission:Categories"));
         categoryPermission.AddChild(FYPTourneyProPermissions.Categories.Create, L("Permission:Categories.Create")); 
@@ -35,6 +40,10 @@ public class FYPTourneyProPermissionDefinitionProvider : PermissionDefinitionPro
 
         var MatchScorePermission = myGroup.AddPermission(FYPTourneyProPermissions.MatchScores.Default, L("Permission:MatchScores"));
         MatchScorePermission.AddChild(FYPTourneyProPermissions.MatchScores.Save, L("Permission:MatchScores.Save"));
+
+        var AppFormPermission = myGroup.AddPermission(FYPTourneyProPermissions.AppForms.Default, L("Permision:AppForms"));
+        AppFormPermission.AddChild(FYPTourneyProPermissions.AppForms.Approve, L("Permission:AppForms.Approve"));
+        AppFormPermission.AddChild(FYPTourneyProPermissions.AppForms.Reject, L("Permission:AppForms.Reject"));
     }
 
     private static LocalizableString L(string name)

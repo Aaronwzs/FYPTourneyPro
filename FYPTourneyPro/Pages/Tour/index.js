@@ -1,6 +1,15 @@
 ﻿$(function () {
 
-   
+    // Collapse and uncollapse tournament creation form
+    $('#createTournamentButton').on('click', function () {
+        const tournamentForm = document.getElementById('NewTournamentForm');
+        if (tournamentForm.style.display === 'none' || tournamentForm.style.display === '') {
+            tournamentForm.style.display = 'block'; // Show the form
+        } else {
+            tournamentForm.style.display = 'none'; // Hide the form
+        }
+    });
+
 
     // Deleting a Tournament
     $('#TournamentList').on('click', 'li i', function () {

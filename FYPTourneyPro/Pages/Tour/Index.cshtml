@@ -1,5 +1,16 @@
 ﻿@page
+@using FYPTourneyPro.Permissions
+@using Microsoft.AspNetCore.Authorization
+@using Volo.Abp.Authorization
+@using Volo.Abp.Users
 @model FYPTourneyPro.Pages.Tour.IndexModel
+
+@inject IAuthorizationService AuthorizationService
+
+@{
+    var canCreateTournament = await AuthorizationService.IsGrantedAsync(FYPTourneyProPermissions.Tournaments.Create);
+}
+
 
 @section styles {
     <abp-style src="/Pages/Tour/index.css" />
@@ -18,45 +29,50 @@
         <abp-card-body>
             @if (User.Identity.IsAuthenticated) {
             <!-- FORM FOR NEW TOURNAMENT -->
-           
-            <form id="NewTournamentForm" class="row row-cols-lg-auto g-3 align-items-center">
-                <div class="col-12">
-                    <input id="TournamentName" type="text" class="form-control" placeholder="Tournament Name" required>
-                </div>
-                <div class="col-12">
-                    <textarea id="TournamentDescription" class="form-control" placeholder="Description" required></textarea>
-                </div>
-                <div class="col-md-6">
-                    <input id="RegistrationStartDate" type="date" class="form-control" placeholder="RegStartDate" required>
-                </div>
-                <div class="col-md-6">
-                    <input id="RegistrationEndDate" type="date" class="form-control" placeholder="RegEndDate"  required>
-                </div>
-                <div class="col-md-6">
-                    <input id="StartDate" type="date" class="form-control" placeholder="StartDate" required>
-                </div>
-                <div class="col-md-6">
-                    <input id="EndDate" type="date" class="form-control" placeholder="EndDate" required>
-                </div>
-                    <div class="col-md-6">
-                        <input id="HotlineNum" type="text" class="form-control" placeholder="Hotline Number" required>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-check-label" for="IsMalaysian">Is Malaysian</label>
-                        <input id="IsMalaysian" type="checkbox" class="form-check-input">
-                    </div>
-                    <div class="col-md-12">
-                        <label class="form-check-label" for="RulesAndRegulations">Rules and Regulations</label>
-                        <textarea id="RulesAndRegulations" class="form-control" placeholder="Enter Rules and Regulations" required></textarea>
-                    </div>
 
-                <div class="col-12">
-                    <button type="submit" class="btn btn-primary">Add Tournament</button>
-                </div>
+                <button id="createTournamentButton" class="btn btn-secondary mb-3">Create Tournament</button>
+
+                    <form id="NewTournamentForm" class="row row-cols-lg-auto g-3 align-items-center" style="display: none;">
+                        <div class="col-12">
+                            <input id="TournamentName" type="text" class="form-control" placeholder="Tournament Name" required>
+                        </div>
+                        <div class="col-12">
+                            <textarea id="TournamentDescription" class="form-control" placeholder="Description" required></textarea>
+                        </div>
+                        <div class="col-md-6">
+                            <input id="RegistrationStartDate" type="date" class="form-control" placeholder="RegStartDate" required>
+                        </div>
+                        <div class="col-md-6">
+                            <input id="RegistrationEndDate" type="date" class="form-control" placeholder="RegEndDate" required>
+                        </div>
+                        <div class="col-md-6">
+                            <input id="StartDate" type="date" class="form-control" placeholder="StartDate" required>
+                        </div>
+                        <div class="col-md-6">
+                            <input id="EndDate" type="date" class="form-control" placeholder="EndDate" required>
+                        </div>
+                        <div class="col-md-6">
+                            <input id="HotlineNum" type="text" class="form-control" placeholder="Hotline Number" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-check-label" for="IsMalaysian">Is Malaysian</label>
+                            <input id="IsMalaysian" type="checkbox" class="form-check-input">
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-check-label" for="RulesAndRegulations">Rules and Regulations</label>
+                            <textarea id="RulesAndRegulations" class="form-control" placeholder="Enter Rules and Regulations" required></textarea>
+                        </div>
+
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary">Add Tournament</button>
+                        </div>
 
 
-            </form>
-            }
+                    </form>
+                }
+               
+                
+            
             else
             {
                 <div class="alert alert-danger">
@@ -70,7 +86,7 @@
                     <li data-id="@tournament.Id">
                         <i class="fa fa-trash-o"></i>
                         <button class="btn btn-warning btn-sm edit-tournament">
-                            <i class="fa fa-edit"></i> Edit
+                            <i class="fa fa-edit"></i> 
                         </button>
                         <a href="javascript:void(0)" class="tournament-link">@tournament.Name</a>
                     </li>
