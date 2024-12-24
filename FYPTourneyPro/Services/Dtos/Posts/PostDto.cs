@@ -14,6 +14,6 @@ namespace FYPTourneyPro.Services.Dtos.Posts
 
         public Guid CreatedByUserId { get; set; }
 
-        public string CreatedByUsername { get; set; }
+        public string? CreatedByUsername { get; set; }
     }
 }

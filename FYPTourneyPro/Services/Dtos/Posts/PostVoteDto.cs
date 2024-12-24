@@ -15,5 +15,7 @@ namespace FYPTourneyPro.Services.Dtos.Posts
         public int Score { get; set; }
         public DateTime CreationTime { get; set; } // Timestamp
         public Guid CreatorId { get; set; } //Creator id    
+
+        public string Creator { get; set; }
     }
 }

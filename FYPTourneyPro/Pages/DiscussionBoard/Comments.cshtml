@@ -14,36 +14,120 @@
     color: black;
     border: 2px solid black;
 }
-</style>
-<h2>@Model.Post.Title</h2>
-<p>@Model.Post.Content</p>
-<div>
-    <!-- Display the upvote count and button -->
-    <button id="upvoteButton" class="btn btn-success" onclick="vote('Upvote', '@Model.Post.Id')">
-        👍 Upvote (@Model.Upvotes)
-    </button>
 
-    <!-- Display the downvote count and button -->
-    <button id="downvoteButton" class="btn btn-danger" onclick="vote('Downvote', '@Model.Post.Id')">
-        👎 Downvote (@Model.Downvotes)
-    </button>
-</div>
-
-<h3>Comments</h3>
-<ul>
-    @foreach (var comment in Model.Comments)
-    {
-        <li>
-            <p>@comment.Content</p>
-            <p><small>By: @comment.CreatedByUserId</small></p>
-        </li>
+    .card {
+        border: none;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
     }
-</ul>
 
-<!-- Form to Add a New Comment -->
-<h3>Add a Comment</h3>
-<form id="addCommentForm">
-    <textarea id="newCommentContent" placeholder="Write your comment..." rows="4" class="form-control"></textarea>
-    <button type="submit" class="btn btn-primary mt-2">Add Comment</button>
-</form>
+    .card-header {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #343a40;
+        border-bottom: none;
+        background-color: #f8f9fa;
+        border-radius: 10px 10px 0 0;
+    }
+
+    .card-body {
+        padding: 1.5rem;
+    }
+
+    .vote-buttons {
+        display: flex;
+        justify-content: flex-start;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .btn-vote {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+        .btn-vote span {
+            font-weight: bold;
+        }
+
+    .comments-section {
+        margin-top: 20px;
+    }
+
+    .comment-card {
+        border: none;
+        border-left: 4px solid #007bff;
+        background-color: #f9f9f9;
+        margin-bottom: 10px;
+        padding: 15px;
+        border-radius: 5px;
+    }
+
+    .comment-author {
+        font-size: 0.9rem;
+        color: #6c757d;
+        margin-bottom: 5px;
+    }
+
+    .add-comment-form textarea {
+        resize: none;
+    }
+</style>
+
+<div class="card">
+    <div class="card-header">
+        @Model.Post.Title
+    </div>
+    <div class="card-body">
+        <p>@Model.Post.Content</p>
+        <p class="text-muted">
+            Posted by <strong>@Model.Post.CreatedByUsername</strong> on
+            <span>@Model.Post.CreationTime.ToString("MMMM dd, yyyy HH:mm")</span>
+        </p>
+
+        <div class="vote-buttons">
+            <!-- Display the upvote button -->
+            <button id="upvoteButton" class="btn btn-success btn-vote" onclick="vote('Upvote', '@Model.Post.Id')">
+                👍 <span id="upvoteCount"></span>
+            </button>
+
+            <!-- Display the downvote button -->
+            <button id="downvoteButton" class="btn btn-danger btn-vote" onclick="vote('Downvote', '@Model.Post.Id')">
+                👎 <span id="downvoteCount"></span>
+            </button>
+        </div>
+
+        <div class="comments-section">
+            <h5>Comments</h5>
+            <div id="commentsList">
+                @if (Model.Comments.Any())
+                {
+                    @foreach (var comment in Model.Comments)
+                    {
+                        <div class="comment-card">
+                            <div class="comment-author">
+                                <strong>@comment.CreatedByUsername</strong>
+                                <span class="text-muted">on @comment.CreationTime.ToString("MMMM dd, yyyy HH:mm")</span>
+                            </div>
+                            <p>@comment.Content</p>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <p>No comments yet. Be the first to comment!</p>
+                }
+            </div>
+        </div>
+
+        <div class="add-comment-form mt-4">
+            <h5>Add a Comment</h5>
+            <form id="addCommentForm">
+                <textarea id="newCommentContent" class="form-control mb-2" placeholder="Write your comment..." rows="4"></textarea>
+                <button type="submit" class="btn btn-primary">Add Comment</button>
+            </form>
+        </div>
+    </div>
+</div>
 

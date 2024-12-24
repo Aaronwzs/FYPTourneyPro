@@ -8,5 +8,8 @@
         public Guid CreatedByUserId { get; set; }
         public int? Upvotes { get; set; }
         public int? Downvotes { get; set; }
+
+        public DateTime CreationTime { get; set; } // Add this property
+        public string? CreatedByUsername { get; set; }
     }
 }

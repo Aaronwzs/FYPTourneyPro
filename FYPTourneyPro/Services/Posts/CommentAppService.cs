@@ -1,8 +1,10 @@
 ﻿using FYPTourneyPro.Entities.DiscussionBoard;
 using FYPTourneyPro.Services.Dtos.Comments;
 using FYPTourneyPro.Services.Dtos.Posts;
+using Microsoft.AspNetCore.Identity;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.Identity;
 using Volo.Abp.Users;
 
 namespace FYPTourneyPro.Services.Posts
@@ -11,12 +13,13 @@ namespace FYPTourneyPro.Services.Posts
     {
             private readonly IRepository<Comment, Guid> _commentRepository;
             private readonly ICurrentUser _currentUser;
-
-            public CommentAppService(IRepository<Comment, Guid> postRepository, ICurrentUser currentUser)
+            private readonly IIdentityUserRepository _userRepository;
+        public CommentAppService(IRepository<Comment, Guid> postRepository, ICurrentUser currentUser, IIdentityUserRepository userRepository)
             {
                 _commentRepository = postRepository;
                 _currentUser = currentUser;
-            }
+                _userRepository = userRepository;
+             }
 
             public async Task<CommentDto> CreateAsync(CommentDto input)
             {
@@ -24,8 +27,6 @@ namespace FYPTourneyPro.Services.Posts
                 {
                     PostId = input.PostId,
                     Content = input.Content,
-                    Upvotes = 0,
-                    Downvotes = 0,
                     CreatedByUserId = _currentUser.Id.Value, // Get UserId from ICurrentUser}
                 };
 
@@ -42,13 +43,24 @@ namespace FYPTourneyPro.Services.Posts
             public async Task<List<CommentDto>> GetAllAsync(Guid postId)
             {
                 var comments = await _commentRepository.GetListAsync();
-            return comments
-                .Where(c => c.PostId == postId)
-                .Select(c => new CommentDto
+
+                var result = new List<CommentDto>();
+           
+            foreach (var comment in comments.Where(c => c.PostId == postId))
+            {
+                // Fetch the username for the comment's creator
+                var user = await _userRepository.GetAsync(comment.CreatedByUserId);
+
+                // Map the comment to a CommentDto
+                result.Add(new CommentDto
                 {
-                    Content = c.Content,
-                    CreatedByUserId = c.CreatedByUserId
-                }).ToList();
+                    Content = comment.Content,
+                    CreatedByUsername = user.UserName,
+                    CreationTime = user.CreationTime
+                });
+            }
+
+            return result;
         }
 
             public async Task<List<CommentDto>> GetListAsyncUid()

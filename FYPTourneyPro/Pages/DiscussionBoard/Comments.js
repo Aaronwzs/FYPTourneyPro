@@ -1,4 +1,9 @@
-﻿// Add a new comment
+﻿// Extract the postId from the URL
+const urlParams = new URLSearchParams(window.location.search);
+const postId = urlParams.get('postId'); // Get the postId query parameter
+
+
+// Add a new comment
 $('#addCommentForm').submit(function (e) {
     e.preventDefault();
 
@@ -10,10 +15,6 @@ $('#addCommentForm').submit(function (e) {
         alert('Please fill all the required fields!');
         return;
     }
-
-    // Extract the postId from the URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const postId = urlParams.get('postId'); // Get the postId query parameter
 
     // Validate postId
     if (!postId) {
@@ -27,7 +28,6 @@ $('#addCommentForm').submit(function (e) {
         Content: content,
     };
 
-
     // Call the RegistrationAppService to create a new registration
     fYPTourneyPro.services.posts.comment.create(commentData).then((result) => {
         // On success, show an alert and reset the form
@@ -40,7 +40,7 @@ $('#addCommentForm').submit(function (e) {
 });
 
 //Button vote and downvote click
-function vote(voteType, postId) {
+async function vote(voteType, postId) {
     console.log(`Vote Type: ${voteType}, Post ID: ${postId}`);
     var voteData = {
         PostId: postId,
@@ -51,33 +51,42 @@ function vote(voteType, postId) {
     if (voteType === 'Upvote') {
         if (upvoteButton.classList.contains('active')) {
             // If Upvote is already active, cancel the vote
-            fYPTourneyPro.services.posts.postVote.deleteVote(postId).then((result) => {
+            await fYPTourneyPro.services.posts.postVote.deleteVote(postId).then((result) => {
                 upvoteButton.classList.remove('active'); // Remove active state
-                alert('Upvote cancelled!');
             });
         } else {
             // Add Upvote and deactivate Downvote
-            fYPTourneyPro.services.posts.postVote.createOrUpdateVote(voteData).then((result) => {
+            await fYPTourneyPro.services.posts.postVote.createOrUpdateVote(voteData).then((result) => {
                 upvoteButton.classList.add('active'); // Add active state to Upvote
                 downvoteButton.classList.remove('active'); // Remove active state from Downvote
-                alert('Upvoted!');
             });
         }
     } else if (voteType === 'Downvote') {
         if (downvoteButton.classList.contains('active')) {
             // If Downvote is already active, cancel the vote
-            fYPTourneyPro.services.posts.postVote.deleteVote(postId).then((result) => {
+            await fYPTourneyPro.services.posts.postVote.deleteVote(postId).then((result) => {
                 downvoteButton.classList.remove('active'); // Remove active state
-                alert('Downvote cancelled!');
             });
         } else {
             // Add Downvote and deactivate Upvote
-            fYPTourneyPro.services.posts.postVote.createOrUpdateVote(voteData).then((result) => {
+            await fYPTourneyPro.services.posts.postVote.createOrUpdateVote(voteData).then((result) => {
                 downvoteButton.classList.add('active'); // Add active state to Downvote
                 upvoteButton.classList.remove('active'); // Remove active state from Upvote
-                alert('Downvoted!');
             });
         }
- 
+
     }
+
+    getVoteCounts(postId);
+
+    };
+
+function getVoteCounts(postId) {
+    fYPTourneyPro.services.posts.postVote.getVoteCount(postId).then((result) => {
+        console.log(result);
+        document.getElementById('upvoteCount').innerHTML = result.upvotes;
+        document.getElementById('downvoteCount').innerHTML = result.downvotes;
+    });
 }
+
+getVoteCounts(postId);

@@ -21,8 +21,7 @@ namespace FYPTourneyPro.Entities.DiscussionBoard
         public Post Post { get; set; }
         public string Content { get; set; }
         public Guid CreatedByUserId { get; set; }
-        public int Upvotes { get; set; }
-        public int Downvotes { get; set; }
+        public DateTime CreationTime { get; set; } // Add this property
     }
 
 }

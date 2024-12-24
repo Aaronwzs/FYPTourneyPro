@@ -53,12 +53,6 @@ namespace FYPTourneyPro.Pages.DiscussionBoard
 
             YourComments = await _commentAppService.GetListAsyncUid();
 
-            var (upvotes, downvotes) = await _postVoteAppService.GetVoteCountAsync(postId);
-
-            Upvotes = upvotes;
-            Downvotes = downvotes;
-
-            test = postId;
         }
     }
 }

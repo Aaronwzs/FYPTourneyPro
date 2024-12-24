@@ -81,12 +81,16 @@ namespace FYPTourneyPro.Services.Posts
         }
 
         // Count Votes by Type
-        public async Task<(int upvotes, int downvotes)> GetVoteCountAsync(Guid postId)
+        public async Task<PostDto> GetVoteCountAsync(Guid postId)
         {
             var upvotes = await _postVoteRepository.CountAsync(v => v.PostId == postId && v.VoteType == "Upvote");
             var downvotes = await _postVoteRepository.CountAsync(v => v.PostId == postId && v.VoteType == "Downvote");
 
-            return (upvotes, downvotes);
+            return new PostDto
+            {
+                Upvotes = upvotes,
+                Downvotes = downvotes
+            };
         }
 
         public async Task<List<PostVoteDto>> GetFilteredPostsAsync(string filterType)
@@ -128,7 +132,8 @@ namespace FYPTourneyPro.Services.Posts
                             CreationTime = p.Post.CreationTime,
                             Upvotes = p.Upvotes,
                             Downvotes = p.Downvotes,
-                            Score = p.Score
+                            Score = p.Score,
+                            Creator = p.Post.CreatedByUsername
                         }).ToList();
 
 
@@ -144,7 +149,8 @@ namespace FYPTourneyPro.Services.Posts
                             CreationTime = p.Post.CreationTime,
                             Upvotes = p.Upvotes,
                             Downvotes = p.Downvotes,
-                            Score = p.Score
+                            Score = p.Score,
+                            Creator = p.Post.CreatedByUsername
                         })
                         .ToList();
 
@@ -159,7 +165,8 @@ namespace FYPTourneyPro.Services.Posts
                             CreationTime = p.Post.CreationTime,
                             Upvotes = p.Upvotes,
                             Downvotes = p.Downvotes,
-                            Score = p.Score
+                            Score = p.Score,
+                            Creator = p.Post.CreatedByUsername
                         })
                         .ToList();
                 default:

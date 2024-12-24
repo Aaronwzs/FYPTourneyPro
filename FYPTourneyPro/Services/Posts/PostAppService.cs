@@ -8,6 +8,7 @@ using OpenQA.Selenium.DevTools.V128.Input;
 using Volo.Abp.Identity;
 using Volo.Abp.Users;
 using FYPTourneyPro.Services.Dtos.Organizer;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 
 namespace FYPTourneyPro.Services.Posts
@@ -16,11 +17,14 @@ namespace FYPTourneyPro.Services.Posts
     {
         private readonly IRepository<Post, Guid> _postRepository;
         private readonly ICurrentUser _currentUser;
+        private readonly IRepository<IdentityUser, Guid> _userRepository;
 
-        public PostAppService(IRepository<Post, Guid> postRepository, ICurrentUser currentUser)
+
+        public PostAppService(IRepository<Post, Guid> postRepository, ICurrentUser currentUser, IRepository<IdentityUser, Guid> userRepository)
         {
             _postRepository = postRepository;
             _currentUser = currentUser;
+            _userRepository = userRepository;
         }
 
         public async Task<PostDto> CreateAsync(PostDto input)
@@ -49,14 +53,21 @@ namespace FYPTourneyPro.Services.Posts
         public async Task<List<PostDto>> GetAllAsync()
         {
             var posts = await _postRepository.GetListAsync();
-            return posts
-                .Select(post => new PostDto
+
+            var postDtos = new List<PostDto>();
+
+            foreach (var post in posts)
+            {
+                var userFound = await _userRepository.GetAsync(post.CreatedByUserId);
+
+                var postDto = new PostDto
                 {
                     Id = post.Id,
                     Title = post.Title,
                     Content = post.Content,
                     CreationTime = post.CreationTime,
                     CreatedByUserId = post.CreatedByUserId,
+                    CreatedByUsername = userFound.UserName, // Populate username here
                     Upvotes = post.Upvotes,
                     Downvotes = post.Downvotes,
                     Comments = post.Comments.Select(comment => new CommentDto
@@ -64,9 +75,14 @@ namespace FYPTourneyPro.Services.Posts
                         Id = comment.Id,
                         PostId = comment.PostId,
                         Content = comment.Content,
-                        CreatedByUserId = comment.CreatedByUserId,
+                        CreatedByUserId = comment.CreatedByUserId
                     }).ToList()
-                }).ToList();
+                };
+
+                postDtos.Add(postDto); // Add the populated PostDto to the list
+            }
+
+            return postDtos;
         }
 
         public async Task<PostDto> GetAsync(Guid id)
@@ -117,7 +133,8 @@ namespace FYPTourneyPro.Services.Posts
                 {
                     Id = p.Id,
                     Title = p.Title,
-                    Content = p.Content
+                    Content = p.Content,
+                    CreationTime = p.CreationTime
                 }).ToList();
         }
 
@@ -125,40 +142,6 @@ namespace FYPTourneyPro.Services.Posts
         {
             await _postRepository.DeleteAsync(id);
         }
-
-        //public async Task UpvotePostAsync(Guid postId)
-        //{
-        //    var post = await _postRepository.GetAsync(postId);
-        //    post.Upvotes++;
-        //    await _postRepository.UpdateAsync(post);
-        //}
-
-        //public async Task DownvotePostAsync(Guid postId)
-        //{
-        //    var post = await _postRepository.GetAsync(postId);
-        //    post.Downvotes++;
-        //    await _postRepository.UpdateAsync(post);
-        //}
-        //public async Task<List<PostDto>> GetHotPostsAsync()
-        //{
-        //    var posts = await _postRepository.GetListAsync();
-        //    var hotPosts = posts.OrderByDescending(p => (p.Upvotes - p.Downvotes) / (DateTime.Now - p.CreationTime).TotalHours).ToList();
-        //    return ObjectMapper.Map<List<Post>, List<PostDto>>(hotPosts);
-        //}
-
-        //public async Task<List<PostDto>> GetBestPostsAsync()
-        //{
-        //    var posts = await _postRepository.GetListAsync();
-        //    var bestPosts = posts.OrderByDescending(p => p.Upvotes - p.Downvotes).ToList();
-        //    return ObjectMapper.Map<List<Post>, List<PostDto>>(bestPosts);
-        //}
-
-        //public async Task<List<PostDto>> GetLatestPostsAsync()
-        //{
-        //    var posts = await _postRepository.GetListAsync();
-        //    var latestPosts = posts.OrderByDescending(p => p.CreationTime).ToList();
-        //    return ObjectMapper.Map<List<Post>, List<PostDto>>(latestPosts);
-        //}
     }
 }
 
