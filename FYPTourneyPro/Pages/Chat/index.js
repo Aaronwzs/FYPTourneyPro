@@ -5,12 +5,12 @@ const createGroupChatForm = document.getElementById("createGroupChatForm");
 createChatButton.addEventListener("click", () => {
     if (createGroupChatForm.style.display === "none") {
         createGroupChatForm.style.display = "block";
-        createChatButton.textContent = "Cancel Group Creation";
+        createChatButton.textContent = "Cancel Chat Creation";
         createChatButton.classList.add("cancel");
         loadParticipants();
     } else {
         createGroupChatForm.style.display = "none";
-        createChatButton.textContent = "Create Group Chat";
+        createChatButton.textContent = "Create Chat";
         createChatButton.classList.remove("cancel");
     }
 });
@@ -61,6 +61,22 @@ searchInput.addEventListener("input", (event) => {
     loadParticipants(event.target.value);
 });
 
+//Select only 1 
+document.getElementById('participantsContainer').addEventListener('change', function () {
+    const selectedParticipants = Array.from(
+        document.querySelectorAll("#participantsContainer input:checked")
+    ).map((checkbox) => checkbox.value);
+    const groupNameField = document.getElementById('groupName');
+
+    if (selectedParticipants.length === 1) {
+        // Disable the group name field if only one participant is selected
+        groupNameField.disabled = true;
+        groupNameField.value = ''; // Clear the group name field
+    } else {
+        // Enable the group name field if more than one participant is selected
+        groupNameField.disabled = false;
+    }
+});
 // Handle Form Submission
 document.getElementById("createGroupForm").addEventListener("submit", (event) => {
         event.preventDefault(); // Prevent page refresh
@@ -74,11 +90,12 @@ document.getElementById("createGroupForm").addEventListener("submit", (event) =>
         if (!groupName || selectedParticipants.length === 0) {
             alert("Please enter a group name and select at least one participant.");
             return;
-        }
+    }
 
     // Simulate API Call
     fYPTourneyPro.services.chat.chat.createGroupChat(groupName, selectedParticipants).then((result) => {
         if (result.isDuplicate) {
+            console.log(result);
             // If the chat room already exists
             alert(`Chat room already exists with ID: ${result.id}`);
         } else {
@@ -86,13 +103,6 @@ document.getElementById("createGroupForm").addEventListener("submit", (event) =>
             alert(`New chat room created with ID: ${result.id}`);
         }
     });
-
-        console.log("Group Created:", { groupName, selectedParticipants });
-        alert(
-            `Group "${groupName}" created with participants: ${selectedParticipants.join(
-                ", "
-            )}`
-        );
 
         // Reset Form and Close
         document.getElementById("createGroupForm").reset();

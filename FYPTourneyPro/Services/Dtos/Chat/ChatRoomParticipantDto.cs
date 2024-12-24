@@ -7,9 +7,9 @@
 
         public Guid ChatRoomId { get; set; }  // The ID of the chat room the participant is in
         public Guid UserId { get; set; }  // The ID of the user participating in the chat room
-        public string LastMessage { get; set; }
+        public string? LastMessage { get; set; }
     
-        public string Username { get; set; }
+        public string? Username { get; set; }
 
         public DateTime CreationTime { get; set; }
 

@@ -2,6 +2,7 @@
 using FYPTourneyPro.Services.Dtos.Comments;
 using FYPTourneyPro.Services.Dtos.Posts;
 using Microsoft.AspNetCore.Identity;
+using OpenQA.Selenium.DevTools.V128.Animation;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Identity;
@@ -14,6 +15,7 @@ namespace FYPTourneyPro.Services.Posts
             private readonly IRepository<Comment, Guid> _commentRepository;
             private readonly ICurrentUser _currentUser;
             private readonly IIdentityUserRepository _userRepository;
+
         public CommentAppService(IRepository<Comment, Guid> postRepository, ICurrentUser currentUser, IIdentityUserRepository userRepository)
             {
                 _commentRepository = postRepository;
@@ -28,6 +30,7 @@ namespace FYPTourneyPro.Services.Posts
                     PostId = input.PostId,
                     Content = input.Content,
                     CreatedByUserId = _currentUser.Id.Value, // Get UserId from ICurrentUser}
+                    CreationTime = DateTime.Now
                 };
 
                 var comment = await _commentRepository.InsertAsync(comments);
@@ -56,7 +59,8 @@ namespace FYPTourneyPro.Services.Posts
                 {
                     Content = comment.Content,
                     CreatedByUsername = user.UserName,
-                    CreationTime = user.CreationTime
+                    CreationTime = comment.CreationTime,
+                    CreatedByUserId = comment.CreatedByUserId
                 });
             }
 

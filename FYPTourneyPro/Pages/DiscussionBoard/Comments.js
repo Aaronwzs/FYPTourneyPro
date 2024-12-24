@@ -90,3 +90,16 @@ function getVoteCounts(postId) {
 }
 
 getVoteCounts(postId);
+
+
+function navigateToChat(userId) {
+    const participantIds = [userId];
+    console.log("boboga");
+    fYPTourneyPro.services.chat.chat.createGroupChat("", participantIds).then((result) => {
+        console.log("hihihihi");
+        console.log(result);
+        window.location.href = `/Chat/Chatroom?chatRoomId=${result.id}`;
+    });
+    
+
+}

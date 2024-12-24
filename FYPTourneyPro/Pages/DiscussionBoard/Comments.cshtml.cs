@@ -36,6 +36,7 @@ namespace FYPTourneyPro.Pages.DiscussionBoard
         public int Upvotes { get; set; }
         public int Downvotes { get; set; }
         public Guid test { get; set; }
+
         
 
         public async Task OnGetAsync(Guid postId)

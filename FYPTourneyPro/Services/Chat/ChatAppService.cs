@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualBasic;
 using FYPTourneyPro.Entities.Organizer;
 using JetBrains.Annotations;
+using FYPTourneyPro.Entities.UserM;
 
 
 
@@ -24,14 +25,16 @@ namespace FYPTourneyPro.Services.Chat
         private readonly IRepository<ChatMessage, Guid> _chatMessageRepository;
         private readonly IRepository<ChatRoomParticipant, Guid> _chatRoomParticipantRepository;
         private readonly IRepository<IdentityUser, Guid> _userRepository;
+        private readonly IRepository<CustomUser, Guid> _custUserRepository;
 
         public ChatAppService(IRepository<ChatRoom, Guid> chatRoomRepository, IRepository<ChatRoomParticipant, Guid> chatRoomParticipantRepository, IRepository<IdentityUser, Guid> userRepository
-            , IRepository<ChatMessage, Guid> chatMessageRepository)
+            , IRepository<ChatMessage, Guid> chatMessageRepository, IRepository<CustomUser, Guid> custUserRepository)
         {
             _chatRoomRepository = chatRoomRepository;
             _chatRoomParticipantRepository = chatRoomParticipantRepository;
             _userRepository = userRepository;
             _chatMessageRepository = chatMessageRepository;
+            _custUserRepository = custUserRepository;
         }
 
         public async Task<List<IdentityUser>> GetAllUsersAsync()
@@ -73,7 +76,7 @@ namespace FYPTourneyPro.Services.Chat
         //    }
         //}
 
-        public async Task<ChatRoomDto> CreateGroupChatAsync(string groupName, List<Guid> participantIds)
+        public async Task<ChatRoomDto> CreateGroupChatAsync(string? groupName, List<Guid> participantIds)
         {
             bool isDuplicate;
             try
@@ -87,22 +90,55 @@ namespace FYPTourneyPro.Services.Chat
                 }
                 var existingChatRooms = await _chatRoomParticipantRepository.GetListAsync(cp => participantIds.Contains(cp.UserId));
 
-                var duplicateChatRoom = existingChatRooms
-                   .GroupBy(cp => cp.ChatRoomId) // Group by chat room ID
-                   .FirstOrDefault(g =>
-                       g.Count() == participantIds.Count && // Match participant count
-                       participantIds.All(pid => g.Any(p => p.UserId == pid)) // Check if all participant IDs match
-                   )?.Key;
+                var chatRoomIds = existingChatRooms.Select(cr => cr.ChatRoomId).Distinct().ToList();
 
 
-                if (duplicateChatRoom.HasValue)
+                //var duplicateChatRoom = existingChatRooms
+                //   .GroupBy(cp => cp.ChatRoomId) // Group by chat room ID
+                //   .FirstOrDefault(g =>
+                //       g.Count() == participantIds.Count && // Match participant count
+                //       participantIds.All(pid => g.Any(p => p.UserId == pid)) // Check if all participant IDs match
+                //   )?.Key;
+                
+
+                foreach (var crIds in chatRoomIds)
                 {
-                    // If a duplicate exists, return its ID
-                    return new ChatRoomDto
+                    var chatRoomParticipants = await _chatRoomParticipantRepository.GetListAsync(cp => cp.ChatRoomId == crIds);
+
+                    var userIdList = chatRoomParticipants.Select(cr => cr.UserId).ToList(); 
+
+                    if(userIdList.Count == participantIds.Count && !participantIds.Except(userIdList).Any())
                     {
-                        Id = duplicateChatRoom.Value,
-                        isDuplicate = true
-                    };
+                        return new ChatRoomDto
+                        {
+                            Id = crIds,
+                            isDuplicate = true
+                        };
+                    }
+
+                }
+
+
+                //if (duplicateChatRoom.HasValue)
+                //{
+                //    // If a duplicate exists, return its ID
+                //    return new ChatRoomDto
+                //    {
+                //        Id = duplicateChatRoom.Value,
+                //        isDuplicate = true
+                //    };
+                //} // If only two participants, use their names as the group name
+
+                // If the group name is empty and only two participants, use their names
+                if (participantIds.Count == 2)
+                {
+                    var participants = await _userRepository.GetListAsync(user => participantIds.Contains(user.Id));
+
+                    var participantsIds = participants.Select(p => p.Id).ToList(); 
+
+                    var participantFound = await _custUserRepository.GetListAsync(user => participantsIds.Contains(user.UserId));
+
+                        groupName = $"{participantFound[0].FullName} and {participantFound[1].FullName}";
                 }
 
                 // Create the new chat room
@@ -157,13 +193,12 @@ namespace FYPTourneyPro.Services.Chat
                 
                 var lastMessage = lastChatMessage.Where(cm => cm.ChatRoomId == participant.ChatRoomId).OrderByDescending(msg => msg.CreationTime).FirstOrDefault();
 
-                
-                if (lastMessage == null)
+                var lastMessageUser = (IdentityUser)null;
 
+                if (lastMessage != null)
                 {
-                    continue; // Skip this participant
+                    lastMessageUser = await _userRepository.GetAsync(lastMessage.CreatorId.Value);
                 }
-                var lastMessageUser = await _userRepository.GetAsync(lastMessage.CreatorId.Value);
 
                 // Manually combine ChatRoom and ChatRoomParticipant information
                 chatRoomParticipantData.Add(new ChatRoomParticipantDto
@@ -171,9 +206,9 @@ namespace FYPTourneyPro.Services.Chat
                     Id = participant.Id,                          // From ChatRoomParticipant
                     ChatRoomId = participant.ChatRoomId,          // From ChatRoomParticipant
                     Name = chatRoom.Name,         // From ChatRoom (Name)
-                    LastMessage = lastMessage?.Content,
-                    Username = lastMessageUser.UserName,
-                    CreationTime = lastMessage.CreationTime
+                    LastMessage = lastMessage?.Content ?? "",
+                    Username = lastMessageUser?.UserName ?? "No messages yet",
+                    CreationTime = lastMessage?.CreationTime ?? chatRoom.CreationTime
                 });
             }
 

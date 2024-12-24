@@ -100,15 +100,26 @@
 
         <div class="comments-section">
             <h5>Comments</h5>
-            <div id="commentsList">
+            <div id="commentsList" style="max-height: 450px; overflow-y: auto; border: 1px solid #ddd; padding: 10px;">
                 @if (Model.Comments.Any())
                 {
-                    @foreach (var comment in Model.Comments)
+                    @foreach (var comment in Model.Comments.OrderByDescending(c => c.CreationTime))
                     {
                         <div class="comment-card">
                             <div class="comment-author">
-                                <strong>@comment.CreatedByUsername</strong>
-                                <span class="text-muted">on @comment.CreationTime.ToString("MMMM dd, yyyy HH:mm")</span>
+                                @if (comment.CreatedByUserId == Model.UserId) // Check if it's the logged-in user
+                                {
+                                    <span style="font-weight: bold; color: #6c757d;">@comment.CreatedByUsername</span>
+                                    <span class="text-muted">on @comment.CreationTime.ToString("MMMM dd, yyyy HH:mm")</span>
+                                }
+                                else
+                                {
+                                    <span style="font-weight: bold; color: #007bff; cursor: pointer;"
+                                          onclick="navigateToChat('@comment.CreatedByUserId')">
+                                        @comment.CreatedByUsername
+                                    </span>
+                                    <span class="text-muted">on @comment.CreationTime.ToString("MMMM dd, yyyy HH:mm")</span>
+                                }
                             </div>
                             <p>@comment.Content</p>
                         </div>

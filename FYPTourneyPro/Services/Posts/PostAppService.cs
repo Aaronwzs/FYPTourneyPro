@@ -19,7 +19,6 @@ namespace FYPTourneyPro.Services.Posts
         private readonly ICurrentUser _currentUser;
         private readonly IRepository<IdentityUser, Guid> _userRepository;
 
-
         public PostAppService(IRepository<Post, Guid> postRepository, ICurrentUser currentUser, IRepository<IdentityUser, Guid> userRepository)
         {
             _postRepository = postRepository;
