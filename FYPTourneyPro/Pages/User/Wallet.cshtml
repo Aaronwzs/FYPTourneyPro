@@ -1,0 +1,63 @@
+﻿@page 
+@model FYPTourneyPro.Pages.User.WalletModel
+@{
+    ViewData["Title"] = "Wallet";
+}
+@section scripts {
+    <abp-script src="/Pages/User/Wallet.js" />
+}
+
+
+<div class="container">
+    
+    <abp-card>
+        <abp-card-header>
+            <abp-card-title>
+                Wallet
+            </abp-card-title>
+        </abp-card-header>
+        <abp-card-body>
+            <h1>Your wallet</h1>
+            @if (User.Identity.IsAuthenticated) {
+            <h2>Wallet for User: @Model.UserId</h2>
+
+                <input id="userId" value="@Model.UserId" hidden />
+            @if (Model.Wallet != null)
+            {
+                <h3>Current Balance: @Model.Wallet.Balance</h3>
+            }
+            else
+            {
+                <h3>No Wallet Found</h3>
+            }
+
+            <h4>Top Up</h4>
+            <form id ="topUpForm" method="post" asp-page-handler="TopUp">
+                <div>
+                    <label>Amount to Top Up:</label>
+                    <input id = "topUpAmt" type="number"  required />
+                </div>
+                <button type="submit">Top Up</button>
+            </form>
+
+
+            <h4>Withdraw</h4>
+            <form id = "WithdrawForm" method="post" asp-page-handler="Withdraw">
+                <div>
+                    <label>Amount to Withdraw:</label>
+                        <input id="withdrawAmt" type="number" required />
+                </div>
+                <button type="submit">Withdraw</button>
+            </form>
+             
+            }
+            else
+            {
+                <div class="alert alert-danger">
+                    You must be logged in to view wallet.
+                </div>
+            }
+            
+        </abp-card-body>
+    </abp-card>
+</div>

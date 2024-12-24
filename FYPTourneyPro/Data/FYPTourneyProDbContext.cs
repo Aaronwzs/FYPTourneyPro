@@ -18,9 +18,10 @@ using System.Reflection.Emit;
 using FYPTourneyPro.Entities.Chatroom;
 using Volo.Abp.Identity;
 
-using FYPTourneyPro.Entities.User;
+using FYPTourneyPro.Entities.UserM;
 using FYPTourneyPro.Entities.Notification;
 using Volo.Abp.Domain.Entities;
+using FYPTourneyPro.Entities.UserM;
 
 namespace FYPTourneyPro.Data;
 
@@ -52,7 +53,7 @@ public class FYPTourneyProDbContext : AbpDbContext<FYPTourneyProDbContext>
     public DbSet<IdentityUser> Users { get; set; } // DbSet for IdentityUser if required
 
     //Custom Register
-    public DbSet<User> User { get; set; }
+    public DbSet<CustomUser> User { get; set; }
 
     //Wallet
     public DbSet<Wallet> Wallet { get; set; }
@@ -221,7 +222,7 @@ public class FYPTourneyProDbContext : AbpDbContext<FYPTourneyProDbContext>
         });
 
         //Custom Register
-        builder.Entity<User>(b =>
+        builder.Entity<CustomUser>(b =>
         {
             b.ToTable("Users");
 
@@ -257,7 +258,7 @@ public class FYPTourneyProDbContext : AbpDbContext<FYPTourneyProDbContext>
         });
 
         //Custom Register
-        builder.Entity<User>(b =>
+        builder.Entity<CustomUser>(b =>
         {
             b.ToTable("Users");
 

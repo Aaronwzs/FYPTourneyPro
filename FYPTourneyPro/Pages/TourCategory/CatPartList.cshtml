@@ -39,8 +39,8 @@
                         {
                             <tr>
                                 <td>@registration.CategoryName</td>
-                                <td>@registration.userName1</td>
-                                <td>@registration.userName2 ?? "N/A"</td>
+                                <td>@registration.FullName1</td>
+                                <td>@registration.FullName2 ?? "N/A"</td>
                                 <td>@registration.RegDate.ToString("yyyy-MM-dd")</td>
                                 <td>@registration.TotalAmount</td>
                             </tr>
@@ -90,7 +90,7 @@
                                     <td>
                                         @foreach (var participant in Model.MatchParticipants.Where(mp => mp.matchId == match.Id))
                                         {
-                                            <div>@participant.userId</div>
+                                            <div>@participant.FullName</div>
                                         }
                                     </td>
                                     <td>
@@ -112,9 +112,9 @@
                                         }
                                     </td>
                                     <td>
-                                        @foreach (var score in Model.MatchScores.Where(ms => ms.MatchId == match.Id))
+                                        @if (Model.MatchScores.Where(ms => ms.MatchId == match.Id).Any())
                                         {
-                                            <div>@score.WinnerId</div>
+                                            <div>@Model.MatchScores.LastOrDefault(ms => ms.MatchId == match.Id)?.WinnerFullName</div>
                                         }
                                     </td>
                                     <td>

@@ -12,5 +12,7 @@
         public Boolean? isWinner { get; set; }
         public Guid CategoryId { get; set; }
         public string? userName { get; set; }
+
+        public string? FullName { get; set; }
     }
 }

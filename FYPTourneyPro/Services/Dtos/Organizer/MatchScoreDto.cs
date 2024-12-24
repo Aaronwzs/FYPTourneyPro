@@ -8,5 +8,7 @@
         public string Set1Score { get; set; }
         public string Set2Score { get; set; }
         public string? Set3Score { get; set; }
+
+        public string? WinnerFullName { get; set; }
     }
 }

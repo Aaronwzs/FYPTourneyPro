@@ -12,5 +12,7 @@
         public int Seed { get; set; }
         public int Points { get; set; }
         public string userName { get; set; }
+
+        public string? FullName { get; set; }
     }
 }

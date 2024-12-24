@@ -11,6 +11,8 @@
 
 <div class="container">
     <input id="tournamentId" value="@Model.TournamentId" hidden />
+    <input id="userId" value="@Model.UserId" hidden />
+    <input id="userName" value="@Model.UserName" hidden />
     <abp-card>
         <abp-card-header>
             <abp-card-title>
@@ -35,7 +37,7 @@
 
                         <div class="form-group">
                             <label for="player1">Player 1</label>
-                            <input type="text" id="player1" class="form-control" value="@Model.UserName" readonly />
+                            <input type="text" id="player1" class="form-control" value="@Model.FullName" readonly />
                         </div>
 
                         <div class="form-group" id="player2Container" style="display:none;">

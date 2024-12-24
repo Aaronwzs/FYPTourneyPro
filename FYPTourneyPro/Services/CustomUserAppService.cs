@@ -1,5 +1,6 @@
-﻿using FYPTourneyPro.Entities.User;
+﻿using FYPTourneyPro.Entities.UserM;
 using FYPTourneyPro.Services.Dtos.User;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Users;
 
@@ -7,10 +8,10 @@ namespace FYPTourneyPro.Services
 {
     public class CustomUserAppService : FYPTourneyProAppService
     {
-        private readonly IRepository<User, Guid> _customUserRepository;
+        private readonly IRepository<CustomUser, Guid> _customUserRepository;
         private readonly ICurrentUser _currentUser;
 
-        public CustomUserAppService(IRepository<User, Guid> customUserRepository, ICurrentUser currentUser)
+        public CustomUserAppService(IRepository<CustomUser, Guid> customUserRepository, ICurrentUser currentUser)
         {
             _customUserRepository = customUserRepository;
             _currentUser = currentUser;
@@ -23,7 +24,7 @@ namespace FYPTourneyPro.Services
                 // Validation could be added here if needed
 
                 // Create a new user record in the custom User table
-                var customUser = new User
+                var customUser = new CustomUser
                 {
                     UserId = _currentUser.Id.Value,  // Set UserId from the logged-in user
                     FullName = input.FullName,
@@ -53,18 +54,43 @@ namespace FYPTourneyPro.Services
             }
         }
 
-        public async Task<UserDto> GetAsync(Guid id)
+        public async Task<UserDto> GetAsync(Guid userid)
         {
-            var customUser = await _customUserRepository.GetAsync(id);
+            //var customUser = await _customUserRepository.GetAsync(userid);
 
+            var customUser = await _customUserRepository.FirstOrDefaultAsync(x =>x.UserId == userid);
+            if (customUser == null)
+            {
+                throw new EntityNotFoundException($"No CustomUser found with UserId: {userid}");
+            }
             return new UserDto
             {
-                Id = customUser.UserId,
+                Id = customUser.Id,
+                UserId = customUser.UserId,
                 FullName = customUser.FullName,
                 Age = customUser.Age,
                 Nationality = customUser.Nationality,
                 PhoneNumber = customUser.PhoneNumber
             };
+        }
+
+        public async Task<List<UserDto>> GetListAsync(Guid userId)
+        {
+            // Fetch the custom users based on the provided IDs
+            var customUsers = await _customUserRepository.GetListAsync(cu =>cu.UserId == userId );
+
+            // Map the custom users to UserDto
+            var userDtos = customUsers.Select(customUser => new UserDto
+            {
+                Id=customUser.Id,
+                UserId = customUser.UserId,
+                FullName = customUser.FullName,
+                Age = customUser.Age,
+                Nationality = customUser.Nationality,
+                PhoneNumber = customUser.PhoneNumber
+            }).ToList();
+
+            return userDtos;
         }
     }
 }

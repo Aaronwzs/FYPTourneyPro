@@ -1,6 +1,6 @@
 ﻿using Volo.Abp.Domain.Entities;
 
-namespace FYPTourneyPro.Entities.User
+namespace FYPTourneyPro.Entities.UserM
 {
     public class AppForm : Entity<Guid>
     {

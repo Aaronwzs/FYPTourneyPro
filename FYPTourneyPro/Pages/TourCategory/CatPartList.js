@@ -97,7 +97,7 @@ $(function () {
 
 console.log("fYPTourneyPro.services.organizer.matchParticipant: ", fYPTourneyPro.services.organizer.matchParticipant)
 
-var matchParticipants = [];
+var matchParticipants = [];  // empty list
 function openScoreModal(matchId) {
     document.getElementById('matchId').value = matchId;
 
@@ -105,7 +105,13 @@ function openScoreModal(matchId) {
         .then(function (participants) {
             console.log('participants: ', participants)
 
+
+            //put 2 participants into this matchParticipant list
             matchParticipants = participants;
+
+            
+
+
             //const participantsList = document.getElementById('participantsList');
             const winnerDropdown = document.getElementById('winnerId');
             //participantsList.innerHTML = '';
@@ -115,15 +121,22 @@ function openScoreModal(matchId) {
                 // Add participant to winner dropdown
                 const option = document.createElement('option');
                 option.value = participant.userId;
-                option.textContent = participant.userName; // Replace with a proper display name
+                //option.textContent = participant.userName; // Replace with a proper display name
+                option.textContent = participant.fullName;
                 winnerDropdown.appendChild(option);
             });
             //get 2 data in list
             //cater for doubles
             // option.value = participant.pairId;
-            $('#player1').text(participants[0].userName);
+
+            var mpFullName = participants[0].fullName;
+            console.log('mpFullName: ', mpFullName)
+
+
+
+            $('#player1').text(participants[0].fullName);
             $('#player1').data('id', participants[0].id);
-            $('#player2').text(participants[1].userName);
+            $('#player2').text(participants[1].fullName);
             $('#player2').data('id', participants[1].id);
 
 
@@ -137,31 +150,31 @@ function openScoreModal(matchId) {
                 participantGroups[participant.pairId].push(participant);
             });
 
-            // Populate winner dropdown with pair names
-            Object.values(participantGroups).forEach(function (pairParticipants) {
-                const option = document.createElement('option');
+            //// Populate winner dropdown with pair names
+            //Object.values(participantGroups).forEach(function (pairParticipants) {
+            //    const option = document.createElement('option');
 
-                // Create pair name by combining participant names
-                const pairName = pairParticipants.map(p => p.userName).join(' & ');
+            //    // Create pair name by combining participant names
+            //    const pairName = pairParticipants.map(p => p.userName).join(' & ');
 
-                // Use first participant's pairId as the value
-                option.value = pairParticipants[0].pairId;
-                option.textContent = pairName;
-                winnerDropdown.appendChild(option);
-            });
+            //    // Use first participant's pairId as the value
+            //    option.value = pairParticipants[0].pairId;
+            //    option.textContent = pairName;
+            //    winnerDropdown.appendChild(option);
+            //});
 
-            // Set player labels (works for both singles and doubles)
-            if (participants.length >= 2) {
-                const firstPair = participantGroups[participants[0].pairId];
-                const secondPair = participantGroups[participants[1].pairId];
+            //// Set player labels (works for both singles and doubles)
+            //if (participants.length >= 2) {
+            //    const firstPair = participantGroups[participants[0].pairId];
+            //    const secondPair = participantGroups[participants[1].pairId];
 
-                // Display pair names
-                $('#player1').text(firstPair.map(p => p.userName).join(' & '));
-                $('#player1').data('pairId', participants[0].pairId);
+            //    // Display pair names
+            //    $('#player1').text(firstPair.map(p => p.userName).join(' & '));
+            //    $('#player1').data('pairId', participants[0].pairId);
 
-                $('#player2').text(secondPair.map(p => p.userName).join(' & '));
-                $('#player2').data('pairId', participants[1].pairId);
-            }
+            //    $('#player2').text(secondPair.map(p => p.userName).join(' & '));
+            //    $('#player2').data('pairId', participants[1].pairId);
+            //}
 
 
 
