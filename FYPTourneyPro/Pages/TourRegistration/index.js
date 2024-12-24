@@ -83,7 +83,10 @@ $(function () {
         var regDate = $('#regDate').val();
         var totalAmount = parseFloat($('#totalAmount').val());
         var userId = $('#userId').val();
+        var userName = $('#userName').val();
 
+
+        console.log("userName: ", userName);
         console.log("player1: ", player1);
         console.log("player2: ", player2);
         console.log("regDate: ", regDate);
@@ -100,7 +103,7 @@ $(function () {
         var registrationData = {
             categoryId: categoryId,
             totalAmount: totalAmount,
-            username1: player1,
+            username1: userName,
             username2: player2,
             tournamentId: $('#tournamentId').val()
         };
@@ -163,13 +166,13 @@ fYPTourneyPro.services.users.wallet.payment(paymentData).then(function (result) 
 
     var tourData = {
         categoryId: categoryId,
-        username1: player1,
+        username1: userName,
         username2: player2,
         tournamentId: $('#tournamentId').val(),
         organizerId: result.organizerId
     };
 
-    fYPTourneyPro.services.notifications.notification.savePlayerRegistrationNotification(player1, player2, registrationData.tournamentId)
+    fYPTourneyPro.services.notifications.notification.savePlayerRegistrationNotification(userName, player2, registrationData.tournamentId)
     fYPTourneyPro.services.notifications.notification.savePlayerJoinTourNotification(tourData)
 
 
