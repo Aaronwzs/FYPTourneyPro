@@ -121,22 +121,22 @@ public class FYPTourneyProMenuContributor : IMenuContributor
                 )
             );
 
-            // Add Application Management section
-            var UploadExcelMenu = context.Menu.AddItem(
-                new ApplicationMenuItem(
-                    "CategoryManagement",
-                    "Category Management",
-                    icon: "fa fa-list"
-                )
-            );
+            //// Add Application Management section
+            //var UploadExcelMenu = context.Menu.AddItem(
+            //    new ApplicationMenuItem(
+            //        "CategoryManagement",
+            //        "Category Management",
+            //        icon: "fa fa-list"
+            //    )
+            //);
 
-            categoryMenu.AddItem(
-                new ApplicationMenuItem(
-                    "CategoryManagement.AddCategory",
-                    "Application Form",
-                    url: "/User/AppForm"
-                )
-            );
+            //categoryMenu.AddItem(
+            //    new ApplicationMenuItem(
+            //        "CategoryManagement.AddCategory",
+            //        "Application Form",
+            //        url: "/User/AppForm"
+            //    )
+            //);
 
             context.Menu.Items.Insert(
          2,

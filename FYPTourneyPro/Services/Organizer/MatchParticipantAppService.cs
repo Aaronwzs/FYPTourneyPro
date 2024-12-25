@@ -3,6 +3,7 @@ using FYPTourneyPro.Entities.UserM;
 using FYPTourneyPro.Permissions;
 using FYPTourneyPro.Services.Dtos.Organizer;
 using Microsoft.AspNetCore.Authorization;
+using System;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Authorization;
 using Volo.Abp.Domain.Repositories;
@@ -22,6 +23,7 @@ namespace FYPTourneyPro.Services.Organizer
         private readonly IUnitOfWorkManager _unitOfWorkManager;
         private readonly IRepository<CustomUser, Guid> _customUserRepository;
         private readonly IAuthorizationService _authorizationService;
+        private readonly IRepository<Tournament, Guid> _tournamentRepository;
 
         public MatchParticipantAppService(
             IRepository<Match, Guid> matchRepository,
@@ -32,7 +34,8 @@ namespace FYPTourneyPro.Services.Organizer
             IIdentityUserRepository userRepository,
             IUnitOfWorkManager unitOfWorkManager,
             IRepository<CustomUser, Guid> customerUserRepository,
-            IAuthorizationService authorizationService
+            IAuthorizationService authorizationService,
+            IRepository<Tournament, Guid> tournamentRepository
             )
         {
             _participantRepository = participantRepository;
@@ -45,6 +48,7 @@ namespace FYPTourneyPro.Services.Organizer
             _unitOfWorkManager = unitOfWorkManager;
             _customUserRepository = customerUserRepository;
             _authorizationService = authorizationService;
+            _tournamentRepository = tournamentRepository;
         }
 
         public async Task<List<IGrouping<Guid, MatchParticipant>>>? GenerateDrawAsync(MatchParticipantDto input)
@@ -108,8 +112,20 @@ namespace FYPTourneyPro.Services.Organizer
                 var matches = new List<Match>();
                 var round = 0;
 
-                // create matches
-                if (isSingle)
+                    Random random = new Random();
+                    int randomCourt = random.Next(1, 11);
+
+                    var Match = await _matchRepository.GetAsync(input.CategoryId);
+
+                    var tourId = category.TournamentId;
+
+                    var tournament = await _tournamentRepository.GetAsync(tourId);
+
+                    var startDate = tournament.StartDate;
+                    var endDate = tournament.EndDate;
+
+                    // create matches
+                    if (isSingle)
                 {
 
                     //make sure it is even first 
@@ -134,9 +150,9 @@ namespace FYPTourneyPro.Services.Organizer
                             var match = new Match
                             {
                                 round = round,
-                                startTime = DateTime.Now,
-                                endTime = DateTime.Now.AddMinutes(30),
-                                courtNum = 1, //todo
+                                startTime = startDate.AddMinutes(30),
+                                endTime = startDate.AddMinutes(60),
+                                courtNum = randomCourt, //todo
 
                                 CategoryId = input.CategoryId
                             };
