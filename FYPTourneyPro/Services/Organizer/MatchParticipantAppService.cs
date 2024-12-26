@@ -112,17 +112,18 @@ namespace FYPTourneyPro.Services.Organizer
                 var matches = new List<Match>();
                 var round = 0;
 
-                    Random random = new Random();
-                    int randomCourt = random.Next(1, 11);
+                   
 
-                    var Match = await _matchRepository.GetAsync(input.CategoryId);
+                    //var Match = await _matchRepository.GetAsync(input.CategoryId);
 
                     var tourId = category.TournamentId;
 
                     var tournament = await _tournamentRepository.GetAsync(tourId);
 
                     var startDate = tournament.StartDate;
-                    var endDate = tournament.EndDate;
+
+                    DateTime tournamentStartTime = DateTime.Now; // or your specific start date
+                    DateTime lastMatchEndTime = tournamentStartTime;
 
                     // create matches
                     if (isSingle)
@@ -147,13 +148,16 @@ namespace FYPTourneyPro.Services.Organizer
 
                         for (int j = 0; j < totalParticipants; j++)
                         {
-                            var match = new Match
+                                Random random = new Random();
+                                int randomCourt = random.Next(1, 11);
+
+
+                                var match = new Match
                             {
                                 round = round,
-                                startTime = startDate.AddMinutes(30),
-                                endTime = startDate.AddMinutes(60),
+                                startTime = lastMatchEndTime,
+                                endTime = lastMatchEndTime.AddMinutes(30),
                                 courtNum = randomCourt, //todo
-
                                 CategoryId = input.CategoryId
                             };
 
@@ -161,10 +165,11 @@ namespace FYPTourneyPro.Services.Organizer
                             matches.Add(match);
 
                             await _matchRepository.InsertAsync(match);
-                            // await _unitOfWorkManager.Current.SaveChangesAsync();
+                                lastMatchEndTime = match.endTime;
+                                // await _unitOfWorkManager.Current.SaveChangesAsync();
 
-                            //await _matchRepository.InsertAsync(newMatches[j]); - not suitable 
-                        }
+                                //await _matchRepository.InsertAsync(newMatches[j]); - not suitable 
+                            }
                         //await _unitOfWorkManager.Current.SaveChangesAsync();  //need to execute it, the later code is dependent on this added records
                         await _unitOfWorkManager.Current.SaveChangesAsync();
                         //no need use the manager, manager vs unit of work 

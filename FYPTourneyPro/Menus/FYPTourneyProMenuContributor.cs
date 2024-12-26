@@ -34,20 +34,20 @@ public class FYPTourneyProMenuContributor : IMenuContributor
             )
         );
 
-        context.Menu.Items.Insert(
-           1,
-           new ApplicationMenuItem(
-               "TodoList",
-               "TodoList",
-               icon: "fas fa-home"
-           ).AddItem(
-                new ApplicationMenuItem(
-                    FYPTourneyProMenus.TodoItems,
-                    "TodoItems",
-                    url: "/TodoItems"
-                )
-            )
-       );
+       // context.Menu.Items.Insert(
+       //    1,
+       //    new ApplicationMenuItem(
+       //        "TodoList",
+       //        "TodoList",
+       //        icon: "fas fa-home"
+       //    ).AddItem(
+       //         new ApplicationMenuItem(
+       //             FYPTourneyProMenus.TodoItems,
+       //             "TodoItems",
+       //             url: "/TodoItems"
+       //         )
+       //     )
+       //);
 
         //Administration
         var administration = context.Menu.GetAdministration();

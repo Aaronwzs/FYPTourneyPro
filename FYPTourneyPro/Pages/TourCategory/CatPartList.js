@@ -1,6 +1,36 @@
 ﻿
 $(function () {
 
+
+    //// Initialize sorting for the Start Time column
+    //$('.sort').on('click', function () {
+    //    const sortOrder = $(this).data('sort');
+    //    const rows = $('#matchesTable tbody tr').get();
+
+    //    rows.sort(function (a, b) {
+    //        const keyA = $(a).children('td').eq(3).text(); // Start Time column index
+    //        const keyB = $(b).children('td').eq(3).text();
+
+    //        // Convert date strings to Date objects for comparison
+    //        const dateA = new Date(keyA);
+    //        const dateB = new Date(keyB);
+
+    //        return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
+    //    });
+
+    //    $.each(rows, function (index, row) {
+    //        $('#matchesTable tbody').append(row);
+    //    });
+    //});
+
+    
+
+
+
+
+
+
+
     console.log("Initializing...");
     const generateDrawBtn = $('#generateDrawBtn');
     const matchListContainer = $('#matchListContainer');

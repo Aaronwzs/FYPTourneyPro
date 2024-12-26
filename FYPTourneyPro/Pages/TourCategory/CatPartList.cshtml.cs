@@ -5,6 +5,7 @@ using FYPTourneyPro.Services.Dtos.User;
 using FYPTourneyPro.Services.Organizer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Volo.Abp.Domain.Repositories;
 
 namespace FYPTourneyPro.Pages.TourCategory
 {
@@ -17,8 +18,10 @@ namespace FYPTourneyPro.Pages.TourCategory
         private readonly MatchScoreAppService _matchScoreAppService;
         private readonly CustomUserAppService _customUserAppService;
 
+        private readonly IRepository<Match, Guid> _matchRepository;
 
-        [BindProperty(SupportsGet = true)]
+
+       [BindProperty(SupportsGet = true)]
         public Guid categoryId { get; set; }
         public List<RegistrationDto> Registrations { get; set; } 
         public CategoryDto Category { get; set; }
@@ -38,7 +41,8 @@ namespace FYPTourneyPro.Pages.TourCategory
             MatchParticipantAppService matchParticipantAppService,
             MatchAppService matchAppService,
             MatchScoreAppService matchScoreAppService,
-            CustomUserAppService customUserAppService
+            CustomUserAppService customUserAppService,
+            IRepository<Match, Guid> matchRepository
             )
         {
             _categoryAppService = categoryAppService;
@@ -47,12 +51,15 @@ namespace FYPTourneyPro.Pages.TourCategory
             _matchAppService = matchAppService;
             _matchScoreAppService= matchScoreAppService;
             _customUserAppService = customUserAppService;
+            _matchRepository = matchRepository;
 
         }
 
         public async Task OnGetAsync(Guid CategoryId)
         {
             categoryId = CategoryId;
+
+            var matches = await _matchRepository.GetListAsync();
 
             // Get category details
             Category = await _categoryAppService.GetAsync(CategoryId);
@@ -156,5 +163,7 @@ namespace FYPTourneyPro.Pages.TourCategory
 
             
         }
+
+
     }
 }

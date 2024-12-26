@@ -131,6 +131,52 @@
                 <!-- Matches will be dynamically injected here -->
             </div>
 
+            <h3>Match Schedule</h3>
+
+
+
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>MatchId</th>
+                            <th>Round</th>
+                            <th>Participants</th>
+                            <th>
+                                Start Time
+                               @*  <span class="sort" data-sort="asc">&#x25B2;</span>t 
+                                <span class="sort" data-sort="desc">&#x25BC;</span> *@
+                            </th>
+                            <th>Court No</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var match in Model.Matches)
+                        {
+                           
+                            <tr>
+                                <td>@match.Id</td>
+                                <td>@match.round</td>
+                                <td>
+                                    @foreach (var participant in Model.MatchParticipants.Where(mp => mp.matchId == match.Id))
+                                    {
+                                        <div>@participant.FullName</div>
+                                    }
+                                </td>
+                                <td>
+                                    @match.startTime
+                                </td>
+                                <td>
+                                   @match.courtNum
+                                </td>
+                                
+                            </tr>
+
+                        }
+                    </tbody>
+                </table>
+            </div>
+
 
             @* Modal to update score *@
             <div class="modal" id="scoreModal" tabindex="-1" role="dialog" aria-labelledby="scoreModalLabel" aria-hidden="true">
