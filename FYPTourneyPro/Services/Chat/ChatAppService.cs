@@ -55,26 +55,6 @@ namespace FYPTourneyPro.Services.Chat
         }
 
 
-        //public async Task<Guid> CreateDirectChatAsync(Guid userId)
-        //{
-        //    try
-        //    {
-        //        var receiver = await _userRepository.GetAsync(userId);
-        //        var currentUserId = CurrentUser.Id; // Get the ID of the logged-in user
-
-        //        var existingChatRoom = await _chatRoomParticipantRepository.GetListAsync(cp => cp.UserId == currentUserId);
-
-        //        var chatRoom = existingChatRoom.FirstOrDefault(cp => cp.UserId == userId);
-
-        //        if (chatRoom != null && chatRoom.ChatRoom.ChatMessages.ChatType == ChatType.Direct)
-        //        {
-        //            return chatRoom.ChatRoomId;
-        //        }
-
-
-
-        //    }
-        //}
 
         public async Task<ChatRoomDto> CreateGroupChatAsync(string? groupName, List<Guid> participantIds)
         {
@@ -92,13 +72,6 @@ namespace FYPTourneyPro.Services.Chat
 
                 var chatRoomIds = existingChatRooms.Select(cr => cr.ChatRoomId).Distinct().ToList();
 
-
-                //var duplicateChatRoom = existingChatRooms
-                //   .GroupBy(cp => cp.ChatRoomId) // Group by chat room ID
-                //   .FirstOrDefault(g =>
-                //       g.Count() == participantIds.Count && // Match participant count
-                //       participantIds.All(pid => g.Any(p => p.UserId == pid)) // Check if all participant IDs match
-                //   )?.Key;
                 
 
                 foreach (var crIds in chatRoomIds)
@@ -118,16 +91,6 @@ namespace FYPTourneyPro.Services.Chat
 
                 }
 
-
-                //if (duplicateChatRoom.HasValue)
-                //{
-                //    // If a duplicate exists, return its ID
-                //    return new ChatRoomDto
-                //    {
-                //        Id = duplicateChatRoom.Value,
-                //        isDuplicate = true
-                //    };
-                //} // If only two participants, use their names as the group name
 
                 // If the group name is empty and only two participants, use their names
                 if (participantIds.Count == 2)
@@ -174,6 +137,27 @@ namespace FYPTourneyPro.Services.Chat
             }
         }
 
+        public async Task EditGroupNameAsync(Guid groupId, string newGroupName)
+        {
+            // Fetch the group
+            var group = await _chatRoomRepository.GetAsync(groupId);
+
+            // Update the group name
+            group.Name = newGroupName;
+            await _chatRoomRepository.UpdateAsync(group);
+        }
+
+        public async Task DeleteGroupAsync(Guid groupId)
+        {
+            // Fetch the group
+            var group = await _chatRoomRepository.GetAsync(groupId);
+
+       
+            // Delete the group
+            await _chatRoomRepository.DeleteAsync(groupId);
+        }
+
+
         public async Task<List<ChatRoomParticipantDto>> GetUserChatRoomsAsync()
         {
             var chatRoomParticipants = await _chatRoomParticipantRepository.GetListAsync(cp => cp.UserId == CurrentUser.Id);
@@ -208,7 +192,9 @@ namespace FYPTourneyPro.Services.Chat
                     Name = chatRoom.Name,         // From ChatRoom (Name)
                     LastMessage = lastMessage?.Content ?? "",
                     Username = lastMessageUser?.UserName ?? "No messages yet",
-                    CreationTime = lastMessage?.CreationTime ?? chatRoom.CreationTime
+                    CreationTime = lastMessage?.CreationTime ?? chatRoom.CreationTime,
+                    CreatorId = chatRoom.CreatorId,
+                    CurrentUserId = CurrentUser.Id
                 });
             }
 
@@ -280,6 +266,7 @@ namespace FYPTourneyPro.Services.Chat
                     IsSeen = message.IsSeen,
                     CreationTime = message.CreationTime,
                     Username = userFound.UserName,
+                    CreatorId = message.CreatorId.Value
                 };
             }
             catch (Exception ex)

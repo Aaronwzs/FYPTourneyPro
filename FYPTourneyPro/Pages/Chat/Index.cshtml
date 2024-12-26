@@ -40,7 +40,13 @@
             </form>
         </div>
     </div>
-
+    <div>
+        <input type="text"
+               id="chatSearchBar"
+               placeholder="Search chat..."
+               onkeyup="filterChatRooms()"
+               class="form-control" />
+    </div>
         <!-- Chatroom Rows -->
     <div id="chatRoomsList">
         <!-- Chat rooms will be dynamically added here -->

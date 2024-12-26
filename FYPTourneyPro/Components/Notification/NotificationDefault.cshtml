@@ -103,10 +103,10 @@
                 notiList.appendChild(div);
 
                 //Takes the data-id and perform actions
-                div.addEventListener('click', function(){
-                    var id = this.getAttribute('data-id');
-                    console.log(id);
-                });
+                  div.addEventListener('click', function(){
+                        var id = this.getAttribute('data-id');
+                                window.location.href = `TourCategory/Index?tournamentId=${id}`
+                  });
             });
         });
     })

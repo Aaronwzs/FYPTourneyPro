@@ -10,7 +10,7 @@ assistant_id: 20241110-220718-cruel-neutron
 # https://rasa.com/docs/rasa/nlu/components/
 language: en
 
-pipeline: null
+pipeline:
 # # No configuration for the NLU pipeline was provided. The following default pipeline was used to train your model.
 # # If you'd like to customize it, uncomment and adjust the pipeline.
 # # See https://rasa.com/docs/rasa/tuning-your-model for more information.

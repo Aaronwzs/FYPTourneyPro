@@ -13,6 +13,8 @@ intents:
   - ask_withdrawals
   - ask_match_fairness
   - ask_next_match
+  - ask_how_to_join_tournament
+  - ask_medical_requirements
 
 entities:
   - player
@@ -51,15 +53,15 @@ actions:
 
 responses:
   utter_greet:
-  - text: "Hey! How are you?"
+  - text: Hey! How are you?
 
   utter_cheer_up:
   - text: |
-      "Great! Let me know if you have more questions."
+      Great! Let me know if you have more questions.
   - text: |
-      "I'm here to help. Let me know if you have more questions."  
+      I'm here to help. Let me know if you have more questions.  
   - text : |
-      "Let me know if there's anything else I can assist you with."
+      Let me know if there's anything else I can assist you with.
   
 
   utter_goodbye:
@@ -94,6 +96,20 @@ responses:
         This rule ensures that the match remains fair and consistent for both teams.
     - text: |
         All the tournament upholds the principles of fair play and sportsmanship.
+
+  utter_how_to_join_tournament:
+    - text: |
+        To join a tournament:
+        1. Ensure you meet the eligibility criteria (e.g., Malaysians only or non-Malaysians also allowed depending on the tournament).
+        2. Select a tournament from the list available on the website.
+        3. Click the "Join" button and complete the registration process.
+
+  utter_medical_requirements:
+    - text: |
+        Please note:
+        - All participants are required to bring their own medical supplies (e.g., spray bandages, first aid kits).
+        - The organizer is not liable for any injuries during the tournaments.
+        - Plan ahead and ensure you have everything you might need for minor injuries.
 
 session_config:
   session_expiration_time: 60

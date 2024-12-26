@@ -87,12 +87,12 @@ document.getElementById("createGroupForm").addEventListener("submit", (event) =>
             document.querySelectorAll("#participantsContainer input:checked")
         ).map((checkbox) => checkbox.value);
 
-        if (!groupName || selectedParticipants.length === 0) {
+        if (selectedParticipants.length === 0) {
             alert("Please enter a group name and select at least one participant.");
             return;
     }
 
-    // Simulate API Call
+    // API Call
     fYPTourneyPro.services.chat.chat.createGroupChat(groupName, selectedParticipants).then((result) => {
         if (result.isDuplicate) {
             console.log(result);
@@ -124,7 +124,7 @@ function loadChatRooms() {
             return timeB - timeA; // Descending order
         });
 
-        console.log("Sorted chatRooms:", chatRooms); // Debug: Log the sorted array
+        console.log(chatRooms);
         chatRooms.forEach((chatRoom) => {
 
             const div = document.createElement("div");
@@ -134,7 +134,10 @@ function loadChatRooms() {
             const title = document.createElement("h3")
             title.textContent = `${chatRoom.name}`;
 
+            div.append(title)
             const content = document.createElement("p")
+
+
 
             if (chatRoom.username) {
                 content.textContent = `${chatRoom.username} - `;
@@ -147,6 +150,7 @@ function loadChatRooms() {
                 creationTime.classList.add("creation-time"); // Add a CSS class
                 content.append(creationTime);
             }
+            div.append(content)
 
             div.addEventListener("click", () => {
                 console.log(`Navigating to chat room: ${chatRoom.name}`);
@@ -154,8 +158,25 @@ function loadChatRooms() {
                 window.location.href = `/Chat/Chatroom?chatRoomId=${chatRoom.chatRoomId}`;
             });
 
-            div.append(title)
-            div.append(content)
+            if (chatRoom.creatorId === chatRoom.currentUserId) {
+                const editButton = document.createElement("button");
+                editButton.textContent = "Edit Name";
+                editButton.addEventListener("click", (event) => {
+                    event.stopPropagation(); // Prevent div click event
+                    editGroupName(chatRoom.chatRoomId);
+                });
+                div.appendChild(editButton);
+
+                const deleteButton = document.createElement("button");
+                deleteButton.textContent = "Delete Chat";
+                deleteButton.addEventListener("click", (event) => {
+                    event.stopPropagation(); // Prevent div click event
+                    deleteGroup(chatRoom.chatRoomId);
+                });
+                div.appendChild(deleteButton);
+            }
+
+   
 
             document.getElementById("chatRoomsList").append(div);
         });
@@ -163,6 +184,70 @@ function loadChatRooms() {
     });
 }
 
+function editGroupName(groupId) {
+    const newGroupName = prompt("Enter the new group name:");
+    if (!newGroupName) return;
+
+    // Call the backend to update the group name
+    fYPTourneyPro.services.chat.editGroupName(groupId, newGroupName)
+        .then(() => {
+            alert("Group name updated successfully!");
+            // Optionally, refresh the list of chat rooms
+        })
+        .catch((error) => {
+            console.error("Error updating group name:", error);
+            alert("Failed to update group name.");
+        });
+}
+
+function editGroupName(groupId) {
+    const newGroupName = prompt("Enter the new group name:");
+    if (!newGroupName) return;
+
+    // Call the backend to update the group name
+    fYPTourneyPro.services.chat.chat.editGroupName(groupId, newGroupName)
+        .then(() => {
+            alert("Group name updated successfully!");
+            // Optionally, refresh the list of chat rooms
+        })
+        .catch((error) => {
+            console.error("Error updating group name:", error);
+            alert("Failed to update group name.");
+        });
+}
+
+function deleteGroup(groupId) {
+    if (!confirm("Are you sure you want to delete this group?")) return;
+
+    // Call the backend to delete the group
+    fYPTourneyPro.services.chat.chat.deleteGroup(groupId)
+        .then(() => {
+            alert("Group deleted successfully!");
+            // Optionally, refresh the list of chat rooms
+        })
+        .catch((error) => {
+            console.error("Error deleting group:", error);
+            alert("Failed to delete group.");
+        });
+}
+
+
 document.addEventListener("DOMContentLoaded", function () {
     loadChatRooms(); // Load chat rooms when the page is ready
 });
+
+
+// Filtering Logic for Search Bar
+function filterChatRooms() {
+    const searchValue = document.getElementById('chatSearchBar').value.toLowerCase();
+    const chatRoomElements = document.querySelectorAll('.chatroom');
+
+    chatRoomElements.forEach(chatRoom => {
+        const chatName = chatRoom.querySelector('h3').textContent.toLowerCase();
+        if (chatName.includes(searchValue)) {
+            chatRoom.style.display = 'block';
+        } else {
+            chatRoom.style.display = 'none';
+        }
+    });
+}

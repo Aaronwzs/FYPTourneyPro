@@ -5,13 +5,13 @@ using static Volo.Abp.Identity.Settings.IdentitySettingNames;
 
 namespace FYPTourneyPro.Entities.Chatroom
 {
-    public class ChatRoom : FullAuditedAggregateRoot<Guid>
+    public class ChatRoom : AuditedEntity<Guid>
     {
         public string Name { get; set; }
         public ICollection<ChatMessage> Messages { get; set; } // Navigation property to all messages in the chat room
     }
 
-    public class ChatMessage : FullAuditedAggregateRoot<Guid>
+    public class ChatMessage : AuditedEntity<Guid>
     {
         public Guid? ChatRoomId { get; set; }  // Nullable: Links message to a chat room for group messages
         public Guid? ReceiverId { get; set; }  // Nullable: Used for direct messages to indicate the recipient
@@ -26,7 +26,7 @@ namespace FYPTourneyPro.Entities.Chatroom
         Group
     }
 
-    public class ChatRoomParticipant : FullAuditedEntity<Guid>
+    public class ChatRoomParticipant : AuditedEntity<Guid>
     {
         public Guid ChatRoomId { get; set; }  // The ID of the chat room
         public Guid UserId { get; set; }       // The ID of the user
