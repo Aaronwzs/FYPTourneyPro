@@ -63,13 +63,13 @@ nlu:
     - Show me all matches played by [test_user](player)
     - Tell me the matches of [player_test](player)
     - What matches are in the [de wsa](tournament_name) tournament?
-    - Show me all games in the [Badminton Open](tournament_name)
-    - Who is playing in the [national finals](tournament_name)?
-    - List all matches in the [Badminton tournamnet](tournament_name)
+    - Show me all games in the [ABC Badminton Open](tournament_name)
+    - Who is playing in the [Iceland Badminton Open](tournament_name)?
+    - List all matches in the [TARUMT Badminton tournament](tournament_name)
     - Tell me about the [test12](tournament_name) matches
     - What games are happening in the [under18Tournament](tournament_name)?
     - Are there any matches in the [international league](tournament_name)?
-    - Show me matches scheduled in [China Open](tournament_name)
+    - Show me matches scheduled in [China Badminton Open](tournament_name)
     - When is the next match in the [championship finals](tournament_name)?
     - Tell me who is participating in the [Taylor Badminton Open](tournament_name)
 
@@ -111,16 +111,6 @@ nlu:
     - What is the next tie for me?
     - When is my match?
     - What is my next scheduled game?
-
-
-# - intent: ask_registration
-#   examples: |
-#     - How do I register for the competition?
-#     - Can I register as a user?
-#     - What are the registration requirements?
-#     - When is the registration period?
-#     - How do I get a spot in the competition?
-#     - What are the rules and regulations for registration?
 
 
 - intent: ask_substitutions

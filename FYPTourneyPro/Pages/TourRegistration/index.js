@@ -171,10 +171,11 @@ fYPTourneyPro.services.users.wallet.payment(paymentData).then(function (result) 
         tournamentId: $('#tournamentId').val(),
         organizerId: result.organizerId
     };
-
+    console.log(userName);
     fYPTourneyPro.services.notifications.notification.savePlayerRegistrationNotification(userName, player2, registrationData.tournamentId)
     fYPTourneyPro.services.notifications.notification.savePlayerJoinTourNotification(tourData)
 
+    console.log(tourData);
 
 
     alert('Registration Successful!');
