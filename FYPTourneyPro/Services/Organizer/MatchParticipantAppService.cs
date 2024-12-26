@@ -3,6 +3,7 @@ using FYPTourneyPro.Entities.UserM;
 using FYPTourneyPro.Permissions;
 using FYPTourneyPro.Services.Dtos.Organizer;
 using Microsoft.AspNetCore.Authorization;
+using System;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Authorization;
 using Volo.Abp.Domain.Repositories;
@@ -22,6 +23,7 @@ namespace FYPTourneyPro.Services.Organizer
         private readonly IUnitOfWorkManager _unitOfWorkManager;
         private readonly IRepository<CustomUser, Guid> _customUserRepository;
         private readonly IAuthorizationService _authorizationService;
+        private readonly IRepository<Tournament, Guid> _tournamentRepository;
 
         public MatchParticipantAppService(
             IRepository<Match, Guid> matchRepository,
@@ -32,7 +34,8 @@ namespace FYPTourneyPro.Services.Organizer
             IIdentityUserRepository userRepository,
             IUnitOfWorkManager unitOfWorkManager,
             IRepository<CustomUser, Guid> customerUserRepository,
-            IAuthorizationService authorizationService
+            IAuthorizationService authorizationService,
+            IRepository<Tournament, Guid> tournamentRepository
             )
         {
             _participantRepository = participantRepository;
@@ -45,6 +48,7 @@ namespace FYPTourneyPro.Services.Organizer
             _unitOfWorkManager = unitOfWorkManager;
             _customUserRepository = customerUserRepository;
             _authorizationService = authorizationService;
+            _tournamentRepository = tournamentRepository;
         }
 
         public async Task<List<IGrouping<Guid, MatchParticipant>>>? GenerateDrawAsync(MatchParticipantDto input)
@@ -108,8 +112,21 @@ namespace FYPTourneyPro.Services.Organizer
                 var matches = new List<Match>();
                 var round = 0;
 
-                // create matches
-                if (isSingle)
+                   
+
+                    //var Match = await _matchRepository.GetAsync(input.CategoryId);
+
+                    var tourId = category.TournamentId;
+
+                    var tournament = await _tournamentRepository.GetAsync(tourId);
+
+                    var startDate = tournament.StartDate;
+
+                    DateTime tournamentStartTime = DateTime.Now; // or your specific start date
+                    DateTime lastMatchEndTime = tournamentStartTime;
+
+                    // create matches
+                    if (isSingle)
                 {
 
                     //make sure it is even first 
@@ -131,13 +148,16 @@ namespace FYPTourneyPro.Services.Organizer
 
                         for (int j = 0; j < totalParticipants; j++)
                         {
-                            var match = new Match
+                                Random random = new Random();
+                                int randomCourt = random.Next(1, 11);
+
+
+                                var match = new Match
                             {
                                 round = round,
-                                startTime = DateTime.Now,
-                                endTime = DateTime.Now.AddMinutes(30),
-                                courtNum = 1, //todo
-
+                                startTime = lastMatchEndTime,
+                                endTime = lastMatchEndTime.AddMinutes(30),
+                                courtNum = randomCourt, //todo
                                 CategoryId = input.CategoryId
                             };
 
@@ -145,10 +165,11 @@ namespace FYPTourneyPro.Services.Organizer
                             matches.Add(match);
 
                             await _matchRepository.InsertAsync(match);
-                            // await _unitOfWorkManager.Current.SaveChangesAsync();
+                                lastMatchEndTime = match.endTime;
+                                // await _unitOfWorkManager.Current.SaveChangesAsync();
 
-                            //await _matchRepository.InsertAsync(newMatches[j]); - not suitable 
-                        }
+                                //await _matchRepository.InsertAsync(newMatches[j]); - not suitable 
+                            }
                         //await _unitOfWorkManager.Current.SaveChangesAsync();  //need to execute it, the later code is dependent on this added records
                         await _unitOfWorkManager.Current.SaveChangesAsync();
                         //no need use the manager, manager vs unit of work 
