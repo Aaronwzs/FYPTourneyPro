@@ -36,6 +36,7 @@ public class FYPTourneyProDbContext : AbpDbContext<FYPTourneyProDbContext>
     public DbSet<PostVotes> postVotes { get; set; }
     public DbSet<Comment> Comment { get; set; }
     public DbSet<Category> Category { get; set; }
+    //Tournament 
     public DbSet<Tournament> Tournament { get; set; }
 
     public DbSet<CategoryParticipant> CategoryParticipant { get; set; }

@@ -152,32 +152,17 @@ namespace FYPTourneyPro.Services.Organizer
                 throw new AbpAuthorizationException($"You are not authorized to create Tournaments . Required permission: {FYPTourneyProPermissions.Tournaments.Create}");
             }
         }
-            public async Task<TournamentDto> UpdateAsync(Guid id, TournamentDto input)
+        public async Task<TournamentDto> UpdateAsync(Guid id, TournamentDto input)
         {
 
-            // Check if the user has permission to delete a todo item
+            
             var isAuthorized = await _authorizationService.IsGrantedAsync(FYPTourneyProPermissions.Tournaments.Edit);
             if (!isAuthorized)
             {
                 throw new AbpAuthorizationException($"You are not authorized to update tournaments. Required permission: {FYPTourneyProPermissions.Tournaments.Edit}");
             }
 
-            if (input.RegistrationStartDate > input.RegistrationEndDate)
-            {
-                throw new Exception("Registration start date cannot be later than registration end date.");
-            }
-
-            // Validation for Start Date and Registration End Date
-            if (input.StartDate <= input.RegistrationEndDate)
-            {
-                throw new Exception("Start date must be later than the registration end date.");
-            }
-
-            // Validation for End Date and Start Date
-            if (input.EndDate <= input.StartDate)
-            {
-                throw new Exception("End date must be later than the start date.");
-            }
+           
 
             var tournament = await _tournamentRepository.GetAsync(id);
             tournament.Name = input.Name;

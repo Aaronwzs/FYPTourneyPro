@@ -78,8 +78,6 @@ namespace FYPTourneyPro.Services.Organizer
             };
         }
 
-       
-
         public async Task DeleteAsync(Guid id)
         {
             var isAuthorized = await _authorizationService.IsGrantedAsync(FYPTourneyProPermissions.Categories.Delete);
@@ -90,8 +88,7 @@ namespace FYPTourneyPro.Services.Organizer
 
             await _categoryRepository.DeleteAsync(id);
         }
-        
-        
+     
         public async Task<List<CategoryDto>> GetListByTournamentAsync(Guid tournamentId)
 {
     var categories = await _categoryRepository.GetListAsync(c => c.TournamentId == tournamentId);
@@ -121,6 +118,7 @@ namespace FYPTourneyPro.Services.Organizer
                 TournamentId = category.TournamentId
             };
         }
+
         public async Task<bool> GetIsPairAsync(Guid categoryId)
         {
             var category = await _categoryRepository.GetAsync(categoryId);

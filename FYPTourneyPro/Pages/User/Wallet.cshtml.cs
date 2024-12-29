@@ -3,6 +3,8 @@ using FYPTourneyPro.Services.Dtos.User;
 using FYPTourneyPro.Services.Users;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Volo.Abp;
+using Volo.Abp.Authorization;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Identity;
@@ -53,17 +55,25 @@ namespace FYPTourneyPro.Pages.User
 
         public async Task OnGetAsync()
         {
-            UserId = _currentUser.Id.Value; // Get UserId from ICurrentUser
+
+            if (_currentUser.Id == null)
+            {
+                throw new AbpAuthorizationException("Access denied. Please log in to continue.");
+            }
+            else {
+                UserId = _currentUser.Id.Value; // Get UserId from ICurrentUser
+                         }
 
 
 
-            // Get current user information
-            if (_currentUser.IsAuthenticated)
+
+                // Get current user information
+                if (_currentUser.IsAuthenticated)
             {
                 var currentUser = await _userRepository.GetAsync(UserId);
                 UserName = currentUser.UserName;
             }
-
+           
             var customUser = await _customUserRepository.FirstOrDefaultAsync(x => x.UserId == UserId);
             if (customUser == null)
             {

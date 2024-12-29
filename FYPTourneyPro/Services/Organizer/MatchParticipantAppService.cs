@@ -53,7 +53,7 @@ namespace FYPTourneyPro.Services.Organizer
 
         public async Task<List<IGrouping<Guid, MatchParticipant>>>? GenerateDrawAsync(MatchParticipantDto input)
         {
-            // Check if the user has permission to delete a todo item
+            // Check if the user has permission to generate draw
             var isAuthorized = await _authorizationService.IsGrantedAsync(FYPTourneyProPermissions.Draws.Generate);
             if (!isAuthorized)
             {
