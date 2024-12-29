@@ -12,8 +12,8 @@
         public string? Username { get; set; }
 
         public DateTime CreationTime { get; set; }
-
-
+        public Guid? CreatorId { get; internal set; }
+        public Guid? CurrentUserId { get; internal set; }
     }
 
 }

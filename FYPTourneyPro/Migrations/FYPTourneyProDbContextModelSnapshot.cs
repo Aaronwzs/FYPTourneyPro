@@ -84,13 +84,6 @@ namespace FYPTourneyPro.Migrations
                     b.Property<Guid?>("ChatRoomId")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .IsRequired()
-                        .HasMaxLength(40)
-                        .HasColumnType("character varying(40)")
-                        .HasColumnName("ConcurrencyStamp");
-
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("text");
@@ -102,25 +95,6 @@ namespace FYPTourneyPro.Migrations
                     b.Property<Guid?>("CreatorId")
                         .HasColumnType("uuid")
                         .HasColumnName("CreatorId");
-
-                    b.Property<Guid?>("DeleterId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("DeleterId");
-
-                    b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("DeletionTime");
-
-                    b.Property<string>("ExtraProperties")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("ExtraProperties");
-
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false)
-                        .HasColumnName("IsDeleted");
 
                     b.Property<bool>("IsSeen")
                         .HasColumnType("boolean");
@@ -148,13 +122,6 @@ namespace FYPTourneyPro.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .IsRequired()
-                        .HasMaxLength(40)
-                        .HasColumnType("character varying(40)")
-                        .HasColumnName("ConcurrencyStamp");
-
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("CreationTime");
@@ -162,25 +129,6 @@ namespace FYPTourneyPro.Migrations
                     b.Property<Guid?>("CreatorId")
                         .HasColumnType("uuid")
                         .HasColumnName("CreatorId");
-
-                    b.Property<Guid?>("DeleterId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("DeleterId");
-
-                    b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("DeletionTime");
-
-                    b.Property<string>("ExtraProperties")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("ExtraProperties");
-
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false)
-                        .HasColumnName("IsDeleted");
 
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnType("timestamp with time zone")
@@ -214,20 +162,6 @@ namespace FYPTourneyPro.Migrations
                     b.Property<Guid?>("CreatorId")
                         .HasColumnType("uuid")
                         .HasColumnName("CreatorId");
-
-                    b.Property<Guid?>("DeleterId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("DeleterId");
-
-                    b.Property<DateTime?>("DeletionTime")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("DeletionTime");
-
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("boolean")
-                        .HasDefaultValue(false)
-                        .HasColumnName("IsDeleted");
 
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnType("timestamp with time zone")
@@ -264,14 +198,8 @@ namespace FYPTourneyPro.Migrations
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("Downvotes")
-                        .HasColumnType("integer");
-
                     b.Property<Guid>("PostId")
                         .HasColumnType("uuid");
-
-                    b.Property<int>("Upvotes")
-                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -596,7 +524,7 @@ namespace FYPTourneyPro.Migrations
                     b.ToTable("TodoItems", (string)null);
                 });
 
-            modelBuilder.Entity("FYPTourneyPro.Entities.User.AppForm", b =>
+            modelBuilder.Entity("FYPTourneyPro.Entities.UserM.AppForm", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
@@ -623,7 +551,7 @@ namespace FYPTourneyPro.Migrations
                     b.ToTable("AppForms", (string)null);
                 });
 
-            modelBuilder.Entity("FYPTourneyPro.Entities.User.User", b =>
+            modelBuilder.Entity("FYPTourneyPro.Entities.UserM.CustomUser", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
@@ -651,7 +579,7 @@ namespace FYPTourneyPro.Migrations
                     b.ToTable("Users", (string)null);
                 });
 
-            modelBuilder.Entity("FYPTourneyPro.Entities.User.Wallet", b =>
+            modelBuilder.Entity("FYPTourneyPro.Entities.UserM.Wallet", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");

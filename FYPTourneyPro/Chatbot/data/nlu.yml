@@ -52,21 +52,65 @@ nlu:
 
 - intent: ask_schedule
   examples: |
-    - Tell me matches played by [ABC1234](player)
-    - What matches are in the tournament [de wsa](tournament_name)?
-    - Show me matches for the player [ADMIN](player)
-    - List matches in the tournament [de wsa](tournament_name)
-    - When is the next match for [ABC1234](player)?
-   
+    - When is [abc1234](player) playing?
+    - Show me matches for [test](player)
+    - What is the next match for [player_test](player)?
+    - List games played by [testplayer](player)
+    - Is [abc1234](player) scheduled to play?
+    - Tell me about [johndoe444](player)'s matches
+    - Which tournaments is [player1](player) participating in?
+    - Who is [admin_player](player) playing against?
+    - Show me all matches played by [test_user](player)
+    - Tell me the matches of [player_test](player)
+    - What matches are in the [de wsa](tournament_name) tournament?
+    - Show me all games in the [ABC Badminton Open](tournament_name)
+    - Who is playing in the [Iceland Badminton Open](tournament_name)?
+    - List all matches in the [TARUMT Badminton tournament](tournament_name)
+    - Tell me about the [test12](tournament_name) matches
+    - What games are happening in the [under18Tournament](tournament_name)?
+    - Are there any matches in the [international league](tournament_name)?
+    - Show me matches scheduled in [China Badminton Open](tournament_name)
+    - When is the next match in the [championship finals](tournament_name)?
+    - Tell me who is participating in the [Taylor Badminton Open](tournament_name)
 
-# - intent: ask_registration
-#   examples: |
-#     - How do I register for the competition?
-#     - Can I register as a user?
-#     - What are the registration requirements?
-#     - When is the registration period?
-#     - How do I get a spot in the competition?
-#     - What are the rules and regulations for registration?
+   
+- intent: ask_how_to_join_tournament
+  examples: |
+    - How can I join a tournament?
+    - What is the registration process for tournaments?
+    - How do I participate in a tournament?
+    - Can you guide me on registering for a tournament?
+    - Tell me the steps to register for a tournament.
+    - How do I sign up for a tournament?
+    - Where can I join a tournament?
+    - How can I register myself for a tournament?
+    - What is the process to enter a tournament?
+
+- intent: ask_medical_requirements
+  examples: |
+    - What are the medical requirements for the tournament?
+    - Is the organizer responsible for medical supplies?
+    - Do I need to bring medical supplies?
+    - What should I bring for injuries?
+    - Are spray bandages provided at the tournament?
+        
+- intent: ask_next_match
+  examples: |
+    - When is my next match?
+    - What is my next game?
+    - When am I playing next?
+    - When is my upcoming match?
+    - What time is my next match?
+    - Can you tell me when my next game is?
+    - Do I have a match scheduled soon?
+    - What is my next game scheduled?
+    - Tell me when I will play next.
+    - Is there a game for me today?
+    - When do I play next?
+    - What is my upcoming game schedule?
+    - What is the next tie for me?
+    - When is my match?
+    - What is my next scheduled game?
 
 
 - intent: ask_substitutions
@@ -94,18 +138,3 @@ nlu:
     - Why can't we substitute players?
     - Why are substitutions prohibited?
  
-- intent: ask_next_match
-  examples: |
-    - When is my next match?
-    - What is my next match?
-    - When is the next match?
-    - What is the next match?
-    - When is the next game?
-    - What is the next game?
-    - When is the next tie?
-    - What is the next tie?
-    - When is the next match for me?
-    - What is the next match for me?
-    - When is the next game for me?
-    - What is the next game for me?
-    - When is

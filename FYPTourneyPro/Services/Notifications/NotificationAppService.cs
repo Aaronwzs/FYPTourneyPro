@@ -1,6 +1,7 @@
 ﻿using FYPTourneyPro.Entities.Chatroom;
 using FYPTourneyPro.Entities.Notification;
 using FYPTourneyPro.Entities.Organizer;
+using FYPTourneyPro.Entities.UserM;
 using FYPTourneyPro.Services.Dtos.Notifications;
 using FYPTourneyPro.Services.Dtos.Organizer;
 using Microsoft.CodeAnalysis.CSharp;
@@ -10,6 +11,7 @@ using Volo.Abp.Identity;
 using Volo.Abp.Uow;
 using Volo.Abp.Users;
 using static Volo.Abp.Identity.IdentityPermissions;
+using static Volo.Abp.Identity.Settings.IdentitySettingNames;
 
 namespace FYPTourneyPro.Services.Notifications
 {
@@ -23,10 +25,11 @@ namespace FYPTourneyPro.Services.Notifications
         private readonly IRepository<Category, Guid> _categoryRepository;
         private readonly ICurrentUser _currentUser;
         private readonly IRepository<ChatRoom, Guid> _chatRoomRepository;
+        private readonly IRepository<CustomUser, Guid> _custUserRepository;
 
         public NotificationAppService(IRepository<Notification, Guid> notificationRepository, IRepository<ChatRoomParticipant, Guid> chatRoomParticipantRepository,
             IUnitOfWorkManager unitOfWorkManager, IRepository<Tournament, Guid> tournamentRepository, IIdentityUserRepository userRepository, IRepository<Category, Guid> categoryRepository
-            , ICurrentUser currentUser, IRepository<ChatRoom, Guid> chatroomRepository)
+            , ICurrentUser currentUser, IRepository<ChatRoom, Guid> chatroomRepository, IRepository<CustomUser, Guid> custUserRepository)
         {
             _notificationRepository = notificationRepository;
             _chatRoomParticipantRepository = chatRoomParticipantRepository;
@@ -36,6 +39,7 @@ namespace FYPTourneyPro.Services.Notifications
             _categoryRepository = categoryRepository;
             _currentUser = currentUser;
             _chatRoomRepository = chatroomRepository;
+            _custUserRepository = custUserRepository;
         }
 
 
@@ -45,21 +49,26 @@ namespace FYPTourneyPro.Services.Notifications
 
             var chatroom = await _chatRoomRepository.GetAsync(chatRoomId);
 
+            var userFull = await _custUserRepository.GetAsync(cp => cp.UserId == userId);
+
             foreach (var user in groupUsers)
             {
-                var userFound = await _userRepository.GetAsync(user.UserId);
+               
 
-                var content = $"New message from {userFound.UserName} in Chatroom {chatroom.Name}";
-
-                var notification = new Notification
+                if (user.UserId != userId)
                 {
-                    Type = "ChatMessage",
-                    UserId = user.UserId,
-                    Content = content,
-                    RelatedEntityId = chatRoomId
-                };
+                    var content = $"New message from {userFull.FullName} in Chatroom {chatroom.Name}";
 
-                await _notificationRepository.InsertAsync(notification);
+                    var notification = new Notification
+                    {
+                        Type = "ChatMessage",
+                        UserId = user.UserId,
+                        Content = content,
+                        RelatedEntityId = chatRoomId
+                    };
+
+                    await _notificationRepository.InsertAsync(notification);
+                }
             }
 
             await _unitOfWorkManager.Current.SaveChangesAsync();
@@ -105,12 +114,12 @@ namespace FYPTourneyPro.Services.Notifications
             var category = await _categoryRepository.GetAsync(input.CategoryId);
 
 
-            var content = $"{input.FullName1} has joined category {category.Name} in tournament {tournament.Name}";
+            var content = $"{input.UserName1} has joined category {category.Name} in tournament {tournament.Name}";
 
 
-            if (input.FullName2 != null)
+            if (input.UserName2 != null)
             {
-                content = $"{input.FullName1} and {input.FullName2} have joined category {category.Name} your tournament {tournament.Name}";
+                content = $"{input.UserName1} and {input.UserName2} have joined category {category.Name} your tournament {tournament.Name}";
             }
 
             var notification = new Notification

@@ -14,6 +14,9 @@ class ActionFetchSchedule(Action):
         player_name = tracker.get_slot("player")
         tournament_name = tracker.get_slot("tournament_name")
 
+        if(player_name):
+            player_name = player_name.upper()
+
         if not (player_name or tournament_name):
             dispatcher.utter_message("Please provide a player name or tournament name.")
             return []
@@ -58,15 +61,16 @@ class ActionFetchSchedule(Action):
         # Format and return results
         if results:
             players = set()
-            response = []
-            for row in results:
-                start_time, end_time, tournament_name, player_name = row
-                players.add(player_name)
-                match_info = f"- Tournament: {tournament_name}\n  Start Time: {start_time}\n  End Time: {end_time}"
-                response.append(match_info)
+            response = ["Here are the matches:"]
 
-            response.append("\nPlayers: " + ", ".join(players))
-            dispatcher.utter_message("\n".join(response))
+        for row in results:
+            start_time, end_time, tournament_name, player_name = row
+            players.add(player_name)
+            match_info = f"- **Tournament**: {tournament_name}\n  **Start Time**: {start_time}\n  **End Time**: {end_time}"
+            response.append(match_info)
+
+            response.append(f"\n**Players**: {', '.join(players)}")
+            dispatcher.utter_message("\n\n".join(response))
         else:
             dispatcher.utter_message("No matches found for the provided details.")
 

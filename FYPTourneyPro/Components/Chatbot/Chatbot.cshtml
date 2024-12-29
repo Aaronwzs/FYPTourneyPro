@@ -17,8 +17,6 @@
                 console.log(`sup ${data.userId}`);
                 const userId = data.userId;
                 isLoggedIn = true;
-                console.log("API Response: ", data);
-                console.log(WebChat);
 
                 console.log(userId, isLoggedIn);
                 // Initialize the chatbot
@@ -35,4 +33,5 @@
         }).fail(function () {
             alert("Failed to retrieve user information.");
         });
+        localStorage.clear();
     });</script>

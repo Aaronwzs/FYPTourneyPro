@@ -33,3 +33,18 @@ stories:
     - slot_was_set:
         - isLoggedIn: true  # Check if the user is logged in
     - action: action_fetch_next_match
+  
+
+- story: Answer medical requirements
+  steps:
+    - intent: ask_medical_requirements
+    - action: utter_medical_requirements
+    - intent: affirm
+    - action: utter_cheer_up
+  
+- story: Answer how to join a tournament
+  steps:
+    - intent: ask_how_to_join_tournament
+    - action: utter_how_to_join_tournament
+    - intent: affirm
+    - action: utter_cheer_up

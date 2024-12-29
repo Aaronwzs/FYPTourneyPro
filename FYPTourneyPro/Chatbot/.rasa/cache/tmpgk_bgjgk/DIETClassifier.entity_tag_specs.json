@@ -1,0 +1,28 @@
+[
+  {
+    "tag_name": "entity",
+    "ids_to_tags": {
+      "1": "B-player_name",
+      "2": "I-player_name",
+      "3": "L-player_name",
+      "4": "U-player_name",
+      "5": "B-tournament_name",
+      "6": "I-tournament_name",
+      "7": "L-tournament_name",
+      "8": "U-tournament_name",
+      "0": "O"
+    },
+    "tags_to_ids": {
+      "B-player_name": 1,
+      "I-player_name": 2,
+      "L-player_name": 3,
+      "U-player_name": 4,
+      "B-tournament_name": 5,
+      "I-tournament_name": 6,
+      "L-tournament_name": 7,
+      "U-tournament_name": 8,
+      "O": 0
+    },
+    "num_tags": 9
+  }
+]

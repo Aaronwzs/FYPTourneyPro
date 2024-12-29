@@ -100,6 +100,7 @@ async function sendMessage() {
 
 
             try {
+                console.log("Sending message:", newMessage);
                 // Send the message to the SignalR server
                 var messageData = {
                     chatRoomId: chatRoomId,
